@@ -4,8 +4,6 @@ namespace RafflesArgentina\ResourceController;
 
 use Orchestra\Testbench\TestCase;
 
-use \App\User;
-
 use RafflesArgentina\ResourceController\Repositories\TestRepository;
 
 class ResourceControllerTest extends TestCase
@@ -52,7 +50,7 @@ class ResourceControllerTest extends TestCase
 
     function testIndexMethod()
     {
-        factory(\App\User::class, 3)->create();
+        factory(\RafflesArgentina\ResourceController\Models\User::class, 3)->create();
         $this->get('/test')
              ->assertViewIs('test.index')
              ->assertViewHas('items')
@@ -84,7 +82,7 @@ class ResourceControllerTest extends TestCase
 
     function testShowMethod()
     {
-        $test = factory(\App\User::class)->create();
+        $test = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
         $this->get('/test/'.$test->id)
              ->assertViewIs('test.show')
              ->assertViewHas('model')
@@ -96,7 +94,7 @@ class ResourceControllerTest extends TestCase
 
     function testEditMethod()
     {
-        $test = factory(\App\User::class)->create();
+        $test = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
         $this->get('/test/'.$test->id.'/edit')
              ->assertViewIs('test.edit')
              ->assertViewHas('model')
@@ -108,7 +106,7 @@ class ResourceControllerTest extends TestCase
 
     function testUpdateMethod()
     {
-        $test = factory(\App\User::class)->create();
+        $test = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
         $this->put('/test/'.$test->id, ['name' => 'Mario', 'email' => 'mario@raffles.com.ar', 'password' => bcrypt(str_random())])
              ->assertRedirect('/test')
              ->assertStatus(302);
@@ -119,12 +117,12 @@ class ResourceControllerTest extends TestCase
 
     function testDestroyMethod()
     {
-        $test = factory(\App\User::class)->create();
+        $test = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
         $this->delete('/test/'.$test->id)
              ->assertRedirect('/test')
              ->assertStatus(302);
 
-        $test = factory(\App\User::class)->create();
+        $test = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
         $this->json('DELETE', '/test/'.$test->id)
              ->assertStatus(200);
     }

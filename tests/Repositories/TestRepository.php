@@ -4,15 +4,11 @@ namespace RafflesArgentina\ResourceController\Repositories;
 
 use Caffeinated\Repository\Repositories\EloquentRepository;
 
-use \App\User;
+use RafflesArgentina\ResourceController\Models\User;
 
 class TestRepository extends EloquentRepository
 {
     public $model = User::class;
 
-    protected $tag = [
-        'created'  => 'UserCreated',
-        'updated'  => 'UserUpdated',
-        'deleted'  => 'UserDeleted',
-    ];
+    protected $tag = ['user'];
 }
