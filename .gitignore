@@ -1,0 +1,4 @@
+vendor/
+skeleton/
+.htaccess
+error_log

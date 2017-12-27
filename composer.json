@@ -1,0 +1,47 @@
+{
+    "name": "rafflesargentina/l5-resource-controller",
+    "description": "Resource Controller for Laravel 5",
+    "keywords": [
+        "resource controller", "laravel 5"
+    ],
+    "homepage": "https://github.com/rafflesargentina/l5-resource-controller",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mario Patronelli",
+            "email": "mario@raffles.com.ar",
+            "homepage": "http://raffles.com.ar",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php" : ">=7.0.0",
+        "laravel/laravel": "^5.5"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^3.5",
+        "phpunit/phpunit": "^6.5",
+        "caffeinated/repository": "^3.2",
+        "apigen/apigen": "^v2.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "RafflesArgentina\\ResourceController\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "RafflesArgentina\\ResourceController\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "check-style": "phpcs -p --standard=PSR2 --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 src tests",
+        "fix-style": "phpcbf -p --standard=PSR2 --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 src tests"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}

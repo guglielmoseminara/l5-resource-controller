@@ -1,0 +1,9 @@
+TAP version 13
+ok 1 - RafflesArgentina\ResourceController\ResourceControllerTest::testIndexMethod
+ok 2 - RafflesArgentina\ResourceController\ResourceControllerTest::testCreateMethod
+ok 3 - RafflesArgentina\ResourceController\ResourceControllerTest::testStoreMethod
+ok 4 - RafflesArgentina\ResourceController\ResourceControllerTest::testShowMethod
+ok 5 - RafflesArgentina\ResourceController\ResourceControllerTest::testEditMethod
+ok 6 - RafflesArgentina\ResourceController\ResourceControllerTest::testUpdateMethod
+ok 7 - RafflesArgentina\ResourceController\ResourceControllerTest::testDestroyMethod
+1..7
