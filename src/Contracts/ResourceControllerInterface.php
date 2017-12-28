@@ -7,7 +7,7 @@ use Illuminate\Support\MessageBag;
 interface ResourceControllerInterface
 {
     /**
-     * Get full route from action, alias and resource name.
+     * Get route name from action, alias and resource name.
      *
      * @param string $action The route action name.
      *
@@ -16,7 +16,7 @@ interface ResourceControllerInterface
     public function getRouteName($action);
 
     /**
-     * Validate rules from a FormRequest class.
+     * Validate rules from a FormRequest instance.
      *
      * @return \Illuminate\Validation\Validator
      */

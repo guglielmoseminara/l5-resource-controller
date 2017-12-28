@@ -23,7 +23,7 @@ abstract class AbstractResourceController extends BaseController
     protected $alias;
 
     /**
-     * Set views vendor location prefix.
+     * Set vendor views prefix.
      *
      * @var string|null
      */
@@ -51,7 +51,7 @@ abstract class AbstractResourceController extends BaseController
     protected $formRequest;
 
     /**
-     * Set routes resource name.
+     * Set resource name.
      *
      * @var string
      */
@@ -65,28 +65,28 @@ abstract class AbstractResourceController extends BaseController
     protected $useSoftDeletes;
 
     /**
-     * Set the info flash message key.
+     * Set info flash message key.
      *
      * @var string|null
      */
     protected $infoFlashMessageKey = 'rafflesargentina.status.info';
 
     /**
-     * Set the error flash message key.
+     * Set error flash message key.
      *
      * @var string|null
      */
     protected $errorFlashMessageKey = 'rafflesargentina.status.error';
 
     /**
-     * Set the success flash message key.
+     * Set success flash message key.
      *
      * @var string|null
      */
     protected $successFlashMessageKey = 'rafflesargentina.status.success';
 
     /**
-     * Set the warning flash message key.
+     * Set warning flash message key.
      *
      * @var string|null
      */
@@ -102,7 +102,7 @@ abstract class AbstractResourceController extends BaseController
     }
 
     /**
-     * Get full route from action, alias and resource name.
+     * Get route name from action, alias and resource name.
      *
      * @param string $action The route action.
      *
@@ -114,7 +114,7 @@ abstract class AbstractResourceController extends BaseController
     }
 
     /**
-     * Validate rules from a FormRequest class.
+     * Validate rules from a FormRequest instance.
      *
      * @return \Illuminate\Validation\Validator
      */
@@ -270,7 +270,7 @@ abstract class AbstractResourceController extends BaseController
     }
 
     /**
-     * Format named route and view path modifiers.
+     * Format route name and view path modifiers.
      *
      * @return void
      */
