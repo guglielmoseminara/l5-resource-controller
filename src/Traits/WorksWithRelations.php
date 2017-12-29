@@ -27,7 +27,7 @@ trait WorksWithRelations
     {
         $data = $request->all();
         foreach ($data as $relationName => $fillables) {
-            if (is_array($relationName) && !$request->hasFile($relationName)) {
+            if (is_array($request->{$relationName}) && !$request->hasFile($relationName)) {
                 $this->_checkData2RelationExists($model, $relationName);
                 $relation = $model->{$relationName}();
                 $related = $relation->getRelated();
@@ -62,7 +62,7 @@ trait WorksWithRelations
     {
         $data = $request->all();
         foreach ($data as $relationName => $fillables) {
-            if (is_array($relationName) && !$request->hasFile($relationName)) {
+            if (is_array($request->{$relationName}) && !$request->hasFile($relationName)) {
                 $this->_checkData2RelationExists($model, $relationName);
                 $relation = $model->{$relationName}();
                 $related = $relation->getRelated();
