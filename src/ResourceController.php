@@ -26,7 +26,8 @@ class ResourceController extends AbstractResourceController
     {
         $this->getFormRequestInstance();
 
-        $items = $this->repository->paginate();
+        $items = $this->useSoftDeletes ? $this->repository->withTrashed()->paginate()
+                                       : $this->repository->paginate();
 
         if ($request->wantsJson()) {
             return response()->json($items, 200, [], JSON_PRETTY_PRINT);
