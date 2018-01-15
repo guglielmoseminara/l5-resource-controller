@@ -3,13 +3,11 @@
 namespace RafflesArgentina\ResourceController;
 
 use DB;
-
 use Illuminate\Http\Request;
-
-use RafflesArgentina\ResourceController\Traits\WorksWithRelations;
-use RafflesArgentina\ResourceController\Traits\WorksWithFileUploads;
-use RafflesArgentina\ResourceController\Traits\FormatsResponseMessages;
 use RafflesArgentina\ResourceController\Exceptions\ResourceControllerException;
+use RafflesArgentina\ResourceController\Traits\FormatsResponseMessages;
+use RafflesArgentina\ResourceController\Traits\WorksWithFileUploads;
+use RafflesArgentina\ResourceController\Traits\WorksWithRelations;
 
 class ResourceController extends AbstractResourceController
 {
@@ -231,11 +229,11 @@ class ResourceController extends AbstractResourceController
 
         if (!is_null($model->deleted_at)) {
             $message = $this->destroyFailedMessage($id);
-            throw new ResourceControllerException($message, $e->getCode(), $e);
+            throw new ResourceControllerException($message);
         }
 
         try {
-            $instance = $this->repository->delete($model);
+            $this->repository->delete($model);
         } catch (\Exception $e) {
             DB::rollback();
 
