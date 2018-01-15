@@ -26,7 +26,9 @@ trait WorksWithFileUploads
      */
     public function uploadFiles(Request $request, Model $model, $relativePath = null)
     {
-        $relativePath = $relativePath ?: $this->setRelativePath();
+        if (!$relativePath) {
+            $relativePath = $this->setRelativePath();
+        }
         $storagePath = $this->getStoragePath($relativePath);
 
         $files = $request->files;
@@ -38,7 +40,7 @@ trait WorksWithFileUploads
                 if ($uploadedFile->isValid()) {
                     $extension = $uploadedFile->guessExtension();
                     $filename = str_random().'.'.$extension;
-                    $file = $uploadedFile->move($storagePath, $filename);
+                    $uploadedFile->move($storagePath, $filename);
                     $relativeLocation = $relativePath.$filename;
                     $this->updateOrCreateFileRelation($model, $relation, $id, $relativeLocation);
                 }
@@ -89,7 +91,7 @@ trait WorksWithFileUploads
                 $relation->associate($related->create([$column => $relativeLocation]));
                 $model->save();
             } else {
-                $relation->update($fillables);
+                $relation->update([$column => $relativeLocation]);
             }
             break;
         case $relation instanceof BelongsToMany:
