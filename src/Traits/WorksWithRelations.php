@@ -33,13 +33,17 @@ trait WorksWithRelations
                 $related = $relation->getRelated();
 
                 switch (true) {
-                case $relation instanceof HasOne ||
-                         $relation instanceof BelongsTo:
+                case $relation instanceof HasOne:
                     $relation->create($fillables);
+                    break;
+                case $relation instanceof BelongsTo:
+                    $related = $related->create($fillables);
+                    $relation->associate($related);
+                    $model->save();
                     break;
                 case $relation instanceof HasMany:
                     foreach ($fillables as $id => $fillables) {
-                        $related->firstOrCreate(['id' => $id], $fillables);
+                        $relation->firstOrCreate(['id' => $id], $fillables);
                     }
                     break;
                 case $relation instanceof BelongsToMany:
@@ -85,7 +89,7 @@ trait WorksWithRelations
                     break;
                 case $relation instanceof HasMany:
                     foreach ($fillables as $id => $fillables) {
-                        $related->updateOrCreate(['id' => $id], $fillables);
+                        $relation->updateOrCreate(['id' => $id], $fillables);
                     }
                     break;
                 case $relation instanceof BelongsToMany:
