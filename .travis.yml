@@ -23,7 +23,7 @@ matrix:
 
 before_script:
   - composer self-update
-  - if [ "$LARAVEL_VERSION" != "" ]; then composer require "laravel/framework:${LARAVEL_VERSION}" --n
+  - if [ "$LARAVEL_VERSION" != "" ]; then composer require "laravel/framework:${LARAVEL_VERSION}" --no-update; fi;
   - composer update
 
 script: vendor/bin/phpunit
