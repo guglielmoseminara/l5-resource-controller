@@ -16,94 +16,126 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 trait WorksWithRelations
 {
     /**
-     * Store related models treating array type request data as Eloquent relations.
+     * Update or create relations handling array type request data.
      *
-     * @param \Illuminate\Http\Request            $request The request object.
+     * @param \Illuminate\Http\Request            $request The Request object.
      * @param \Illuminate\Database\Eloquent\Model $model   The eloquent model.
      *
      * @return void
      */
-    public function storeRelatedModels(Request $request, Model $model)
+    public function updateOrCreateRelations(Request $request, Model $model)
     {
         $data = $request->all();
         foreach ($data as $relationName => $fillables) {
             if (is_array($request->{$relationName}) && !$request->hasFile($relationName)) {
-                $this->_checkData2RelationExists($model, $relationName);
-                $relation = $model->{$relationName}();
-                $related = $relation->getRelated();
+                $this->_checkRelationExists($model, $relationName);
 
-                switch (true) {
-                case $relation instanceof HasOne:
-                    $relation->create($fillables);
-                    break;
-                case $relation instanceof BelongsTo:
-                    $related = $related->create($fillables);
-                    $relation->associate($related);
-                    $model->save();
-                    break;
-                case $relation instanceof HasMany:
-                    foreach ($fillables as $id => $fields) {
-                        $relation->updateOrCreate(['id' => $id], $fields);
-                    }
-                    break;
-                case $relation instanceof BelongsToMany:
-                    foreach ($fillables as $id => $fields) {
-                        $related->updateOrCreate(['id' => $id], $fields);
-                    }
-                    $relation->attach(array_keys($fillables));
-                    break;
-                }
+                $relation = $model->{$relationName}();
+                $this->handleRelations($fillables, $model, $relation);
             }
         }
     }
 
     /**
-     * Update related models treating array type request data as Eloquent relations.
+     * Handle relations.
      *
-     * @param \Illuminate\Http\Request            $request The request object
-     * @param \Illuminate\Database\Eloquent\Model $model   The eloquent model.
+     * @param array                                            $fillables The relation fillables.
+     * @param \Illuminate\Database\Eloquent\Model              $model     The eloquent model.
+     * @param \Illuminate\Database\Eloquent\Relations\Relation $relation  The eloquent relation.
      *
      * @return void
      */
-    public function updateRelatedModels(Request $request, Model $model)
+    protected function handleRelations(array $fillables, Model $model, Relation $relation)
     {
-        $data = $request->all();
-        foreach ($data as $relationName => $fillables) {
-            if (is_array($request->{$relationName}) && !$request->hasFile($relationName)) {
-                $this->_checkData2RelationExists($model, $relationName);
-                $relation = $model->{$relationName}();
-                $related = $relation->getRelated();
-
-                switch (true) {
-                case $relation instanceof HasOne:
-                    if (!$relation->first()) {
-                        $relation->create($fillables);
-                    } else {
-                        $relation->update($fillables);
-                    }
-                    break;
-                case $relation instanceof BelongsTo:
-                    if (!$relation->first()) {
-                        $relation->associate($related->create($fillables));
-                        $model->save();
-                    } else {
-                        $relation->update($fillables);
-                    }
-                    break;
-                case $relation instanceof HasMany:
-                    foreach ($fillables as $id => $fields) {
-                        $relation->updateOrCreate(['id' => $id], $fields);
-                    }
-                    break;
-                case $relation instanceof BelongsToMany:
-                    foreach ($fillables as $id => $fields) {
-                        $related->updateOrCreate(['id' => $id], $fields);
-                    }
-                    $relation->sync(array_keys($fillables));
-                    break;
-                }
-            }
+        switch (true) {
+        case $relation instanceof HasOne:
+            $this->updateOrCreateHasOne($fillables, $model, $relation);
+            break;
+        case $relation instanceof BelongsTo:
+            $this->updateOrCreateBelongsToOne($fillables, $model, $relation);
+            break;
+        case $relation instanceof HasMany:
+            $this->updateOrCreateHasMany($fillables, $model, $relation);
+            break;
+        case $relation instanceof BelongsToMany:
+            $this->updateOrCreateBelongsToMany($fillables, $model, $relation);
+            break;
         }
+    }
+
+    /**
+     * HasOne relation updateOrCreate logic.
+     *
+     * @param array				               $fillables The relation fillables.
+     * @param \Illuminate\Database\Eloquent\Model	       $model	  The eloquent model.
+     * @param \Illuminate\Database\Eloquent\Relations\Relation $relation  The eloquent relation.
+     *
+     * @return void
+     */
+    protected function updateOrCreateHasOne(array $fillables, Model $model, Relation $relation)
+    {
+        if (!$relation->first()) {
+            $relation->create($fillables);
+        } else {
+            $relation->update($fillables);
+        }
+    }
+
+    /**
+     * BelongsToOne relation updateOrCreate logic.
+     *
+     * @param array                                            $fillables The relation fillables.
+     * @param \Illuminate\Database\Eloquent\Model              $model     The eloquent model.
+     * @param \Illuminate\Database\Eloquent\Relations\Relation $relation  The eloquent relation.
+     *
+     * @return void
+     */
+    protected function updateOrCreateBelongsToOne(array $fillables, Model $model, Relation $relation)
+    {
+        $related = $relation->getRelated();
+
+        if (!$relation->first()) {
+            $relation->associate($related->create($fillables));
+            $model->save();
+        } else {
+            $relation->update($fillables);
+        }
+    }
+
+    /**
+     * HasMany relation updateOrCreate logic.
+     *
+     * @param array                                            $fillables The relation fillables.
+     * @param \Illuminate\Database\Eloquent\Model              $model     The eloquent model.
+     * @param \Illuminate\Database\Eloquent\Relations\Relation $relation  The eloquent relation.
+     *
+     * @return void
+     */
+    protected function updateOrCreateHasMany(array $fillables, Model $model, Relation $relation)
+    {
+        foreach ($fillables as $id => $fields) {
+            $relation->updateOrCreate(['id' => $id], $fields);
+        }
+    }
+
+    /**
+     * BelongsToMany relation updateOrCreate logic.
+     *
+     * @param array                                            $fillables The relation fillables.
+     * @param \Illuminate\Database\Eloquent\Model              $model     The eloquent model.
+     * @param \Illuminate\Database\Eloquent\Relations\Relation $relation  The eloquent relation.
+     *
+     * @return void
+     */
+    protected function updateOrCreateBelongsToMany(array $fillables, Model $model, Relation $relation)
+    {
+        $related = $relation->getRelated();
+
+        foreach ($fillables as $id => $fields) {
+            $related->updateOrCreate(['id' => $id], $fields);
+        }
+
+        $relation->sync(array_keys($fillables));
     }
 
     /**
@@ -116,7 +148,7 @@ trait WorksWithRelations
      *
      * @return void
      */
-    private function _checkData2RelationExists(Model $model, string $relationName)
+    private function _checkRelationExists(Model $model, string $relationName)
     {
         if (!method_exists($model, $relationName) || !$model->{$relationName}() instanceof Relation) {
             if (Lang::has('resource-controller.data2relationinexistent')) {

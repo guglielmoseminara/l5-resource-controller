@@ -5,10 +5,13 @@ namespace RafflesArgentina\ResourceController\Traits;
 use Lang;
 use Storage;
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -16,9 +19,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 trait WorksWithFileUploads
 {
     /**
-     * Upload request files.
+     * Upload request files and update or create relations handling array type request data.
      *
-     * @param \Illuminate\Http\Request            $request      The request object
+     * @param \Illuminate\Http\Request            $request      The Request object.
      * @param \Illuminate\Database\Eloquent\Model $model        The eloquent model.
      * @param string|null                         $relativePath The file uploads relative path.
      *
@@ -29,21 +32,19 @@ trait WorksWithFileUploads
         if (!$relativePath) {
             $relativePath = $this->setRelativePath();
         }
-        $storagePath = $this->getStoragePath($relativePath);
 
         $files = $request->files;
         foreach ($files as $relationName => $uploadedFiles) {
-            $this->_checkFile2RelationExists($model, $relationName);
+            $this->_checkFileRelationExists($model, $relationName);
             $relation = $model->{$relationName}();
 
             foreach ($uploadedFiles as $id => $uploadedFile) {
-                if ($uploadedFile->isValid()) {
-                    $extension = $uploadedFile->guessExtension();
-                    $filename = str_random().'.'.$extension;
-                    $uploadedFile->move($storagePath, $filename);
-                    $relativeLocation = $relativePath.$filename;
-                    $this->updateOrCreateFileRelation($model, $relation, $id, $relativeLocation);
+                if (!$uploadedFile->isValid()) {
+                    throw new UploadException($uploadedFile->getError());
                 }
+
+                $location = $this->getUploadedFileLocation($uploadedFile, $relativePath);
+                $this->handleFileRelations($model, $relation, $id, $location);
             }
         }
     }
@@ -55,7 +56,7 @@ trait WorksWithFileUploads
      *
      * @return string
      */
-    public function getStoragePath($relativePath)
+    protected function getStoragePath($relativePath)
     {
         return Storage::disk()->getDriver()->getAdapter()->getPathPrefix().$relativePath;
     }
@@ -65,41 +66,9 @@ trait WorksWithFileUploads
      *
      * @return string
      */
-    public function setRelativePath()
+    protected function setRelativePath()
     {
         return 'uploads/';
-    }
-
-    /**
-     * Update or create file relation with file location.
-     *
-     * @param \Illuminate\Database\Eloquent\Model              $model            The eloquent model.
-     * @param \Illuminate\Database\Eloquent\Relations\Relation $relation         The eloquent relation.
-     * @param string                                           $id               The id for the existent or new relation.
-     * @param string                                           $relativeLocation The uploaded file relative location.
-     *
-     * @return void
-     */
-    public function updateOrCreateFileRelation(Model $model, Relation $relation, $id, $relativeLocation)
-    {
-        $column = $this->getLocationColumn();
-        $related = $relation->getRelated();
-
-        switch (true) {
-        case $relation instanceof BelongsTo:
-            if (!$relation->first()) {
-                $relation->associate($related->create([$column => $relativeLocation]));
-                $model->save();
-            } else {
-                $relation->update([$column => $relativeLocation]);
-            }
-            break;
-        case $relation instanceof BelongsToMany:
-            $relation->sync($id, [$column => $relativeLocation]);
-            break;
-        default:
-            $relation->updateOrCreate(['id' => $id], [$column => $relativeLocation]);
-        }
     }
 
     /**
@@ -107,9 +76,141 @@ trait WorksWithFileUploads
      *
      * @return string
      */
-    public function getLocationColumn()
+    protected function getLocationColumn()
     {
         return 'location';
+    }
+
+    /**
+     * Handle file relations.
+     *
+     * @param \Illuminate\Database\Eloquent\Model                 $model        The eloquent model.
+     * @param \Illuminate\Database\Eloquent\Relations\Relation    $relation     The eloquent relation.
+     * @param string                                              $id           The id for an existent or new relation.
+     * @param string						  $location	The uploaded file location.
+     *
+     * @return void
+     */
+    protected function handleFileRelations(Model $model, Relation $relation, $id, $location)
+    {
+        switch (true) {
+        case $relation instanceof HasOne:
+            $this->updateOrCreateFileHasOne($model, $relation, $id, $location);
+             break;
+        case $relation instanceof BelongsTo:
+            $this->updateOrCreateFileBelongsToOne($model, $relation, $id, $location);
+            break;
+        case $relation instanceof HasMany:
+            $this->updateOrCreateFileHasMany($model, $relation, $id, $location);
+            break;
+        case $relation instanceof BelongsToMany:
+            $this->updateOrCreateFileBelongsToMany($model, $relation, $id, $location);
+            break;
+        }
+    }
+
+    /**
+     * Get location from the UploadedFile object.
+     *
+     * @param \Symfony\Component\HttpFoundation\File\UploadedFile $uploadedFile The UploadedFile object.
+     * @param string						  $relativePath	The uploaded file relative path.
+     *
+     * @return string
+     */
+    protected function getUploadedFileLocation(UploadedFile $uploadedFile, $relativePath)
+    {
+        $extension = $uploadedFile->guessExtension();
+        $filename = str_random().'.'.$extension;
+
+        $storagePath = $this->getStoragePath($relativePath);
+
+        $uploadedFile->move($storagePath, $filename);
+
+        $location = $relativePath.$filename;
+
+        return $location; 
+    }
+
+    /**
+     * HasOne file relation updateOrCreate logic.
+     *
+     * @param \Illuminate\Database\Eloquent\Model              $model     The eloquent model.
+     * @param \Illuminate\Database\Eloquent\Relations\Relation $relation  The eloquent relation.
+     * @param string                                           $id        The id for an existent or new relation.
+     * @param string                                           $location  The uploaded file location.
+     *
+     * @return void
+     */
+    protected function updateOrCreateFileHasOne(Model $model, Relation $relation, $id = null, $location)
+    {
+        $column = $this->getLocationColumn();
+
+        if (!$relation->first()) {
+            $relation->create([$column => $location]);
+        } else {
+            $relation->update([$column => $location]);
+        }
+    }
+
+    /**
+     * BelongsToOne file relation updateOrCreate logic.
+     *
+     * @param \Illuminate\Database\Eloquent\Model              $model     The eloquent model.
+     * @param \Illuminate\Database\Eloquent\Relations\Relation $relation  The eloquent relation.
+     * @param string                                           $id        The id for an existent or new relation.
+     * @param string                                           $location  The uploaded file location.
+     *
+     * @return void
+     */
+    protected function updateOrCreateFileBelongsToOne(Model $model, Relation $relation, $id = null, $location)
+    {
+        $related = $relation->getRelated();
+
+        $column = $this->getLocationColumn();
+
+        if (!$relation->first()) {
+            $relation->associate($related->create([$column => $location]));
+            $model->save();
+        } else {
+            $relation->update([$column => $location]);
+        }
+    }
+
+    /**
+     * HasMany file relation updateOrCreate logic.
+     *
+     * @param \Illuminate\Database\Eloquent\Model              $model     The eloquent model.
+     * @param \Illuminate\Database\Eloquent\Relations\Relation $relation  The eloquent relation.
+     * @param string                                           $id        The id for an existent or new relation.
+     * @param string                                           $location  The uploaded file location.
+     *
+     * @return void
+     */
+    protected function updateOrCreateFileHasMany(Model $model, Relation $relation, $id = null, $location)
+    {
+        $column = $this->getLocationColumn();
+
+        $relation->updateOrCreate(['id' => $id], [$column => $location]);
+    }
+
+    /**
+     * BelongsToMany file relation updateOrCreate logic.
+     *
+     * @param \Illuminate\Database\Eloquent\Model              $model     The eloquent model.
+     * @param \Illuminate\Database\Eloquent\Relations\Relation $relation  The eloquent relation.
+     * @param string                                           $id        The id for an existent or new relation.
+     * @param string                                           $location  The uploaded file location.
+     *
+     * @return void
+     */
+    protected function updateOrCreateFileBelongsToMany(Model $model, Relation $relation, $id = null, $location)
+    {
+        $related = $relation->getRelated();
+
+        $column = $this->getLocationColumn();
+
+        $related->updateOrCreate(['id' => $id], [$column => $location]);
+        $relation->syncWithoutDetaching($id, [$column => $location]);
     }
 
     /**
@@ -122,11 +223,11 @@ trait WorksWithFileUploads
      *
      * @return void
      */
-    private function _checkFile2RelationExists(Model $model, $relationName)
+    private function _checkFileRelationExists(Model $model, $relationName)
     {
         if (!method_exists($model, $relationName) || !$model->{$relationName}() instanceof Relation) {
-            if (Lang::has('resource-controller.file2relationinexistent')) {
-                $message = trans('resource-controller.file2relationinexistent', ['relationName' => $relationName]);
+            if (Lang::has('resource-controller.filerelationinexistent')) {
+                $message = trans('resource-controller.filerelationinexistent', ['relationName' => $relationName]);
             } else {
                 $message = "Request file '{$relationName}' is not named after an existent relation.";
             }
