@@ -3,11 +3,13 @@
 namespace RafflesArgentina\ResourceController;
 
 use DB;
+
 use Illuminate\Http\Request;
-use RafflesArgentina\ResourceController\Exceptions\ResourceControllerException;
-use RafflesArgentina\ResourceController\Traits\FormatsResponseMessages;
-use RafflesArgentina\ResourceController\Traits\WorksWithFileUploads;
+
 use RafflesArgentina\ResourceController\Traits\WorksWithRelations;
+use RafflesArgentina\ResourceController\Traits\WorksWithFileUploads;
+use RafflesArgentina\ResourceController\Traits\FormatsResponseMessages;
+use RafflesArgentina\ResourceController\Exceptions\ResourceControllerException;
 
 class ResourceController extends AbstractResourceController
 {
@@ -77,7 +79,7 @@ class ResourceController extends AbstractResourceController
             $instance = $this->repository->create($request->all());
             $model = $instance[1];
             $number = $model->{$model->getRouteKeyName()};
-            $this->storeRelatedModels($request, $model);
+            $this->updateOrCreateRelations($request, $model);
             $this->uploadFiles($request, $model);
         } catch (\Exception $e) {
             DB::rollback();
@@ -108,7 +110,7 @@ class ResourceController extends AbstractResourceController
      */
     public function show(Request $request, $id)
     {
-        $model = $this->useSoftDeletes ? $this->repository->withTrashed()->findBy($this->repository->model->getRouteKeyName(), $id)
+        $model = $this->useSoftDeletes ? $this->repository->withTrashed()->where($this->repository->model->getRouteKeyName(), $id)->first()
                                        : $this->repository->findBy($this->repository->model->getRouteKeyName(), $id);
 
         if (!$model) {
@@ -142,7 +144,7 @@ class ResourceController extends AbstractResourceController
             return $this->validNotFoundJsonResponse();
         }
 
-        $model = $this->useSoftDeletes ? $this->repository->withTrashed()->findBy($this->repository->model->getRouteKeyName(), $id)
+        $model = $this->useSoftDeletes ? $this->repository->withTrashed()->where($this->repository->model->getRouteKeyName(), $id)->first()
                                        : $this->repository->findBy($this->repository->model->getRouteKeyName(), $id);
 
         if (!$model) {
@@ -167,7 +169,7 @@ class ResourceController extends AbstractResourceController
     {
         $this->getFormRequestInstance();
 
-        $model = $this->useSoftDeletes ? $this->repository->wihTrashed()->findBy($this->repository->model->getRouteKeyName(), $id)
+        $model = $this->useSoftDeletes ? $this->repository->withTrashed()->where($this->repository->model->getRouteKeyName(), $id)->first()
                                        : $this->repository->findBy($this->repository->model->getRouteKeyName(), $id);
 
         if (!$model) {
@@ -182,7 +184,7 @@ class ResourceController extends AbstractResourceController
         try { 
             $instance = $this->repository->update($model, $request->all());
             $model = $instance[1];
-            $this->updateRelatedModels($request, $model);
+            $this->updateOrCreateRelations($request, $model);
             $this->uploadFiles($request, $model);
         } catch (\Exception $e) {
             DB::rollback();
@@ -215,7 +217,7 @@ class ResourceController extends AbstractResourceController
     {
         $this->getFormRequestInstance();
 
-        $model = $this->useSoftDeletes ? $this->repository->withTrashed()->findBy($this->repository->model->getRouteKeyName(), $id)
+        $model = $this->useSoftDeletes ? $this->repository->withTrashed()->where($this->repository->model->getRouteKeyName(), $id)->first()
                                        : $this->repository->findBy($this->repository->model->getRouteKeyName(), $id);
 
         if (!$model) {
@@ -226,11 +228,6 @@ class ResourceController extends AbstractResourceController
         }
 
         DB::beginTransaction();
-
-        if (!is_null($model->deleted_at)) {
-            $message = $this->destroyFailedMessage($id);
-            throw new ResourceControllerException($message);
-        }
 
         try {
             $this->repository->delete($model);
