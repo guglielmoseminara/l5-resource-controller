@@ -42,11 +42,14 @@ trait WorksWithRelations
                     $model->save();
                     break;
                 case $relation instanceof HasMany:
-                    foreach ($fillables as $id => $fillables) {
-                        $relation->firstOrCreate(['id' => $id], $fillables);
+                    foreach ($fillables as $id => $fields) {
+                        $relation->updateOrCreate(['id' => $id], $fields);
                     }
                     break;
                 case $relation instanceof BelongsToMany:
+                    foreach ($fillables as $id => $fields) {
+                        $related->updateOrCreate(['id' => $id], $fields);
+                    }
                     $relation->attach(array_keys($fillables));
                     break;
                 }
@@ -88,11 +91,14 @@ trait WorksWithRelations
                     }
                     break;
                 case $relation instanceof HasMany:
-                    foreach ($fillables as $id => $fillables) {
-                        $relation->updateOrCreate(['id' => $id], $fillables);
+                    foreach ($fillables as $id => $fields) {
+                        $relation->updateOrCreate(['id' => $id], $fields);
                     }
                     break;
                 case $relation instanceof BelongsToMany:
+                    foreach ($fillables as $id => $fields) {
+                        $related->updateOrCreate(['id' => $id], $fields);
+                    }
                     $relation->sync(array_keys($fillables));
                     break;
                 }
