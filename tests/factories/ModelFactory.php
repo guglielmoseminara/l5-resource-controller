@@ -7,3 +7,11 @@ $factory->define(\RafflesArgentina\ResourceController\Models\User::class, functi
         'password' => bcrypt($faker->password),
     ];
 });
+
+$factory->define(\RafflesArgentina\ResourceController\Models\Related::class, function (\Faker\Generator $faker) {
+    return [
+        'a' => str_random(),
+        'b' => str_random(),
+        'c' => str_random(),
+    ];
+});

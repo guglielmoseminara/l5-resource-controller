@@ -4,63 +4,40 @@ namespace RafflesArgentina\ResourceController;
 
 use Orchestra\Testbench\TestCase;
 
-use RafflesArgentina\ResourceController\Repositories\TestRepository;
-
 class ResourceControllerTest extends TestCase
 {
-    /**
-     * Setup the test environment.
-     */
-    public function setUp()
-    {
-        parent::setUp();
+    use BaseTest;
 
-        $this->loadLaravelMigrations(['--database' => 'testbench']);
-
-        $this->artisan('migrate', ['--database' => 'testbench']);
-
-        $this->withFactories(__DIR__.'/factories');
-
-        \Route::group([
-            'middleware' => [],
-            'namespace'  => 'RafflesArgentina\ResourceController',
-        ], function ($router) {
-            $router->resource('test', 'TestController');
-        });
-
-        \View::addLocation(__DIR__.'/Resources/Views');
-    }
-
-    /**
-     * Define environment setup.
-     *
-     * @param  \Illuminate\Foundation\Application  $app
-     * @return void
-     */
-    protected function getEnvironmentSetUp($app)
-    {
-        // Setup default database to use sqlite :memory:
-        $app['config']->set('database.default', 'testbench');
-        $app['config']->set('database.connections.testbench', [
-            'driver'   => 'sqlite',
-            'database' => ':memory:',
-            'prefix'   => '',
-        ]);
-    }
-
-    function testIndexMethod()
+    function testIndexRoute()
     {
         factory(\RafflesArgentina\ResourceController\Models\User::class, 3)->create();
+
         $this->get('/test')
              ->assertViewIs('test.index')
              ->assertViewHas('items')
              ->assertStatus(200);
 
         $this->json('GET', '/test')
-             ->assertStatus(200);
+             ->assertStatus(200)
+             ->assertJsonCount(3, 'data');
     }
 
-    function testCreateMethod()
+    function testIndexRouteWithUseSoftDeletes()
+    {
+        $users = factory(\RafflesArgentina\ResourceController\Models\User::class, 3)->create();
+        foreach ($users as $user) $user->delete();
+
+        $this->get('/test2')
+             ->assertViewIs('test.index')
+             ->assertViewHas('items')
+             ->assertStatus(200);
+
+        $this->json('GET', '/test2')
+             ->assertStatus(200)
+             ->assertJsonCount(3, 'data');
+    }
+
+    function testCreateRoute()
     {
         $this->get('/test/create')
              ->assertViewIs('test.create')
@@ -71,59 +48,147 @@ class ResourceControllerTest extends TestCase
              ->assertStatus(404);
     }
 
-    function testStoreMethod()
+    function testStoreRoute()
     {
         $this->post('/test', ['name' => 'Mario', 'email' => 'mario@raffles.com.ar', 'password' => bcrypt(str_random())])
-             ->assertRedirect('/test');
+             ->assertRedirect('/test')
+             ->assertSessionHas('rafflesargentina.status.success');
 
         $this->json('POST', '/test', ['name' => 'Paula', 'email' => 'paula@raffles.com.ar', 'password' => bcrypt(str_random())])
              ->assertStatus(200);
     }
 
-    function testShowMethod()
+    function testShowRoute()
     {
-        $test = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->get('/test/'.$test->id)
+        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
+
+        $this->get('/test/'.$user->id)
              ->assertViewIs('test.show')
              ->assertViewHas('model')
              ->assertStatus(200);
 
-        $this->json('GET', '/test/'.$test->id)
+        $this->json('GET', '/test/'.$user->id)
              ->assertStatus(200);
     }
 
-    function testEditMethod()
+    function testShowRouteWithUseSoftDeletes()
     {
-        $test = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->get('/test/'.$test->id.'/edit')
+        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
+        $user->delete();
+
+        $this->get('/test2/'.$user->id)
+             ->assertViewIs('test.show')
+             ->assertViewHas('model')
+             ->assertStatus(200);
+
+        $this->json('GET', '/test2/'.$user->id)
+             ->assertStatus(200);
+    }
+
+    function testShowRouteWithInexistentModel()
+    {
+        $this->get('/test/7')->assertStatus(404);
+
+        $this->json('GET', '/test/7')->assertStatus(404);
+    }
+
+    function testEditRoute()
+    {
+        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
+
+        $this->get('/test/'.$user->id.'/edit')
              ->assertViewIs('test.edit')
              ->assertViewHas('model')
              ->assertStatus(200);
 
-        $this->json('GET', '/test/'.$test->id.'/edit')
+        $this->json('GET', '/test/'.$user->id.'/edit')
              ->assertStatus(404);
     }
 
-    function testUpdateMethod()
+    function testEditRouteWithUseSoftDeletes()
     {
-        $test = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->put('/test/'.$test->id, ['name' => 'Mario', 'email' => 'mario@raffles.com.ar', 'password' => bcrypt(str_random())])
-             ->assertRedirect('/test')
-             ->assertStatus(302);
+        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
+        $user->delete();
 
-        $this->json('PUT', '/test/'.$test->id, ['name' => 'Mario', 'email' => 'mario@raffles.com.ar', 'password' => bcrypt(str_random())])
+        $this->get('/test2/'.$user->id.'/edit')
+             ->assertViewIs('test.edit')
+             ->assertViewHas('model')
+             ->assertStatus(200);
+
+        $this->json('GET', '/test2/'.$user->id.'/edit')
+             ->assertStatus(404);
+    }
+
+    function testEditRouteWithInexistentModel()
+    {
+        $this->get('/test/7/edit')->assertStatus(404);
+
+        $this->json('GET', '/test/7/edit')->assertStatus(404);
+    }
+
+    function testUpdateRoute()
+    {
+        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
+
+        $this->put('/test/'.$user->id, ['name' => 'Mario', 'email' => 'mario@raffles.com.ar', 'password' => bcrypt(str_random())])
+             ->assertRedirect('/test')
+             ->assertStatus(302)
+             ->assertSessionHas('rafflesargentina.status.success');
+
+        $this->json('PUT', '/test/'.$user->id, ['name' => 'Mario', 'email' => 'mario@raffles.com.ar', 'password' => bcrypt(str_random())])
              ->assertStatus(200);
     }
 
-    function testDestroyMethod()
+    function testUpdateRouteWithUseSoftDeletes()
     {
-        $test = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->delete('/test/'.$test->id)
+        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
+        $user->delete();
+
+        $this->put('/test2/'.$user->id, ['name' => 'Mario', 'email' => 'mario@raffles.com.ar', 'password' => bcrypt(str_random())])
+             ->assertRedirect('/test')
+             ->assertStatus(302)
+             ->assertSessionHas('rafflesargentina.status.success');
+
+        $this->json('PUT', '/test2/'.$user->id, ['name' => 'Mario', 'email' => 'mario@raffles.com.ar', 'password' => bcrypt(str_random())])
+             ->assertStatus(200);
+    }
+
+    function testUpdateRouteWithInexistentModel()
+    {
+        $this->put('/test/7')->assertStatus(404);
+
+        $this->json('PUT', '/test/7')->assertStatus(404);
+    }
+
+    function testDestroyRoute()
+    {
+        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
+        $this->delete('/test/'.$user->id)
              ->assertRedirect('/test')
              ->assertStatus(302);
 
-        $test = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->json('DELETE', '/test/'.$test->id)
+        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
+        $this->json('DELETE', '/test/'.$user->id)
              ->assertStatus(200);
+    }
+
+    function testDestroyRouteWithUseSoftDeletes()
+    {
+        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
+        $user->delete();
+
+        $this->delete('/test2/'.$user->id)
+             ->assertRedirect('/test')
+             ->assertStatus(302);
+
+        $this->json('DELETE', '/test2/'.$user->id)
+             ->assertStatus(200);
+    }
+
+    function testDestroyRouteWithInexistentModel()
+    {
+        $this->delete('/test/7')->assertStatus(404);
+
+        $this->json('DELETE', '/test/7')->assertStatus(404);
     }
 }

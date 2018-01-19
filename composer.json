@@ -23,7 +23,8 @@
         "phpunit/phpunit": "^6.5",
         "caffeinated/repository": "^3.2",
         "apigen/apigen": "^v2.8",
-        "squizlabs/php_codesniffer": "^3.2"
+        "squizlabs/php_codesniffer": "^3.2",
+        "orchestra/database": "^3.5"
     },
     "autoload": {
         "psr-4": {
