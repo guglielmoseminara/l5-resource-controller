@@ -1,9 +1,32 @@
 TAP version 13
-ok 1 - RafflesArgentina\ResourceController\ResourceControllerTest::testIndexMethod
-ok 2 - RafflesArgentina\ResourceController\ResourceControllerTest::testCreateMethod
-ok 3 - RafflesArgentina\ResourceController\ResourceControllerTest::testStoreMethod
-ok 4 - RafflesArgentina\ResourceController\ResourceControllerTest::testShowMethod
-ok 5 - RafflesArgentina\ResourceController\ResourceControllerTest::testEditMethod
-ok 6 - RafflesArgentina\ResourceController\ResourceControllerTest::testUpdateMethod
-ok 7 - RafflesArgentina\ResourceController\ResourceControllerTest::testDestroyMethod
-1..7
+not ok 1 - Error: RafflesArgentina\ResourceController\ResourceControllerTest::testIndexRoute
+not ok 2 - Error: RafflesArgentina\ResourceController\ResourceControllerTest::testIndexRouteWithUseSoftDeletes
+not ok 3 - Error: RafflesArgentina\ResourceController\ResourceControllerTest::testCreateRoute
+not ok 4 - Error: RafflesArgentina\ResourceController\ResourceControllerTest::testStoreRoute
+not ok 5 - Error: RafflesArgentina\ResourceController\ResourceControllerTest::testShowRoute
+not ok 6 - Error: RafflesArgentina\ResourceController\ResourceControllerTest::testShowRouteWithUseSoftDeletes
+not ok 7 - Error: RafflesArgentina\ResourceController\ResourceControllerTest::testShowRouteWithInexistentModel
+not ok 8 - Error: RafflesArgentina\ResourceController\ResourceControllerTest::testEditRoute
+not ok 9 - Error: RafflesArgentina\ResourceController\ResourceControllerTest::testEditRouteWithUseSoftDeletes
+not ok 10 - Error: RafflesArgentina\ResourceController\ResourceControllerTest::testEditRouteWithInexistentModel
+not ok 11 - Error: RafflesArgentina\ResourceController\ResourceControllerTest::testUpdateRoute
+not ok 12 - Error: RafflesArgentina\ResourceController\ResourceControllerTest::testUpdateRouteWithUseSoftDeletes
+not ok 13 - Error: RafflesArgentina\ResourceController\ResourceControllerTest::testUpdateRouteWithInexistentModel
+not ok 14 - Error: RafflesArgentina\ResourceController\ResourceControllerTest::testDestroyRoute
+not ok 15 - Error: RafflesArgentina\ResourceController\ResourceControllerTest::testDestroyRouteWithUseSoftDeletes
+not ok 16 - Error: RafflesArgentina\ResourceController\ResourceControllerTest::testDestroyRouteWithInexistentModel
+not ok 17 - Error: RafflesArgentina\ResourceController\WorksWithFileUploadsTest::testPostHasOneFileUpload
+not ok 18 - Error: RafflesArgentina\ResourceController\WorksWithFileUploadsTest::testPostBelongsToFileUpload
+not ok 19 - Error: RafflesArgentina\ResourceController\WorksWithFileUploadsTest::testPostHasManyFileUploads
+not ok 20 - Error: RafflesArgentina\ResourceController\WorksWithFileUploadsTest::testPostBelongsToManyFileUploads
+not ok 21 - Error: RafflesArgentina\ResourceController\WorksWithRelationsTest::testStoreHasOne
+not ok 22 - Error: RafflesArgentina\ResourceController\WorksWithRelationsTest::testStoreBelongsTo
+not ok 23 - Error: RafflesArgentina\ResourceController\WorksWithRelationsTest::testStoreHasMany
+not ok 24 - Error: RafflesArgentina\ResourceController\WorksWithRelationsTest::testStoreBelongsToManyExistent
+not ok 25 - Error: RafflesArgentina\ResourceController\WorksWithRelationsTest::testStoreBelongsToManyInexistent
+not ok 26 - Error: RafflesArgentina\ResourceController\WorksWithRelationsTest::testUpdateHasOne
+not ok 27 - Error: RafflesArgentina\ResourceController\WorksWithRelationsTest::testUpdateBelongsTo
+not ok 28 - Error: RafflesArgentina\ResourceController\WorksWithRelationsTest::testUpdateHasMany
+not ok 29 - Error: RafflesArgentina\ResourceController\WorksWithRelationsTest::testUpdateBelongsToManyExistent
+not ok 30 - Error: RafflesArgentina\ResourceController\WorksWithRelationsTest::testUpdateBelongsToManyInexistent
+1..30

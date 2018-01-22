@@ -108,14 +108,14 @@
 		<b>Namespace:</b> <a href="namespace-RafflesArgentina.html">RafflesArgentina</a>\<a href="namespace-RafflesArgentina.ResourceController.html">ResourceController</a>\<a href="namespace-RafflesArgentina.ResourceController.Traits.html">Traits</a><br>
 		
 
-		<b>Located at</b> <a href="source-class-RafflesArgentina.ResourceController.Traits.WorksWithRelations.html#15-120" title="Go to source code">Traits/WorksWithRelations.php</a><br>
+		<b>Located at</b> <a href="source-class-RafflesArgentina.ResourceController.Traits.WorksWithRelations.html#16-163" title="Go to source code">Traits/WorksWithRelations.php</a><br>
 	</div>
 
 
 
 	<table class="summary methods" id="methods">
 	<caption>Methods summary</caption>
-	<tr data-order="storeRelatedModels" id="_storeRelatedModels">
+	<tr data-order="updateOrCreateRelations" id="_updateOrCreateRelations">
 
 		<td class="attributes"><code>
 			 public 
@@ -125,27 +125,25 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_storeRelatedModels">#</a>
-		<code><a href="source-class-RafflesArgentina.ResourceController.Traits.WorksWithRelations.html#17-50" title="Go to source code">storeRelatedModels</a>( <span>Illuminate\Http\Request <var>$request</var></span>, <span>Illuminate\Database\Eloquent\Model <var>$model</var></span> )</code>
+		<a class="anchor" href="#_updateOrCreateRelations">#</a>
+		<code><a href="source-class-RafflesArgentina.ResourceController.Traits.WorksWithRelations.html#18-37" title="Go to source code">updateOrCreateRelations</a>( <span>Illuminate\Http\Request <var>$request</var></span>, <span>Illuminate\Database\Eloquent\Model <var>$model</var></span> )</code>
 
 		<div class="description short">
 			
-<p>Store related models treating array type request data as Eloquent
-relations.</p>
+<p>Update or create relations handling array type request data.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
 			
-<p>Store related models treating array type request data as Eloquent
-relations.</p>
+<p>Update or create relations handling array type request data.</p>
 
 
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$request</var></dt>
-					<dd>The request object.</dd>
+					<dd>The Request object.</dd>
 					<dt><var>$model</var></dt>
 					<dd>The eloquent model.</dd>
 				</dl></div>
@@ -157,39 +155,207 @@ relations.</p>
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="updateRelatedModels" id="_updateRelatedModels">
+	<tr data-order="handleRelations" id="_handleRelations">
 
 		<td class="attributes"><code>
-			 public 
+			 protected 
 			
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_updateRelatedModels">#</a>
-		<code><a href="source-class-RafflesArgentina.ResourceController.Traits.WorksWithRelations.html#52-96" title="Go to source code">updateRelatedModels</a>( <span>Illuminate\Http\Request <var>$request</var></span>, <span>Illuminate\Database\Eloquent\Model <var>$model</var></span> )</code>
+		<a class="anchor" href="#_handleRelations">#</a>
+		<code><a href="source-class-RafflesArgentina.ResourceController.Traits.WorksWithRelations.html#39-64" title="Go to source code">handleRelations</a>( <span>array <var>$fillables</var></span>, <span>Illuminate\Database\Eloquent\Model <var>$model</var></span>, <span>Illuminate\Database\Eloquent\Relations\Relation <var>$relation</var></span> )</code>
 
 		<div class="description short">
 			
-<p>Update related models treating array type request data as Eloquent
-relations.</p>
+<p>Handle relations.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
 			
-<p>Update related models treating array type request data as Eloquent
-relations.</p>
+<p>Handle relations.</p>
 
 
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
-					<dt><var>$request</var></dt>
-					<dd>The request object</dd>
+					<dt><var>$fillables</var></dt>
+					<dd>The relation fillables.</dd>
 					<dt><var>$model</var></dt>
 					<dd>The eloquent model.</dd>
+					<dt><var>$relation</var></dt>
+					<dd>The eloquent relation.</dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="updateOrCreateHasOne" id="_updateOrCreateHasOne">
+
+		<td class="attributes"><code>
+			 protected 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_updateOrCreateHasOne">#</a>
+		<code><a href="source-class-RafflesArgentina.ResourceController.Traits.WorksWithRelations.html#66-82" title="Go to source code">updateOrCreateHasOne</a>( <span>array <var>$fillables</var></span>, <span>Illuminate\Database\Eloquent\Model <var>$model</var></span>, <span>Illuminate\Database\Eloquent\Relations\Relation <var>$relation</var></span> )</code>
+
+		<div class="description short">
+			
+<p>HasOne relation updateOrCreate logic.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>HasOne relation updateOrCreate logic.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$fillables</var></dt>
+					<dd>The relation fillables.</dd>
+					<dt><var>$model</var></dt>
+					<dd>The eloquent model.</dd>
+					<dt><var>$relation</var></dt>
+					<dd>The eloquent relation.</dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="updateOrCreateBelongsToOne" id="_updateOrCreateBelongsToOne">
+
+		<td class="attributes"><code>
+			 protected 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_updateOrCreateBelongsToOne">#</a>
+		<code><a href="source-class-RafflesArgentina.ResourceController.Traits.WorksWithRelations.html#84-103" title="Go to source code">updateOrCreateBelongsToOne</a>( <span>array <var>$fillables</var></span>, <span>Illuminate\Database\Eloquent\Model <var>$model</var></span>, <span>Illuminate\Database\Eloquent\Relations\Relation <var>$relation</var></span> )</code>
+
+		<div class="description short">
+			
+<p>BelongsToOne relation updateOrCreate logic.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>BelongsToOne relation updateOrCreate logic.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$fillables</var></dt>
+					<dd>The relation fillables.</dd>
+					<dt><var>$model</var></dt>
+					<dd>The eloquent model.</dd>
+					<dt><var>$relation</var></dt>
+					<dd>The eloquent relation.</dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="updateOrCreateHasMany" id="_updateOrCreateHasMany">
+
+		<td class="attributes"><code>
+			 protected 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_updateOrCreateHasMany">#</a>
+		<code><a href="source-class-RafflesArgentina.ResourceController.Traits.WorksWithRelations.html#105-119" title="Go to source code">updateOrCreateHasMany</a>( <span>array <var>$fillables</var></span>, <span>Illuminate\Database\Eloquent\Model <var>$model</var></span>, <span>Illuminate\Database\Eloquent\Relations\Relation <var>$relation</var></span> )</code>
+
+		<div class="description short">
+			
+<p>HasMany relation updateOrCreate logic.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>HasMany relation updateOrCreate logic.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$fillables</var></dt>
+					<dd>The relation fillables.</dd>
+					<dt><var>$model</var></dt>
+					<dd>The eloquent model.</dd>
+					<dt><var>$relation</var></dt>
+					<dd>The eloquent relation.</dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="updateOrCreateBelongsToMany" id="_updateOrCreateBelongsToMany">
+
+		<td class="attributes"><code>
+			 protected 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_updateOrCreateBelongsToMany">#</a>
+		<code><a href="source-class-RafflesArgentina.ResourceController.Traits.WorksWithRelations.html#121-139" title="Go to source code">updateOrCreateBelongsToMany</a>( <span>array <var>$fillables</var></span>, <span>Illuminate\Database\Eloquent\Model <var>$model</var></span>, <span>Illuminate\Database\Eloquent\Relations\Relation <var>$relation</var></span> )</code>
+
+		<div class="description short">
+			
+<p>BelongsToMany relation updateOrCreate logic.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>BelongsToMany relation updateOrCreate logic.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$fillables</var></dt>
+					<dd>The relation fillables.</dd>
+					<dt><var>$model</var></dt>
+					<dd>The eloquent model.</dd>
+					<dt><var>$relation</var></dt>
+					<dd>The eloquent relation.</dd>
 				</dl></div>
 
 
