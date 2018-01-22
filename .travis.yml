@@ -1,32 +1,9 @@
 language: php
 
 php:
-  - 5.6
   - 7.0
-  - hhvm
-
-sudo: false
-
-cache:
-  directories:
-    - $HOME/.composer
-
-env:
-  - LARAVEL_VERSION=5.4.*
-  - LARAVEL_VERSION=5.5.*
-
-matrix:
-  exclude:
-    - php: 5.6
-      env: LARAVEL_VERSION=5.5.*
-    - php: 7.0
-      env: LARAVEL_VERSION=5.4.*
-    - php: hhvm
-      env: LARAVEL_VERSION=5.5.*
 
 before_script:
-  - composer self-update
-  - if [ "$LARAVEL_VERSION" != "" ]; then composer require "laravel/framework:${LARAVEL_VERSION}" --no-update; fi;
-  - composer update
+  - composer install --dev --prefer-source --no-interaction
 
 script: vendor/bin/phpunit

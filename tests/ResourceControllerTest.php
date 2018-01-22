@@ -12,26 +12,14 @@ class ResourceControllerTest extends TestCase
     {
         factory(\RafflesArgentina\ResourceController\Models\User::class, 3)->create();
 
-        $app = app();
-        $version = $app::VERSION;
+        $this->get('/test')
+             ->assertViewIs('test.index')
+             ->assertViewHas('items')
+             ->assertStatus(200);
 
-        if ($version < 5.5) {
-            $this->get('/test')
-                 ->assertViewHas('items')
-                 ->assertStatus(200);
-
-            $this->json('GET', '/test')
-                 ->assertStatus(200);
-        } else {
-            $this->get('/test')
-                 ->assertViewIs('test.index')
-                 ->assertViewHas('items')
-                 ->assertStatus(200);
-
-            $this->json('GET', '/test')
-                 ->assertStatus(200)
-                 ->assertJsonCount(3, 'data');
-        }
+        $this->json('GET', '/test')
+             ->assertStatus(200)
+             ->assertJsonCount(3, 'data');
     }
 
     function testIndexRouteWithUseSoftDeletes()
@@ -39,43 +27,22 @@ class ResourceControllerTest extends TestCase
         $users = factory(\RafflesArgentina\ResourceController\Models\User::class, 3)->create();
         foreach ($users as $user) $user->delete();
 
-        $app = app();
-        $version = $app::VERSION;
+        $this->get('/test2')
+             ->assertViewIs('test.index')
+             ->assertViewHas('items')
+             ->assertStatus(200);
 
-        if ($version < 5.5) {
-            $this->get('/test2')
-                 ->assertViewHas('items')
-                 ->assertStatus(200);
-
-            $this->json('GET', '/test2')
-                 ->assertStatus(200);
-        } else {
-            $this->get('/test2')
-                 ->assertViewIs('test.index')
-                 ->assertViewHas('items')
-                 ->assertStatus(200);
-
-            $this->json('GET', '/test2')
-                 ->assertStatus(200)
-                 ->assertJsonCount(3, 'data');
-        }
+        $this->json('GET', '/test2')
+             ->assertStatus(200)
+             ->assertJsonCount(3, 'data');
     }
 
     function testCreateRoute()
     {
-        $app = app();
-        $version = $app::VERSION;
-
-        if ($version < 5.5) {
-            $this->get('/test/create')
-                 ->assertViewHas('model')
-                 ->assertStatus(200);
-        } else {
-            $this->get('/test/create')
-                 ->assertViewIs('test.create')
-                 ->assertViewHas('model')
-                 ->assertStatus(200);
-        }
+        $this->get('/test/create')
+             ->assertViewIs('test.create')
+             ->assertViewHas('model')
+             ->assertStatus(200);
 
         $this->json('GET', '/test/create')
              ->assertStatus(404);
@@ -95,19 +62,10 @@ class ResourceControllerTest extends TestCase
     {
         $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
 
-        $app = app();
-        $version = $app::VERSION;
-
-        if ($version < 5.5) {
-            $this->get('/test/'.$user->id)
-                 ->assertViewHas('model')
-                 ->assertStatus(200);
-        } else {
-            $this->get('/test/'.$user->id)
-                 ->assertViewIs('test.show')
-                 ->assertViewHas('model')
-                 ->assertStatus(200);
-        }
+        $this->get('/test/'.$user->id)
+             ->assertViewIs('test.show')
+             ->assertViewHas('model')
+             ->assertStatus(200);
 
         $this->json('GET', '/test/'.$user->id)
              ->assertStatus(200);
@@ -118,19 +76,10 @@ class ResourceControllerTest extends TestCase
         $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
         $user->delete();
 
-        $app = app();
-        $version = $app::VERSION;
-
-        if ($version < 5.5) {
-            $this->get('/test2/'.$user->id)
-                 ->assertViewIs('test.show')
-                 ->assertViewHas('model')
-                 ->assertStatus(200);
-        } else {
-            $this->get('/test2/'.$user->id)
-                 ->assertViewHas('model')
-                 ->assertStatus(200);
-        }
+        $this->get('/test2/'.$user->id)
+             ->assertViewIs('test.show')
+             ->assertViewHas('model')
+             ->assertStatus(200);
 
         $this->json('GET', '/test2/'.$user->id)
              ->assertStatus(200);
@@ -147,19 +96,10 @@ class ResourceControllerTest extends TestCase
     {
         $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
 
-        $app = app();
-        $version = $app::VERSION;
-
-        if ($version < 5.5) {
-            $this->get('/test/'.$user->id.'/edit')
-                 ->assertViewHas('model')
-                 ->assertStatus(200);
-        } else {
-            $this->get('/test/'.$user->id.'/edit')
-                 ->assertViewIs('test.edit')
-                 ->assertViewHas('model')
-                 ->assertStatus(200);
-        }
+        $this->get('/test/'.$user->id.'/edit')
+             ->assertViewIs('test.edit')
+             ->assertViewHas('model')
+             ->assertStatus(200);
 
         $this->json('GET', '/test/'.$user->id.'/edit')
              ->assertStatus(404);
@@ -170,19 +110,10 @@ class ResourceControllerTest extends TestCase
         $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
         $user->delete();
 
-        $app = app();
-        $version = $app::VERSION;
-
-        if ($version < 5.5) {
-            $this->get('/test2/'.$user->id.'/edit')
-                 ->assertViewHas('model')
-                 ->assertStatus(200);
-        } else {
-            $this->get('/test2/'.$user->id.'/edit')
-                 ->assertViewIs('test.edit')
-                 ->assertViewHas('model')
-                 ->assertStatus(200);
-        }
+        $this->get('/test2/'.$user->id.'/edit')
+             ->assertViewIs('test.edit')
+             ->assertViewHas('model')
+             ->assertStatus(200);
 
         $this->json('GET', '/test2/'.$user->id.'/edit')
              ->assertStatus(404);
