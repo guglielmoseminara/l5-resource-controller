@@ -9,55 +9,61 @@ trait FormatsResponseMessages
     /**
      * Format the store failed message.
      *
+     * @param string $message The Exception message.
+     *
      * @return string
      */
-    public function storeFailedMessage()
+    public function storeFailedMessage($message = null)
     {
         if (Lang::has('resource-controller.storefailed')) {
-            return trans('resource-controller.storefailed');
+            return trans('resource-controller.storefailed', ['message' => $message]);
         }
 
-        return 'Operation failed while creating a new record.';
+        return 'Operation failed while creating a new record with message: '.$message;
     }
 
     /**
      * Format the update failed message.
      *
-     * @param string $number The model id.
+     * @param string $number  The model id.
+     * @param string $message The Exception message.
      *
      * @return string
      */
-    public function updateFailedMessage($number)
+    public function updateFailedMessage($number, $message = null)
     {
         if (Lang::has('resource-controller.updatefailed')) {
             return trans(
                 'resource-controller.updatefailed', [
-                    'number' => $number
+                    'number' => $number,
+                    'message' => $message
                 ]
             );
         }
 
-        return 'Operation failed while updating the record: '.$number;
+        return 'Operation failed while updating the record '.$number.' with message: '.$message;
     }
 
     /**
      * Format the destroy failed message.
      *
-     * @param string $number The model id.
+     * @param string $number  The model id.
+     * @param string $message The Exception message.
      *
      * @return string
      */
-    public function destroyFailedMessage($number)
+    public function destroyFailedMessage($number, $message = null)
     {
         if (Lang::has('resource-controller.destroyfailed')) {
             return trans(
                 'resource-controller.destroyfailed', [
-                    'number' => $number
+                    'number' => $number,
+                    'message' => $message
                 ]
             );
         }
 
-        return 'Operation failed while destroying the record: '.$number;
+        return 'Operation failed while destroying the record '.$number.' with message: '.$message;
     }
 
     /**

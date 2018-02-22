@@ -84,7 +84,7 @@ class ResourceController extends AbstractResourceController
         } catch (\Exception $e) {
             DB::rollback();
 
-            $message = $this->storeFailedMessage();
+            $message = $this->storeFailedMessage($e->getMessage());
             throw new ResourceControllerException($message);
         }
 
@@ -189,7 +189,7 @@ class ResourceController extends AbstractResourceController
         } catch (\Exception $e) {
             DB::rollback();
 
-            $message = $this->updateFailedMessage($id);
+            $message = $this->updateFailedMessage($id, $e->getMessage());
             throw new ResourceControllerException($message);
         }
 
@@ -234,7 +234,7 @@ class ResourceController extends AbstractResourceController
         } catch (\Exception $e) {
             DB::rollback();
 
-            $message = $this->destroyFailedMessage($id);
+            $message = $this->destroyFailedMessage($id, $e->getMessage());
             throw new ResourceControllerException($message);
         }
 
