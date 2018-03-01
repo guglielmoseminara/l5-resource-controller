@@ -23,6 +23,13 @@ abstract class AbstractResourceController extends BaseController
     protected $alias;
 
     /**
+     * Set theme location for views.
+     *
+     * @var string|null
+     */
+    protected $theme;
+
+    /**
      * Set vendor views prefix.
      *
      * @var string|null
@@ -165,10 +172,10 @@ abstract class AbstractResourceController extends BaseController
     public function getViewLocation($action)
     {
         if (request()->ajax()) {
-            return $this->module.$this->resourceName.'ajax.'.$action;
+            return $this->module.$this->theme.$this->resourceName.'ajax.'.$action;
         }
 
-        return $this->module.$this->resourceName.$action;
+        return $this->module.$this->theme.$this->resourceName.$action;
     }
 
     /**
@@ -278,6 +285,10 @@ abstract class AbstractResourceController extends BaseController
     {
         if ($this->alias) {
             $this->alias = str_finish($this->alias, '.');
+        }
+
+        if ($this->theme) {
+            $this->theme = str_finish($this->theme, '.');
         }
 
         if ($this->module) {
