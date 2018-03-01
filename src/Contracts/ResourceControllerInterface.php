@@ -7,9 +7,9 @@ use Illuminate\Support\MessageBag;
 interface ResourceControllerInterface
 {
     /**
-     * Get route name from action, alias and resource name.
+     * Get named route for the specified action.
      *
-     * @param string $action The route action name.
+     * @param string $action The action.
      *
      * @return string
      */

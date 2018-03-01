@@ -84,10 +84,10 @@ trait WorksWithFileUploads
     /**
      * Handle file relations.
      *
-     * @param \Illuminate\Database\Eloquent\Model                 $model        The eloquent model.
-     * @param \Illuminate\Database\Eloquent\Relations\Relation    $relation     The eloquent relation.
-     * @param string                                              $id           The id for an existent or new relation.
-     * @param string						  $location	The uploaded file location.
+     * @param \Illuminate\Database\Eloquent\Model              $model    The eloquent model.
+     * @param \Illuminate\Database\Eloquent\Relations\Relation $relation The eloquent relation.
+     * @param string                                           $id       The id for an existent or new relation.
+     * @param string                                           $location The uploaded file location.
      *
      * @return void
      */
@@ -96,7 +96,7 @@ trait WorksWithFileUploads
         switch (true) {
         case $relation instanceof HasOne:
             $this->updateOrCreateFileHasOne($model, $relation, $id, $location);
-             break;
+            break;
         case $relation instanceof BelongsTo:
             $this->updateOrCreateFileBelongsToOne($model, $relation, $id, $location);
             break;
@@ -113,7 +113,7 @@ trait WorksWithFileUploads
      * Get location from the UploadedFile object.
      *
      * @param \Symfony\Component\HttpFoundation\File\UploadedFile $uploadedFile The UploadedFile object.
-     * @param string						  $relativePath	The uploaded file relative path.
+     * @param string                                              $relativePath The uploaded file relative path.
      *
      * @return string
      */
@@ -134,10 +134,10 @@ trait WorksWithFileUploads
     /**
      * HasOne file relation updateOrCreate logic.
      *
-     * @param \Illuminate\Database\Eloquent\Model              $model     The eloquent model.
-     * @param \Illuminate\Database\Eloquent\Relations\Relation $relation  The eloquent relation.
-     * @param string                                           $id        The id for an existent or new relation.
-     * @param string                                           $location  The uploaded file location.
+     * @param \Illuminate\Database\Eloquent\Model              $model    The eloquent model.
+     * @param \Illuminate\Database\Eloquent\Relations\Relation $relation The eloquent relation.
+     * @param string                                           $id       The id for an existent or new relation.
+     * @param string                                           $location The uploaded file location.
      *
      * @return void
      */
@@ -155,10 +155,10 @@ trait WorksWithFileUploads
     /**
      * BelongsToOne file relation updateOrCreate logic.
      *
-     * @param \Illuminate\Database\Eloquent\Model              $model     The eloquent model.
-     * @param \Illuminate\Database\Eloquent\Relations\Relation $relation  The eloquent relation.
-     * @param string                                           $id        The id for an existent or new relation.
-     * @param string                                           $location  The uploaded file location.
+     * @param \Illuminate\Database\Eloquent\Model              $model    The eloquent model.
+     * @param \Illuminate\Database\Eloquent\Relations\Relation $relation The eloquent relation.
+     * @param string                                           $id       The id for an existent or new relation.
+     * @param string                                           $location The uploaded file location.
      *
      * @return void
      */
@@ -179,10 +179,10 @@ trait WorksWithFileUploads
     /**
      * HasMany file relation updateOrCreate logic.
      *
-     * @param \Illuminate\Database\Eloquent\Model              $model     The eloquent model.
-     * @param \Illuminate\Database\Eloquent\Relations\Relation $relation  The eloquent relation.
-     * @param string                                           $id        The id for an existent or new relation.
-     * @param string                                           $location  The uploaded file location.
+     * @param \Illuminate\Database\Eloquent\Model              $model    The eloquent model.
+     * @param \Illuminate\Database\Eloquent\Relations\Relation $relation The eloquent relation.
+     * @param string                                           $id       The id for an existent or new relation.
+     * @param string                                           $location The uploaded file location.
      *
      * @return void
      */
@@ -196,10 +196,10 @@ trait WorksWithFileUploads
     /**
      * BelongsToMany file relation updateOrCreate logic.
      *
-     * @param \Illuminate\Database\Eloquent\Model              $model     The eloquent model.
-     * @param \Illuminate\Database\Eloquent\Relations\Relation $relation  The eloquent relation.
-     * @param string                                           $id        The id for an existent or new relation.
-     * @param string                                           $location  The uploaded file location.
+     * @param \Illuminate\Database\Eloquent\Model              $model    The eloquent model.
+     * @param \Illuminate\Database\Eloquent\Relations\Relation $relation The eloquent relation.
+     * @param string                                           $id       The id for an existent or new relation.
+     * @param string                                           $location The uploaded file location.
      *
      * @return void
      */

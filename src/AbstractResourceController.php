@@ -16,28 +16,28 @@ abstract class AbstractResourceController extends BaseController
                                           implements ResourceControllerInterface
 {
     /**
-     * Set alias for named routes.
+     * The alias for named routes.
      *
      * @var string|null
      */
     protected $alias;
 
     /**
-     * Set theme location for views.
+     * The location for themed views.
      *
      * @var string|null
      */
     protected $theme;
 
     /**
-     * Set vendor views prefix.
+     * The vendor views prefix.
      *
      * @var string|null
      */
     protected $module;
 
     /**
-     * Set prefix for named routes.
+     * The prefix for named routes.
      *
      * @var string|null
      */
@@ -58,7 +58,7 @@ abstract class AbstractResourceController extends BaseController
     protected $formRequest;
 
     /**
-     * Set resource name.
+     * The name of the resource.
      *
      * @var string
      */
@@ -72,33 +72,38 @@ abstract class AbstractResourceController extends BaseController
     protected $useSoftDeletes;
 
     /**
-     * Set info flash message key.
+     * The info flash message key.
      *
      * @var string|null
      */
     protected $infoFlashMessageKey = 'rafflesargentina.status.info';
 
     /**
-     * Set error flash message key.
+     * The error flash message key.
      *
      * @var string|null
      */
     protected $errorFlashMessageKey = 'rafflesargentina.status.error';
 
     /**
-     * Set success flash message key.
+     * The success flash message key.
      *
      * @var string|null
      */
     protected $successFlashMessageKey = 'rafflesargentina.status.success';
 
     /**
-     * Set warning flash message key.
+     * The warning flash message key.
      *
      * @var string|null
      */
     protected $warningFlashMessageKey = 'rafflesargentina.status.warning';
 
+    /**
+     * Create a new AbstractResourceController instance.
+     *
+     * @return void
+     */
     public function __construct()
     {
         $this->_checkRepositoryProperty();
@@ -109,9 +114,9 @@ abstract class AbstractResourceController extends BaseController
     }
 
     /**
-     * Get route name from action, alias and resource name.
+     * Get named route for the specified action.
      *
-     * @param string $action The route action.
+     * @param string $action The action.
      *
      * @return string
      */

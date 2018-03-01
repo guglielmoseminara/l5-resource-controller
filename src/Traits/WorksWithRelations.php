@@ -66,8 +66,8 @@ trait WorksWithRelations
     /**
      * HasOne relation updateOrCreate logic.
      *
-     * @param array				               $fillables The relation fillables.
-     * @param \Illuminate\Database\Eloquent\Model	       $model	  The eloquent model.
+     * @param array                                            $fillables The relation fillables.
+     * @param \Illuminate\Database\Eloquent\Model              $model     The eloquent model.
      * @param \Illuminate\Database\Eloquent\Relations\Relation $relation  The eloquent relation.
      *
      * @return void
