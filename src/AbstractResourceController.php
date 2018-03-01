@@ -277,19 +277,21 @@ abstract class AbstractResourceController extends BaseController
     private function _formatRouteNameAndViewPathModifiers()
     {
         if ($this->alias) {
-            $this->alias .= '.';
+            $this->alias = str_finish($this->alias, '.');
         }
 
         if ($this->module) {
-            $this->module .= '::';
+            if (!ends_with($this->module, '::')) {
+                $this->module .= '::';
+            }
         }
 
         if ($this->prefix) {
-            $this->prefix .= '.';
+            $this->prefix = str_finish($this->prefix, '.');
         }
 
         if ($this->resourceName) {
-            $this->resourceName .= '.';
+            $this->resourceName = str_finish($this->resourceName, '.');
         }
     }
 
