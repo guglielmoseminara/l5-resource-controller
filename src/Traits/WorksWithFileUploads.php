@@ -44,7 +44,7 @@ trait WorksWithFileUploads
                 }
 
                 $location = $this->getUploadedFileLocation($uploadedFile, $relativePath);
-                $this->handleFileRelations($model, $relation, $id, $location);
+                $this->handleFileRelations($model, $relation, $location, $id);
             }
         }
     }
@@ -86,25 +86,25 @@ trait WorksWithFileUploads
      *
      * @param \Illuminate\Database\Eloquent\Model              $model    The eloquent model.
      * @param \Illuminate\Database\Eloquent\Relations\Relation $relation The eloquent relation.
-     * @param string                                           $id       The id for an existent or new relation.
      * @param string                                           $location The uploaded file location.
+     * @param string                                           $id       The id for an existent or new relation.
      *
      * @return void
      */
-    protected function handleFileRelations(Model $model, Relation $relation, $id, $location)
+    protected function handleFileRelations(Model $model, Relation $relation, $location, $id)
     {
         switch (true) {
         case $relation instanceof HasOne:
-            $this->updateOrCreateFileHasOne($model, $relation, $id, $location);
+            $this->updateOrCreateFileHasOne($model, $relation, $location, $id);
             break;
         case $relation instanceof BelongsTo:
-            $this->updateOrCreateFileBelongsToOne($model, $relation, $id, $location);
+            $this->updateOrCreateFileBelongsToOne($model, $relation, $location, $id);
             break;
         case $relation instanceof HasMany:
-            $this->updateOrCreateFileHasMany($model, $relation, $id, $location);
+            $this->updateOrCreateFileHasMany($model, $relation, $location, $id);
             break;
         case $relation instanceof BelongsToMany:
-            $this->updateOrCreateFileBelongsToMany($model, $relation, $id, $location);
+            $this->updateOrCreateFileBelongsToMany($model, $relation, $location, $id);
             break;
         }
     }
@@ -136,12 +136,12 @@ trait WorksWithFileUploads
      *
      * @param \Illuminate\Database\Eloquent\Model              $model    The eloquent model.
      * @param \Illuminate\Database\Eloquent\Relations\Relation $relation The eloquent relation.
-     * @param string                                           $id       The id for an existent or new relation.
      * @param string                                           $location The uploaded file location.
+     * @param string|null                                      $id       The id for an existent or new relation.
      *
      * @return void
      */
-    protected function updateOrCreateFileHasOne(Model $model, Relation $relation, $id = null, $location)
+    protected function updateOrCreateFileHasOne(Model $model, Relation $relation, $location, $id = null)
     {
         $column = $this->getLocationColumn();
 
@@ -157,12 +157,12 @@ trait WorksWithFileUploads
      *
      * @param \Illuminate\Database\Eloquent\Model              $model    The eloquent model.
      * @param \Illuminate\Database\Eloquent\Relations\Relation $relation The eloquent relation.
-     * @param string                                           $id       The id for an existent or new relation.
      * @param string                                           $location The uploaded file location.
+     * @param string|null                                      $id       The id for an existent or new relation.
      *
      * @return void
      */
-    protected function updateOrCreateFileBelongsToOne(Model $model, Relation $relation, $id = null, $location)
+    protected function updateOrCreateFileBelongsToOne(Model $model, Relation $relation, $location, $id = null)
     {
         $related = $relation->getRelated();
 
@@ -181,12 +181,12 @@ trait WorksWithFileUploads
      *
      * @param \Illuminate\Database\Eloquent\Model              $model    The eloquent model.
      * @param \Illuminate\Database\Eloquent\Relations\Relation $relation The eloquent relation.
-     * @param string                                           $id       The id for an existent or new relation.
      * @param string                                           $location The uploaded file location.
+     * @param string|null                                      $id       The id for an existent or new relation.
      *
      * @return void
      */
-    protected function updateOrCreateFileHasMany(Model $model, Relation $relation, $id = null, $location)
+    protected function updateOrCreateFileHasMany(Model $model, Relation $relation, $location, $id = null)
     {
         $column = $this->getLocationColumn();
 
@@ -198,12 +198,12 @@ trait WorksWithFileUploads
      *
      * @param \Illuminate\Database\Eloquent\Model              $model    The eloquent model.
      * @param \Illuminate\Database\Eloquent\Relations\Relation $relation The eloquent relation.
-     * @param string                                           $id       The id for an existent or new relation.
      * @param string                                           $location The uploaded file location.
+     * @param string|null                                      $id       The id for an existent or new relation.
      *
      * @return void
      */
-    protected function updateOrCreateFileBelongsToMany(Model $model, Relation $relation, $id = null, $location)
+    protected function updateOrCreateFileBelongsToMany(Model $model, Relation $relation, $location, $id = null)
     {
         $related = $relation->getRelated();
 
