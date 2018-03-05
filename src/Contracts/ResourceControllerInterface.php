@@ -34,9 +34,9 @@ interface ResourceControllerInterface
     public function checkViewExists($view);
 
     /**
-     * Get view location from vendor prefix, route action and resource name.
+     * Get view location for the specified action.
      *
-     * @param string $action The route action.
+     * @param string $action The action.
      *
      * @return string
      */
