@@ -18,9 +18,9 @@ class ResourceController extends AbstractResourceController
     /**
      * Display a listing of the resource.
      *
-     * @param \Illuminate\Http\Request $request The request object
+     * @param Request $request The request object
      *
-     * @return \Illuminate\Http\Response
+     * @return mixed
      */
     public function index(Request $request)
     {
@@ -42,9 +42,9 @@ class ResourceController extends AbstractResourceController
     /**
      * Show the form for creating a new resource.
      *
-     * @param \lluminate\Http\Request $request The request object.
+     * @param Request $request The request object.
      *
-     * @return \Illuminate\Http\Response
+     * @return mixed
      */
     public function create(Request $request)
     {
@@ -63,9 +63,9 @@ class ResourceController extends AbstractResourceController
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request The request object.
+     * @param Request $request The request object.
      *
-     * @return \Illuminate\Http\Response
+     * @return mixed
      *
      * @throws \RafflesArgentina\ResourceController\Exceptions\RepositoryException
      */
@@ -103,10 +103,10 @@ class ResourceController extends AbstractResourceController
     /**
      * Display the specified resource.
      *
-     * @param \Illuminate\Http\Request $request The request object.
-     * @param int                      $id      The model id
+     * @param Request $request The request object.
+     * @param int     $id      The model id
      *
-     * @return \Illuminate\Http\Response
+     * @return mixed
      */
     public function show(Request $request, $id)
     {
@@ -133,10 +133,10 @@ class ResourceController extends AbstractResourceController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \Illuminate\Http\Request $request The request object.
-     * @param int                      $id      The model id
+     * @param Request $request The request object.
+     * @param int     $id      The model id
      *
-     * @return \Illuminate\Http\Response
+     * @return mixed
      */
     public function edit(Request $request, $id)
     {
@@ -160,10 +160,10 @@ class ResourceController extends AbstractResourceController
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request The request object.
-     * @param int                      $id      The model id
+     * @param Request $request The request object.
+     * @param int     $id      The model id
      *
-     * @return \Illuminate\Http\Response
+     * @return mixed
      */
     public function update(Request $request, $id)
     {
@@ -208,10 +208,10 @@ class ResourceController extends AbstractResourceController
     /**
      * Remove the specified resource from storage.
      *
-     * @param \Illuminate\Http\Request $request The request object.
-     * @param int                      $id      The model id
+     * @param Request $request The request object.
+     * @param int     $id      The model id
      *
-     * @return \Illuminate\Http\Response
+     * @return mixed
      */
     public function destroy(Request $request, $id)
     {

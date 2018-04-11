@@ -53,7 +53,7 @@ abstract class AbstractResourceController extends BaseController
     /**
      * The FormRequest class to instantiate.
      *
-     * @var string|null
+     * @var mixed|null
      */
     protected $formRequest;
 
@@ -212,7 +212,7 @@ abstract class AbstractResourceController extends BaseController
      *
      * @param \Illuminate\Validation\Validator $validator The validator instance.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function redirectBackWithErrors($validator)
     {
@@ -228,7 +228,7 @@ abstract class AbstractResourceController extends BaseController
      *
      * @param string $message The response message.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function validSuccessJsonResponse($message = 'Success')
     {
@@ -247,7 +247,7 @@ abstract class AbstractResourceController extends BaseController
      *
      * @param string $message The response message.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function validNotFoundJsonResponse($message = 'Not found')
     {
@@ -267,7 +267,7 @@ abstract class AbstractResourceController extends BaseController
      * @param \Illuminate\Support\MessageBag $errors  The message bag errors.
      * @param string                         $message The response message.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function validUnprocessableEntityJsonResponse(MessageBag $errors, $message = 'Unprocessable Entity')
     {

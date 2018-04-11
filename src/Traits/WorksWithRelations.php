@@ -18,8 +18,8 @@ trait WorksWithRelations
     /**
      * Update or create relations handling array type request data.
      *
-     * @param \Illuminate\Http\Request            $request The Request object.
-     * @param \Illuminate\Database\Eloquent\Model $model   The eloquent model.
+     * @param Request $request The Request object.
+     * @param Model   $model   The eloquent model.
      *
      * @return void
      */
@@ -39,9 +39,9 @@ trait WorksWithRelations
     /**
      * Handle relations.
      *
-     * @param array                                            $fillables The relation fillables.
-     * @param \Illuminate\Database\Eloquent\Model              $model     The eloquent model.
-     * @param \Illuminate\Database\Eloquent\Relations\Relation $relation  The eloquent relation.
+     * @param array    $fillables The relation fillables.
+     * @param Model    $model     The eloquent model.
+     * @param Relation $relation  The eloquent relation.
      *
      * @return void
      */
@@ -66,9 +66,9 @@ trait WorksWithRelations
     /**
      * HasOne relation updateOrCreate logic.
      *
-     * @param array                                            $fillables The relation fillables.
-     * @param \Illuminate\Database\Eloquent\Model              $model     The eloquent model.
-     * @param \Illuminate\Database\Eloquent\Relations\Relation $relation  The eloquent relation.
+     * @param array    $fillables The relation fillables.
+     * @param Model    $model     The eloquent model.
+     * @param Relation $relation  The eloquent relation.
      *
      * @return void
      */
@@ -84,9 +84,9 @@ trait WorksWithRelations
     /**
      * BelongsToOne relation updateOrCreate logic.
      *
-     * @param array                                            $fillables The relation fillables.
-     * @param \Illuminate\Database\Eloquent\Model              $model     The eloquent model.
-     * @param \Illuminate\Database\Eloquent\Relations\Relation $relation  The eloquent relation.
+     * @param array    $fillables The relation fillables.
+     * @param Model    $model     The eloquent model.
+     * @param Relation $relation  The eloquent relation.
      *
      * @return void
      */
@@ -105,9 +105,9 @@ trait WorksWithRelations
     /**
      * HasMany relation updateOrCreate logic.
      *
-     * @param array                                            $fillables The relation fillables.
-     * @param \Illuminate\Database\Eloquent\Model              $model     The eloquent model.
-     * @param \Illuminate\Database\Eloquent\Relations\Relation $relation  The eloquent relation.
+     * @param array    $fillables The relation fillables.
+     * @param Model    $model     The eloquent model.
+     * @param Relation $relation  The eloquent relation.
      *
      * @return void
      */
@@ -121,9 +121,9 @@ trait WorksWithRelations
     /**
      * BelongsToMany relation updateOrCreate logic.
      *
-     * @param array                                            $fillables The relation fillables.
-     * @param \Illuminate\Database\Eloquent\Model              $model     The eloquent model.
-     * @param \Illuminate\Database\Eloquent\Relations\Relation $relation  The eloquent relation.
+     * @param array    $fillables The relation fillables.
+     * @param Model    $model     The eloquent model.
+     * @param Relation $relation  The eloquent relation.
      *
      * @return void
      */
@@ -141,10 +141,10 @@ trait WorksWithRelations
     /**
      * Throw an exception if array type request data is not named after an existent Eloquent relation.
      *
-     * @param \Illuminate\Database\Eloquent\Model $model        The eloquent model.
-     * @param string                              $relationName The eloquent relation name.
+     * @param Model  $model        The eloquent model.
+     * @param string $relationName The eloquent relation name.
      *
-     * @throws \Illuminate\Database\Eloquent\MassAssignmentException
+     * @throws MassAssignmentException
      *
      * @return void
      */

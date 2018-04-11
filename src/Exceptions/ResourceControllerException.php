@@ -19,7 +19,7 @@ class ResourceControllerException extends \Exception
      *
      * @param \Illuminate\Http\Request $request The request object.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function render($request)
     {
