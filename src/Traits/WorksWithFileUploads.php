@@ -30,7 +30,7 @@ trait WorksWithFileUploads
     public function uploadFiles(Request $request, Model $model, $relativePath = null)
     {
         if (!$relativePath) {
-            $relativePath = $this->setRelativePath();
+            $relativePath = $this->getDefaultRelativePath();
         }
 
         $files = $request->files;
@@ -62,11 +62,11 @@ trait WorksWithFileUploads
     }
 
     /**
-     * Set relative path.
+     * Get default relative path.
      *
      * @return string
      */
-    protected function setRelativePath()
+    protected function getDefaultRelativePath()
     {
         return 'uploads/';
     }
