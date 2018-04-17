@@ -86,8 +86,8 @@ interface ResourceControllerInterface
     /**
      * Return a valid 422 Unprocessable entity json response.
      *
-     * @param \Illuminate\Support\MessageBag $errors  The message bag errors.
-     * @param string                         $message The response message.
+     * @param MessageBag $errors  The message bag errors.
+     * @param string     $message The response message.
      *
      * @return \Illuminate\Http\Response
      */
