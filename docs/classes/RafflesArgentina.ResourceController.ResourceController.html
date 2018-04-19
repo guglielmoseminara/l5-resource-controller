@@ -1,0 +1,1852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>API Documentation</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">API Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/RafflesArgentina.html">\RafflesArgentina</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">13</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-683444984"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-683444984" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-817395059"></a>
+                                <a href="../namespaces/RafflesArgentina.html" style="margin-left: 30px; padding-left: 0">RafflesArgentina</a>
+            </div>
+            <div id="namespace-817395059" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-43376892"></a>
+                                <a href="../namespaces/RafflesArgentina.ResourceController.html" style="margin-left: 30px; padding-left: 0">ResourceController</a>
+            </div>
+            <div id="namespace-43376892" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1689660751"></a>
+                                <a href="../namespaces/RafflesArgentina.ResourceController.Contracts.html" style="margin-left: 30px; padding-left: 0">Contracts</a>
+            </div>
+            <div id="namespace-1689660751" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/RafflesArgentina.ResourceController.Contracts.ResourceControllerInterface.html">ResourceControllerInterface</a></li>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1126420752"></a>
+                                <a href="../namespaces/RafflesArgentina.ResourceController.Exceptions.html" style="margin-left: 30px; padding-left: 0">Exceptions</a>
+            </div>
+            <div id="namespace-1126420752" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/RafflesArgentina.ResourceController.Exceptions.ResourceControllerException.html">ResourceControllerException</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-679616004"></a>
+                                <a href="../namespaces/RafflesArgentina.ResourceController.Traits.html" style="margin-left: 30px; padding-left: 0">Traits</a>
+            </div>
+            <div id="namespace-679616004" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                            <li class="trait"><a href="../classes/RafflesArgentina.ResourceController.Traits.FormatsResponseMessages.html">FormatsResponseMessages</a></li>
+                                                                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html">AbstractResourceController</a></li>
+                                                    <li class="class"><a href="../classes/RafflesArgentina.ResourceController.ResourceController.html">ResourceController</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/RafflesArgentina.ResourceController.html">\RafflesArgentina\ResourceController</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+
+                    <h1><small>\RafflesArgentina\ResourceController</small>ResourceController</h1>
+                    <p><em></em></p>
+                    
+                    
+                                        
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.Traits.FormatsResponseMessages.html#method_storeFailedMessage" class="">storeFailedMessage()</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.Traits.FormatsResponseMessages.html#method_updateFailedMessage" class="">updateFailedMessage()</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.Traits.FormatsResponseMessages.html#method_destroyFailedMessage" class="">destroyFailedMessage()</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.Traits.FormatsResponseMessages.html#method_storeSuccessfulMessage" class="">storeSuccessfulMessage()</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.Traits.FormatsResponseMessages.html#method_updateSuccessfulMessage" class="">updateSuccessfulMessage()</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.Traits.FormatsResponseMessages.html#method_destroySuccessfulMessage" class="">destroySuccessfulMessage()</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.ResourceController.html#method_index" class="">index()</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.ResourceController.html#method_create" class="">create()</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.ResourceController.html#method_store" class="">store()</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.ResourceController.html#method_show" class="">show()</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.ResourceController.html#method_edit" class="">edit()</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.ResourceController.html#method_update" class="">update()</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.ResourceController.html#method_destroy" class="">destroy()</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html#method_getRouteName" class="">getRouteName()</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html#method_validateRules" class="">validateRules()</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html#method_checkViewExists" class="">checkViewExists()</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html#method_getViewLocation" class="">getViewLocation()</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html#method_getRedirectionRoute" class="">getRedirectionRoute()</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html#method_getFormRequestInstance" class="">getFormRequestInstance()</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html#method_redirectBackWithErrors" class="">redirectBackWithErrors()</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html#method_validSuccessJsonResponse" class="">validSuccessJsonResponse()</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html#method_validNotFoundJsonResponse" class="">validNotFoundJsonResponse()</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html#method_validUnprocessableEntityJsonResponse" class="">validUnprocessableEntityJsonResponse()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No public properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No constants found</em>
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.ResourceController.html#method_getPaginatorInstance" class="">getPaginatorInstance()</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.ResourceController.html#method_findFirstByKey" class="">findFirstByKey()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html#property_alias" class="">$alias</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html#property_theme" class="">$theme</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html#property_module" class="">$module</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html#property_prefix" class="">$prefix</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html#property_repository" class="">$repository</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html#property_formRequest" class="">$formRequest</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html#property_resourceName" class="">$resourceName</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html#property_useSoftDeletes" class="">$useSoftDeletes</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html#property_infoFlashMessageKey" class="">$infoFlashMessageKey</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html#property_errorFlashMessageKey" class="">$errorFlashMessageKey</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html#property_successFlashMessageKey" class="">$successFlashMessageKey</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html#property_warningFlashMessageKey" class="">$warningFlashMessageKey</a><br />
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html#method__formatRouteNameAndViewPathModifiers" class="">_formatRouteNameAndViewPathModifiers()</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html#method__checkRepositoryProperty" class="">_checkRepositoryProperty()</a><br />
+                                                                    <a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html#method__checkResourceNameProperty" class="">_checkResourceNameProperty()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No private properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                        
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/ResourceController.html"><div class="path-wrapper">ResourceController.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">Default</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                                        <div class="namespace-wrapper">\Illuminate\Routing\Controller</div>
+                                                                    
+                                        <div class="namespace-wrapper"><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html">\RafflesArgentina\ResourceController\AbstractResourceController</a></div>
+                                                                                                    <div class="namespace-wrapper">\RafflesArgentina\ResourceController\ResourceController</div>
+                            </dd>
+
+                        
+                                                                                    <dt>Uses traits</dt>
+                                                        <dd>
+                                                                    <div class="namespace-wrapper">\RafflesArgentina\ResourceController\Traits\WorksWithRelations</div>
+                                                            </dd>
+                                                                                <dd>
+                                                                    <div class="namespace-wrapper">\RafflesArgentina\ResourceController\Traits\WorksWithFileUploads</div>
+                                                            </dd>
+                                                                                <dd>
+                                <a href="../classes/RafflesArgentina.ResourceController.Traits.FormatsResponseMessages.html">                                    <div class="namespace-wrapper">\RafflesArgentina\ResourceController\Traits\FormatsResponseMessages</div>
+                                </a>                            </dd>
+                        
+                        
+                        
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr><td colspan="2"><em>None found</em></td></tr>
+                                        </table>
+                </aside>
+            </div>
+
+                        
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_alias" name="property_alias" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$alias</h3>
+                <pre class="signature">$alias : string|null</pre>
+                <p><em>The alias for named routes.</em></p>
+                
+
+                                <h4>Type</h4>
+                string|null
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\AbstractResourceController</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_theme" name="property_theme" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$theme</h3>
+                <pre class="signature">$theme : string|null</pre>
+                <p><em>The location for themed views.</em></p>
+                
+
+                                <h4>Type</h4>
+                string|null
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\AbstractResourceController</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_module" name="property_module" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$module</h3>
+                <pre class="signature">$module : string|null</pre>
+                <p><em>The vendor views prefix.</em></p>
+                
+
+                                <h4>Type</h4>
+                string|null
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\AbstractResourceController</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_prefix" name="property_prefix" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$prefix</h3>
+                <pre class="signature">$prefix : string|null</pre>
+                <p><em>The prefix for named routes.</em></p>
+                
+
+                                <h4>Type</h4>
+                string|null
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\AbstractResourceController</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_repository" name="property_repository" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$repository</h3>
+                <pre class="signature">$repository : string</pre>
+                <p><em>The Repository class to instantiate.</em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\AbstractResourceController</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_formRequest" name="property_formRequest" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$formRequest</h3>
+                <pre class="signature">$formRequest : mixed|null</pre>
+                <p><em>The FormRequest class to instantiate.</em></p>
+                
+
+                                <h4>Type</h4>
+                mixed|null
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\AbstractResourceController</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_resourceName" name="property_resourceName" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$resourceName</h3>
+                <pre class="signature">$resourceName : string</pre>
+                <p><em>The name of the resource.</em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\AbstractResourceController</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_useSoftDeletes" name="property_useSoftDeletes" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$useSoftDeletes</h3>
+                <pre class="signature">$useSoftDeletes : boolean</pre>
+                <p><em>Define if model uses SoftDeletes.</em></p>
+                
+
+                                <h4>Type</h4>
+                boolean
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\AbstractResourceController</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_infoFlashMessageKey" name="property_infoFlashMessageKey" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$infoFlashMessageKey</h3>
+                <pre class="signature">$infoFlashMessageKey : string|null</pre>
+                <p><em>The info flash message key.</em></p>
+                
+
+                                <h4>Type</h4>
+                string|null
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\AbstractResourceController</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_errorFlashMessageKey" name="property_errorFlashMessageKey" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$errorFlashMessageKey</h3>
+                <pre class="signature">$errorFlashMessageKey : string|null</pre>
+                <p><em>The error flash message key.</em></p>
+                
+
+                                <h4>Type</h4>
+                string|null
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\AbstractResourceController</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_successFlashMessageKey" name="property_successFlashMessageKey" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$successFlashMessageKey</h3>
+                <pre class="signature">$successFlashMessageKey : string|null</pre>
+                <p><em>The success flash message key.</em></p>
+                
+
+                                <h4>Type</h4>
+                string|null
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\AbstractResourceController</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_warningFlashMessageKey" name="property_warningFlashMessageKey" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$warningFlashMessageKey</h3>
+                <pre class="signature">$warningFlashMessageKey : string|null</pre>
+                <p><em>The warning flash message key.</em></p>
+                
+
+                                <h4>Type</h4>
+                string|null
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\AbstractResourceController</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                            
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_storeFailedMessage" name="method_storeFailedMessage" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">storeFailedMessage()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">storeFailedMessage(string  <span class="argument">$message = null</span>) : string</pre>
+                <p><em>Format the store failed message.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$message </td>
+                                <td><p>The Exception message.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.Traits.FormatsResponseMessages.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\Traits\FormatsResponseMessages</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_updateFailedMessage" name="method_updateFailedMessage" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">updateFailedMessage()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">updateFailedMessage(string  <span class="argument">$number</span>, string  <span class="argument">$message = null</span>) : string</pre>
+                <p><em>Format the update failed message.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$number </td>
+                                <td><p>The model id.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$message </td>
+                                <td><p>The Exception message.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.Traits.FormatsResponseMessages.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\Traits\FormatsResponseMessages</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_destroyFailedMessage" name="method_destroyFailedMessage" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">destroyFailedMessage()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">destroyFailedMessage(string  <span class="argument">$number</span>, string  <span class="argument">$message = null</span>) : string</pre>
+                <p><em>Format the destroy failed message.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$number </td>
+                                <td><p>The model id.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$message </td>
+                                <td><p>The Exception message.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.Traits.FormatsResponseMessages.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\Traits\FormatsResponseMessages</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_storeSuccessfulMessage" name="method_storeSuccessfulMessage" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">storeSuccessfulMessage()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">storeSuccessfulMessage(string  <span class="argument">$number</span>) : string</pre>
+                <p><em>Format the store successful message.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$number </td>
+                                <td><p>The model id.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.Traits.FormatsResponseMessages.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\Traits\FormatsResponseMessages</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_updateSuccessfulMessage" name="method_updateSuccessfulMessage" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">updateSuccessfulMessage()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">updateSuccessfulMessage(string  <span class="argument">$number</span>) : string</pre>
+                <p><em>Format the update successful message.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$number </td>
+                                <td><p>The model id.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.Traits.FormatsResponseMessages.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\Traits\FormatsResponseMessages</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_destroySuccessfulMessage" name="method_destroySuccessfulMessage" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">destroySuccessfulMessage()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">destroySuccessfulMessage(string  <span class="argument">$number</span>) : string</pre>
+                <p><em>Format the destroy successful message.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$number </td>
+                                <td><p>The model id.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.Traits.FormatsResponseMessages.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\Traits\FormatsResponseMessages</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___construct" name="method___construct" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__construct()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__construct() : void</pre>
+                <p><em>Create a new AbstractResourceController instance.</em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\AbstractResourceController</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_index" name="method_index" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">index()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">index(\Illuminate\Http\Request  <span class="argument">$request</span>) : mixed</pre>
+                <p><em>Display a listing of the resource.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\Illuminate\Http\Request</td>
+                                <td>$request </td>
+                                <td><p>The request object.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_create" name="method_create" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">create()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">create(\Illuminate\Http\Request  <span class="argument">$request</span>) : mixed</pre>
+                <p><em>Show the form for creating a new resource.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\Illuminate\Http\Request</td>
+                                <td>$request </td>
+                                <td><p>The request object.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_store" name="method_store" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">store()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">store(\Illuminate\Http\Request  <span class="argument">$request</span>) : mixed</pre>
+                <p><em>Store a newly created resource in storage.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\Illuminate\Http\Request</td>
+                                <td>$request </td>
+                                <td><p>The request object.</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\RafflesArgentina\ResourceController\Exceptions\ResourceControllerException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_show" name="method_show" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">show()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">show(\Illuminate\Http\Request  <span class="argument">$request</span>, string  <span class="argument">$key</span>) : mixed</pre>
+                <p><em>Display the specified resource.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\Illuminate\Http\Request</td>
+                                <td>$request </td>
+                                <td><p>The request object.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$key </td>
+                                <td><p>The model key.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_edit" name="method_edit" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">edit()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">edit(\Illuminate\Http\Request  <span class="argument">$request</span>, string  <span class="argument">$key</span>) : mixed</pre>
+                <p><em>Show the form for editing the specified resource.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\Illuminate\Http\Request</td>
+                                <td>$request </td>
+                                <td><p>The request object.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$key </td>
+                                <td><p>The model key.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_update" name="method_update" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">update()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">update(\Illuminate\Http\Request  <span class="argument">$request</span>, string  <span class="argument">$key</span>) : mixed</pre>
+                <p><em>Update the specified resource in storage.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\Illuminate\Http\Request</td>
+                                <td>$request </td>
+                                <td><p>The request object.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$key </td>
+                                <td><p>The model key.</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\RafflesArgentina\ResourceController\Exceptions\ResourceControllerException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_destroy" name="method_destroy" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">destroy()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">destroy(\Illuminate\Http\Request  <span class="argument">$request</span>, string  <span class="argument">$key</span>) : mixed</pre>
+                <p><em>Remove the specified resource from storage.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\Illuminate\Http\Request</td>
+                                <td>$request </td>
+                                <td><p>The request object.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$key </td>
+                                <td><p>The model key.</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\RafflesArgentina\ResourceController\Exceptions\ResourceControllerException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getRouteName" name="method_getRouteName" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getRouteName()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getRouteName(string  <span class="argument">$action</span>) : string</pre>
+                <p><em>Get named route for the specified action.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$action </td>
+                                <td><p>The action.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\AbstractResourceController</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_validateRules" name="method_validateRules" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">validateRules()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">validateRules() : \Illuminate\Validation\Validator</pre>
+                <p><em>Validate rules from a FormRequest instance.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    \Illuminate\Validation\Validator
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\AbstractResourceController</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_checkViewExists" name="method_checkViewExists" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">checkViewExists()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">checkViewExists(string  <span class="argument">$view</span>) : void</pre>
+                <p><em>Throw an exception if the view doesn&#039;t exist.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$view </td>
+                                <td><p>The view.</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\RafflesArgentina\ResourceController\Exceptions\ResourceControllerException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\AbstractResourceController</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getViewLocation" name="method_getViewLocation" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getViewLocation()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getViewLocation(string  <span class="argument">$action</span>) : string</pre>
+                <p><em>Get view location for the specified action.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$action </td>
+                                <td><p>The action.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\AbstractResourceController</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getRedirectionRoute" name="method_getRedirectionRoute" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getRedirectionRoute()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getRedirectionRoute() : string</pre>
+                <p><em>Get redirection route.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\AbstractResourceController</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getFormRequestInstance" name="method_getFormRequestInstance" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getFormRequestInstance()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getFormRequestInstance() : mixed</pre>
+                <p><em>Get the FormRequest instance.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\AbstractResourceController</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_redirectBackWithErrors" name="method_redirectBackWithErrors" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">redirectBackWithErrors()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">redirectBackWithErrors(\Illuminate\Validation\Validator  <span class="argument">$validator</span>) : \Illuminate\Http\RedirectResponse</pre>
+                <p><em>Redirect back with errors.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\Illuminate\Validation\Validator</td>
+                                <td>$validator </td>
+                                <td><p>The validator instance.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    \Illuminate\Http\RedirectResponse
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\AbstractResourceController</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_validSuccessJsonResponse" name="method_validSuccessJsonResponse" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">validSuccessJsonResponse()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">validSuccessJsonResponse(string  <span class="argument">$message = &#039;Success&#039;</span>) : \Illuminate\Http\JsonResponse</pre>
+                <p><em>Return a valid 200 Success json response.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$message </td>
+                                <td><p>The response message.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    \Illuminate\Http\JsonResponse
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\AbstractResourceController</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_validNotFoundJsonResponse" name="method_validNotFoundJsonResponse" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">validNotFoundJsonResponse()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">validNotFoundJsonResponse(string  <span class="argument">$message = &#039;Not found&#039;</span>) : \Illuminate\Http\JsonResponse</pre>
+                <p><em>Return a valid 404 Not found json response.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$message </td>
+                                <td><p>The response message.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    \Illuminate\Http\JsonResponse
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\AbstractResourceController</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_validUnprocessableEntityJsonResponse" name="method_validUnprocessableEntityJsonResponse" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">validUnprocessableEntityJsonResponse()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">validUnprocessableEntityJsonResponse(\Illuminate\Support\MessageBag  <span class="argument">$errors</span>, string  <span class="argument">$message = &#039;Unprocessable Entity&#039;</span>) : \Illuminate\Http\JsonResponse</pre>
+                <p><em>Return a valid 422 Unprocessable entity json response.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\Illuminate\Support\MessageBag</td>
+                                <td>$errors </td>
+                                <td><p>The message bag errors.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$message </td>
+                                <td><p>The response message.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    \Illuminate\Http\JsonResponse
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\AbstractResourceController</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getPaginatorInstance" name="method_getPaginatorInstance" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">getPaginatorInstance()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getPaginatorInstance() : \Illuminate\Pagination\LengthAwarePaginator</pre>
+                <p><em>Get Paginator instance.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    \Illuminate\Pagination\LengthAwarePaginator
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_findFirstByKey" name="method_findFirstByKey" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">findFirstByKey()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">findFirstByKey(string  <span class="argument">$key</span>) : \RafflesArgentina\ResourceController\Model|null</pre>
+                <p><em>Find first by key.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$key </td>
+                                <td><p>The model key.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    \RafflesArgentina\ResourceController\Model|null
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method__formatRouteNameAndViewPathModifiers" name="method__formatRouteNameAndViewPathModifiers" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">_formatRouteNameAndViewPathModifiers()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">_formatRouteNameAndViewPathModifiers() : void</pre>
+                <p><em>Format route name and view path modifiers.</em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\AbstractResourceController</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method__checkRepositoryProperty" name="method__checkRepositoryProperty" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">_checkRepositoryProperty()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">_checkRepositoryProperty() : void</pre>
+                <p><em>Throw an exception if repository property is not set.</em></p>
+                
+
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\RafflesArgentina\ResourceController\Exceptions\ResourceControllerException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\AbstractResourceController</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method__checkResourceNameProperty" name="method__checkResourceNameProperty" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">_checkResourceNameProperty()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">_checkResourceNameProperty() : void</pre>
+                <p><em>Throw an exception if resourceName property is not set.</em></p>
+                
+
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\RafflesArgentina\ResourceController\Exceptions\ResourceControllerException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/RafflesArgentina.ResourceController.AbstractResourceController.html"><div class="path-wrapper">\RafflesArgentina\ResourceController\AbstractResourceController</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">ResourceController.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/ResourceController.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/RafflesArgentina.html">\RafflesArgentina</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on April 19th, 2018 at 19:03.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>

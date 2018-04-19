@@ -1,3 +1,0 @@
-
-var ApiGen = ApiGen || {};
-ApiGen.elements = [["c","Exception"],["c","RafflesArgentina\\ResourceController\\AbstractResourceController"],["c","RafflesArgentina\\ResourceController\\Contracts\\ResourceControllerInterface"],["c","RafflesArgentina\\ResourceController\\Exceptions\\ResourceControllerException"],["c","RafflesArgentina\\ResourceController\\ResourceController"],["c","RafflesArgentina\\ResourceController\\Traits\\FormatsResponseMessages"],["c","RafflesArgentina\\ResourceController\\Traits\\WorksWithFileUploads"],["c","RafflesArgentina\\ResourceController\\Traits\\WorksWithRelations"],["c","Throwable"]];
