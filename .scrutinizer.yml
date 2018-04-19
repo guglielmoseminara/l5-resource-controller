@@ -2,5 +2,5 @@ filter:
     excluded_paths:
         - docs/*
 
-    tools:
-        external_code_coverage: true
+tools:
+    external_code_coverage: true
