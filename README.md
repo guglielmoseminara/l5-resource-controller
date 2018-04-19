@@ -1,4 +1,4 @@
-# l5-resource-controller
+# Resource Controller for Laravel 5
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
@@ -17,17 +17,23 @@ $ composer require rafflesargentina/l5-resource-controller
 
 ## Usage
 
-Create a controller like you normally would, but don't define any methods. Instead, change it to extend  ResourceController class. Then you should define a few protected properties. These are mandatory:
+Create a controller like you normally would and change it to extend ResourceController class. Then set $repository an $resourceName properties:
 
 - $repository: The Repository class to instantiate.
 - $resourceName: Set routes resource name.
 
-And these are the optional:
+Also you can set these optional properties:
 
-- $alias: Set alias for named routes.
-- $prefix : Set prefix for named routes.
+- $alias: The alias for named routes.
+- $theme: The location for themed views.
 - $module: Set views vendor location prefix.
-- $formRequest: Set the FormRequest associate class to validate rules (take a look at [l5-action-based-form-request][link-abfr] ).
+- $prefix : The vendor views prefix.
+- $formRequest: The FormRequest class to instantiate (also take a look at [l5-action-based-form-request][link-abfr]).
+- $useSoftDeletes: Define if model uses SoftDeletes.
+- $infoFlashMessageKey: The info flash message key.
+- $errorFlashMessageKey: The info flash message key.
+- $successFlashMessageKey: The info flash message key.
+- $warningFlashMessageKey: The info flash message key.
 
 Example:
 
@@ -43,12 +49,6 @@ use App\Repositories\ArticleRepository;
 
 class ArticlesController extends ResourceController
 {
-    protected $alias = null;
-
-    protected $module = 'admin';
-
-    protected $prefix = null;
-    
     protected $repository = ArticleRepository::class;
 
     protected $formRequest = ArticleRequest::class;
