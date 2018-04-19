@@ -7,7 +7,7 @@ use Lang;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Database\Eloquent\Relations\{HasOne, MorphOne, MorphTo, BelongsTo};
+use Illuminate\Database\Eloquent\Relations\{HasOne, MorphOne, BelongsTo};
 use Illuminate\Database\Eloquent\Relations\{HasMany, MorphMany, MorphToMany, BelongsToMany};
 use Illuminate\Database\Eloquent\MassAssignmentException;
 
@@ -49,7 +49,7 @@ trait WorksWithRelations
         case $relation instanceof HasOne || $relation instanceof MorphOne:
             $this->updateOrCreateHasOne($fillables, $model, $relation);
             break;
-        case $relation instanceof BelongsTo || $relation instanceof MorphTo:
+        case $relation instanceof BelongsTo:
             $this->updateOrCreateBelongsToOne($fillables, $model, $relation);
             break;
         case $relation instanceof HasMany || $relation instanceof MorphMany:

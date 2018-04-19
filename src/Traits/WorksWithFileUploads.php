@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Database\Eloquent\Relations\{HasOne, MorphOne, MorphTo, BelongsTo};
+use Illuminate\Database\Eloquent\Relations\{HasOne, MorphOne, BelongsTo};
 use Illuminate\Database\Eloquent\Relations\{HasMany, MorphMany, MorphToMany, BelongsToMany};
 
 trait WorksWithFileUploads
@@ -95,7 +95,7 @@ trait WorksWithFileUploads
         case $relation instanceof HasOne || $relation instanceof MorphOne:
             $this->updateOrCreateFileHasOne($model, $relation, $location, $id);
             break;
-        case $relation instanceof BelongsTo || $relation instanceof MorphTo:
+        case $relation instanceof BelongsTo:
             $this->updateOrCreateFileBelongsToOne($model, $relation, $location, $id);
             break;
         case $relation instanceof HasMany || $relation instanceof MorphMany:
