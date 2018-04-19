@@ -2,10 +2,86 @@
 
 namespace RafflesArgentina\ResourceController\Contracts;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\MessageBag;
+
+use RafflesArgentina\ResourceController\Exceptions\ResourceControllerException;
 
 interface ResourceControllerInterface
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request The request object.
+     *
+     * @return mixed
+     */
+    public function index(Request $request);
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @param Request $request The request object.
+     *
+     * @return mixed
+     */
+    public function create(Request $request);
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request The request object.
+     *
+     * @throws ResourceControllerException
+     *
+     * @return mixed
+     */
+    public function store(Request $request);
+
+    /**
+     * Display the specified resource.
+     *
+     * @param Request $request The request object.
+     * @param string  $key     The model key.
+     *
+     * @return mixed
+     */
+    public function show(Request $request, $key);
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param Request $request The request object.
+     * @param string  $key     The model key.
+     *
+     * @return mixed
+     */
+    public function edit(Request $request, $key);
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request The request object.
+     * @param string  $key     The model key.
+     *
+     * @throws ResourceControllerException
+     *
+     * @return mixed
+     */
+    public function update(Request $request, $key);
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param Request $request The request object.
+     * @param string  $key     The model key.
+     *
+     * @throws ResourceControllerException
+     *
+     * @return mixed
+     */
+    public function destroy(Request $request, $key);
+
     /**
      * Get named route for the specified action.
      *
@@ -27,7 +103,7 @@ interface ResourceControllerInterface
      *
      * @param string $view The view.
      *
-     * @throws \RafflesArgentina\ResourceController\Exceptions\ResourceControllerException
+     * @throws ResourceControllerException
      *
      * @return void
      */
@@ -43,25 +119,25 @@ interface ResourceControllerInterface
     public function getViewLocation($action);
 
     /**
-     * Set redirection route.
+     * Get redirection route.
      *
      * @return string
      */
-    public function redirectionRoute();
+    public function getRedirectionRoute();
 
     /**
      * Get the FormRequest instance.
      *
-     * @return \Illuminate\Foundation\Http\FormRequest
+     * @return mixed
      */
     public function getFormRequestInstance();
 
     /**
-     * Redirect back with errors if validator fails.
+     * Redirect back with errors.
      *
      * @param \Illuminate\Validation\Validator $validator The validator instance.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function redirectBackWithErrors($validator);
 
@@ -70,7 +146,7 @@ interface ResourceControllerInterface
      *
      * @param string $message The response message.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function validSuccessJsonResponse($message = 'Success');
 
@@ -79,7 +155,7 @@ interface ResourceControllerInterface
      *
      * @param string $message The response message.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function validNotFoundJsonResponse($message = 'Not found');
 
@@ -89,7 +165,7 @@ interface ResourceControllerInterface
      * @param MessageBag $errors  The message bag errors.
      * @param string     $message The response message.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function validUnprocessableEntityJsonResponse(MessageBag $errors, $message = 'Unprocessable Entity');
 }

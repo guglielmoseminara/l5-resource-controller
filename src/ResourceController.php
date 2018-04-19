@@ -18,7 +18,7 @@ class ResourceController extends AbstractResourceController
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request The request object
+     * @param Request $request The request object.
      *
      * @return mixed
      */
@@ -26,8 +26,7 @@ class ResourceController extends AbstractResourceController
     {
         $this->getFormRequestInstance();
 
-        $items = $this->useSoftDeletes ? $this->repository->withTrashed()->paginate()
-                                       : $this->repository->paginate();
+        $items = $this->getPaginatorInstance();
 
         if ($request->wantsJson()) {
             return response()->json($items, 200, [], JSON_PRETTY_PRINT);
@@ -65,9 +64,9 @@ class ResourceController extends AbstractResourceController
      *
      * @param Request $request The request object.
      *
-     * @return mixed
+     * @throws ResourceControllerException
      *
-     * @throws \RafflesArgentina\ResourceController\Exceptions\RepositoryException
+     * @return mixed
      */
     public function store(Request $request)
     {
@@ -96,7 +95,7 @@ class ResourceController extends AbstractResourceController
             return $this->validSuccessJsonResponse($message);
         }
 
-        return redirect()->route($this->redirectionRoute())
+        return redirect()->route($this->getRedirectionRoute())
                          ->with($this->successFlashMessageKey, $message);
     }
 
@@ -104,14 +103,13 @@ class ResourceController extends AbstractResourceController
      * Display the specified resource.
      *
      * @param Request $request The request object.
-     * @param int     $id      The model id
+     * @param string  $key     The model key.
      *
      * @return mixed
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, $key)
     {
-        $model = $this->useSoftDeletes ? $this->repository->withTrashed()->where($this->repository->model->getRouteKeyName(), $id)->first()
-                                       : $this->repository->findBy($this->repository->model->getRouteKeyName(), $id);
+        $model = $this->findFirstByKey($key);
 
         if (!$model) {
             if ($request->wantsJson()) {
@@ -134,18 +132,17 @@ class ResourceController extends AbstractResourceController
      * Show the form for editing the specified resource.
      *
      * @param Request $request The request object.
-     * @param int     $id      The model id
+     * @param string  $key     The model key.
      *
      * @return mixed
      */
-    public function edit(Request $request, $id)
+    public function edit(Request $request, $key)
     {
         if ($request->wantsJson()) {
             return $this->validNotFoundJsonResponse();
         }
 
-        $model = $this->useSoftDeletes ? $this->repository->withTrashed()->where($this->repository->model->getRouteKeyName(), $id)->first()
-                                       : $this->repository->findBy($this->repository->model->getRouteKeyName(), $id);
+        $model = $this->findFirstByKey($key);
 
         if (!$model) {
             abort(404);
@@ -161,16 +158,17 @@ class ResourceController extends AbstractResourceController
      * Update the specified resource in storage.
      *
      * @param Request $request The request object.
-     * @param int     $id      The model id
+     * @param string  $key     The model key.
+     *
+     * @throws ResourceControllerException
      *
      * @return mixed
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $key)
     {
         $this->getFormRequestInstance();
 
-        $model = $this->useSoftDeletes ? $this->repository->withTrashed()->where($this->repository->model->getRouteKeyName(), $id)->first()
-                                       : $this->repository->findBy($this->repository->model->getRouteKeyName(), $id);
+        $model = $this->findFirstByKey($key);
 
         if (!$model) {
             if ($request->wantsJson()) {
@@ -189,19 +187,19 @@ class ResourceController extends AbstractResourceController
         } catch (\Exception $e) {
             DB::rollback();
 
-            $message = $this->updateFailedMessage($id, $e->getMessage());
+            $message = $this->updateFailedMessage($key, $e->getMessage());
             throw new ResourceControllerException($message);
         }
 
         DB::commit();
 
-        $message = $this->updateSuccessfulMessage($id);
+        $message = $this->updateSuccessfulMessage($key);
 
         if ($request->wantsJson()) {
             return $this->validSuccessJsonResponse($message);
         }
 
-        return redirect()->route($this->redirectionRoute())
+        return redirect()->route($this->getRedirectionRoute())
                          ->with($this->successFlashMessageKey, $message);
     }
 
@@ -209,16 +207,17 @@ class ResourceController extends AbstractResourceController
      * Remove the specified resource from storage.
      *
      * @param Request $request The request object.
-     * @param int     $id      The model id
+     * @param string  $key     The model key.
+     *
+     * @throws ResourceControllerException
      *
      * @return mixed
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, $key)
     {
         $this->getFormRequestInstance();
 
-        $model = $this->useSoftDeletes ? $this->repository->withTrashed()->where($this->repository->model->getRouteKeyName(), $id)->first()
-                                       : $this->repository->findBy($this->repository->model->getRouteKeyName(), $id);
+        $model = $this->findFirstByKey($key);
 
         if (!$model) {
             if ($request->wantsJson()) {
@@ -234,19 +233,53 @@ class ResourceController extends AbstractResourceController
         } catch (\Exception $e) {
             DB::rollback();
 
-            $message = $this->destroyFailedMessage($id, $e->getMessage());
+            $message = $this->destroyFailedMessage($key, $e->getMessage());
             throw new ResourceControllerException($message);
         }
 
         DB::commit();
 
-        $message = $this->destroySuccessfulMessage($id);
+        $message = $this->destroySuccessfulMessage($key);
 
         if ($request->wantsJson()) {
             return $this->validSuccessJsonResponse($message);
         }
 
-        return redirect()->route($this->redirectionRoute())
+        return redirect()->route($this->getRedirectionRoute())
                          ->with($this->infoFlashMessageKey, $message);
+    }
+
+    /**
+     * Get Paginator instance.
+     *
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    protected function getPaginatorInstance()
+    {
+        if ($this->useSoftDeletes) {
+            return $this->repository->model->withTrashed()->paginate();
+        }
+
+        return $this->repository->paginate();
+    }
+
+    /**
+     * Find first by key.
+     *
+     * @param string $key The model key.
+     *
+     * @return Model|null
+     */
+    protected function findFirstByKey($key)
+    {
+        if ($this->useSoftDeletes) {
+            return $this->repository
+                ->withTrashed()
+                ->where($this->repository->model->getRouteKeyName(), $key)
+                ->first();
+        }
+
+        return $this->repository
+            ->findBy($this->repository->model->getRouteKeyName(), $key);
     }
 }

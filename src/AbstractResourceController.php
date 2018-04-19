@@ -5,9 +5,11 @@ namespace RafflesArgentina\ResourceController;
 use Lang;
 use Validator;
 
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Facades\View;
+use Illuminate\Foundation\Http\FormRequest;
 
 use RafflesArgentina\ResourceController\Contracts\ResourceControllerInterface;
 use RafflesArgentina\ResourceController\Exceptions\ResourceControllerException;
@@ -65,7 +67,7 @@ abstract class AbstractResourceController extends BaseController
     protected $resourceName;
 
     /**
-     * Define if model uses SoftDeletes;
+     * Define if model uses SoftDeletes.
      *
      * @var boolean
      */
@@ -114,6 +116,79 @@ abstract class AbstractResourceController extends BaseController
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request The request object.
+     *
+     * @return mixed
+     */
+    public abstract function index(Request $request);
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @param Request $request The request object.
+     *
+     * @return mixed
+     */
+    public abstract function create(Request $request);
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request The request object.
+     *
+     * @throws ResourceControllerException
+     *
+     * @return mixed
+     */
+    public abstract function store(Request $request);
+
+    /**
+     * Display the specified resource.
+     *
+     * @param Request $request The request object.
+     * @param string  $key     The model key.
+     *
+     * @return mixed
+     */
+    public abstract function show(Request $request, $key);
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param Request $request The request object.
+     * @param string  $key     The model key.
+     *
+     * @return mixed
+     */
+    public abstract function edit(Request $request, $key);
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request The request object.
+     * @param string  $key     The model key.
+     *
+     * @throws ResourceControllerException
+     *
+     * @return mixed
+     */
+    public abstract function update(Request $request, $key);
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param Request $request The request object.
+     * @param string  $key     The model key.
+     *
+     * @throws ResourceControllerException
+     *
+     * @return mixed
+     */
+    public abstract function destroy(Request $request, $key);
+
+    /**
      * Get named route for the specified action.
      *
      * @param string $action The action.
@@ -150,7 +225,7 @@ abstract class AbstractResourceController extends BaseController
      *
      * @param string $view The view.
      *
-     * @throws \RafflesArgentina\ResourceController\Exceptions\ResourceControllerException
+     * @throws ResourceControllerException
      *
      * @return void
      */
@@ -184,11 +259,11 @@ abstract class AbstractResourceController extends BaseController
     }
 
     /**
-     * Set redirection route.
+     * Get redirection route.
      *
      * @return string
      */
-    public function redirectionRoute()
+    public function getRedirectionRoute()
     {
         return $this->getRouteName('index');
     }
@@ -196,19 +271,19 @@ abstract class AbstractResourceController extends BaseController
     /**
      * Get the FormRequest instance.
      *
-     * @return \Illuminate\Foundation\Http\FormRequest
+     * @return mixed
      */
     public function getFormRequestInstance()
     {
         if (!$this->formRequest) {
-            return new \Illuminate\Foundation\Http\FormRequest;
+            return new FormRequest;
         }
         
         return app()->make($this->formRequest);
     }
 
     /**
-     * Redirect back with errors if validator fails.
+     * Redirect back with errors.
      *
      * @param \Illuminate\Validation\Validator $validator The validator instance.
      *
@@ -237,7 +312,7 @@ abstract class AbstractResourceController extends BaseController
                 'code' => '200',
                 'message' => $message,
                 'errors' => [],
-                'redirect' => route($this->redirectionRoute()),
+                'redirect' => route($this->getRedirectionRoute()),
             ], 200, [], JSON_PRETTY_PRINT
         );
     }
@@ -256,7 +331,7 @@ abstract class AbstractResourceController extends BaseController
                 'code' => '404',
                 'message' => $message,
                 'errors' => [],
-                'redirect' => route($this->redirectionRoute()),
+                'redirect' => route($this->getRedirectionRoute()),
             ], 404, [], JSON_PRETTY_PRINT
         );
     }
@@ -276,7 +351,7 @@ abstract class AbstractResourceController extends BaseController
                 'code' => '422',
                 'message' => $message,
                 'errors' => $errors,
-                'redirect' => route($this->redirectionRoute()),
+                'redirect' => route($this->getRedirectionRoute()),
             ], 422, [], JSON_PRETTY_PRINT
         );
     }
@@ -314,7 +389,7 @@ abstract class AbstractResourceController extends BaseController
     /**
      * Throw an exception if repository property is not set.
      *
-     * @throws \RafflesArgentina\ResourceController\Exceptions\ResourceControllerException
+     * @throws ResourceControllerException
      *
      * @return void
      */
@@ -334,7 +409,7 @@ abstract class AbstractResourceController extends BaseController
     /**
      * Throw an exception if resourceName property is not set.
      *
-     * @throws \RafflesArgentina\ResourceController\Exceptions\ResourceControllerException
+     * @throws ResourceControllerException
      *
      * @return void
      */
