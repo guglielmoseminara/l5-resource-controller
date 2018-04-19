@@ -10,11 +10,9 @@ use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\{HasOne, MorphOne, MorphTo, BelongsTo};
+use Illuminate\Database\Eloquent\Relations\{HasMany, MorphMany, MorphToMany, BelongsToMany};
 
 trait WorksWithFileUploads
 {
@@ -94,16 +92,16 @@ trait WorksWithFileUploads
     protected function handleFileRelations(Model $model, Relation $relation, $location, $id)
     {
         switch (true) {
-        case $relation instanceof HasOne:
+        case $relation instanceof HasOne || $relation instanceof MorphOne:
             $this->updateOrCreateFileHasOne($model, $relation, $location, $id);
             break;
-        case $relation instanceof BelongsTo:
+        case $relation instanceof BelongsTo || $relation instanceof MorphTo:
             $this->updateOrCreateFileBelongsToOne($model, $relation, $location, $id);
             break;
-        case $relation instanceof HasMany:
+        case $relation instanceof HasMany || $relation instanceof MorphMany:
             $this->updateOrCreateFileHasMany($model, $relation, $location, $id);
             break;
-        case $relation instanceof BelongsToMany:
+        case $relation instanceof BelongsToMany || $relation instanceof MorphToMany:
             $this->updateOrCreateFileBelongsToMany($model, $relation, $location, $id);
             break;
         }

@@ -6,12 +6,10 @@ use Lang;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\{HasOne, MorphOne, MorphTo, BelongsTo};
+use Illuminate\Database\Eloquent\Relations\{HasMany, MorphMany, MorphToMany, BelongsToMany};
 use Illuminate\Database\Eloquent\MassAssignmentException;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 trait WorksWithRelations
 {
@@ -48,16 +46,16 @@ trait WorksWithRelations
     protected function handleRelations(array $fillables, Model $model, Relation $relation)
     {
         switch (true) {
-        case $relation instanceof HasOne:
+        case $relation instanceof HasOne || $relation instanceof MorphOne:
             $this->updateOrCreateHasOne($fillables, $model, $relation);
             break;
-        case $relation instanceof BelongsTo:
+        case $relation instanceof BelongsTo || $relation instanceof MorphTo:
             $this->updateOrCreateBelongsToOne($fillables, $model, $relation);
             break;
-        case $relation instanceof HasMany:
+        case $relation instanceof HasMany || $relation instanceof MorphMany:
             $this->updateOrCreateHasMany($fillables, $model, $relation);
             break;
-        case $relation instanceof BelongsToMany:
+        case $relation instanceof BelongsToMany || $relation instanceof MorphToMany:
             $this->updateOrCreateBelongsToMany($fillables, $model, $relation);
             break;
         }
@@ -154,7 +152,7 @@ trait WorksWithRelations
             if (Lang::has('resource-controller.data2relationinexistent')) {
                 $message = trans('resource-controller.data2relationinexistent', ['relationName' => $relationName]);
             } else {
-                $message = "Array type request data '{$relationName}' is not named after an existent relation.";
+                $message = "Array type request data '{$relationName}' must be named after an existent relation.";
             }
 
             throw new MassAssignmentException($message);
