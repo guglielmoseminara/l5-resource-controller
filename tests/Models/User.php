@@ -37,6 +37,21 @@ class User extends Model
         return $this->belongsToMany(Upload::class, 'upload_user', 'upload_id', 'user_id');
     }
 
+    public function morphOneFileUpload()
+    {
+        return $this->morphOne(Upload::class, 'uploadeable');
+    }
+
+    public function morphManyFileUploads()
+    {
+        return $this->morphMany(Upload::class, 'uploadeable');
+    }
+
+    public function morphToManyFileUploads()
+    {
+        return $this->morphToMany(Upload::class, 'uploadeable');
+    }
+
     public function hasOneRelated()
     {
         return $this->hasOne(Related::class);
@@ -55,5 +70,20 @@ class User extends Model
     public function belongsToManyRelated()
     {
         return $this->belongsToMany(Related::class);
+    }
+
+    public function morphOneRelated()
+    {
+        return $this->morphOne(Related::class, 'relatable');
+    }
+
+    public function morphManyRelated()
+    {
+        return $this->morphMany(Related::class, 'relatable');
+    }
+
+    public function morphToManyRelated()
+    {
+        return $this->morphToMany(Related::class, 'relatable');
     }
 }

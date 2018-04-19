@@ -9,6 +9,8 @@ class Upload extends Model
     protected $fillable = [
         'user_id',
         'location',
+        'uploadeable_id',
+        'uploadeable_type',
     ];
 
     public function user()
@@ -19,5 +21,10 @@ class Upload extends Model
     public function users()
     {
         return $this->belongsToMany(Upload::class);
+    }
+
+    public function uploadeable()
+    {
+        return $this->morphTo();
     }
 }

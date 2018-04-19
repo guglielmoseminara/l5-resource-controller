@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUploadsTable extends Migration
+class CreateUploadeablesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateUploadsTable extends Migration
      */
     public function up()
     {
-        Schema::create('uploads', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('user_id')->nullable();
-            $table->string('location');
+        Schema::create('uploadeables', function (Blueprint $table) {
+            $table->unsignedInteger('upload_id')->nullable();
             $table->unsignedInteger('uploadeable_id')->nullable();
             $table->string('uploadeable_type')->nullable();
-            $table->timestamps();
         });
     }
 
@@ -30,6 +27,6 @@ class CreateUploadsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('uploads');
+        Schema::dropIfExists('uploadeables');
     }
 }

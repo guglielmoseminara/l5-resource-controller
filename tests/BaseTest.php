@@ -11,6 +11,8 @@ trait BaseTest
     {
         parent::setUp();
 
+        gc_disable();
+
         $this->loadMigrationsFrom(__DIR__.'/database/migrations');
 
         $this->withFactories(__DIR__.'/factories');

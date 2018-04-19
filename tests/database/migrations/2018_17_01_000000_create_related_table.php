@@ -19,6 +19,8 @@ class CreateRelatedTable extends Migration
             $table->string('a');
             $table->string('b');
             $table->string('c');
+            $table->string('relatable_id')->nullable();
+            $table->string('relatable_type')->nullable();
             $table->timestamps();
         });
     }
