@@ -13,8 +13,6 @@ class WorksWithFileUploadsTest extends TestCase
 
     function testPostHasOneFileUpload()
     {
-        $user = \RafflesArgentina\ResourceController\Models\User::first();
-
         Storage::fake('uploads');
 
         $this->post('/test', [
@@ -33,8 +31,6 @@ class WorksWithFileUploadsTest extends TestCase
 
     function testPostMorphOneFileUpload()
     {
-        $user = \RafflesArgentina\ResourceController\Models\User::first();
-
         Storage::fake('uploads');
 
         $this->post('/test', [
@@ -73,8 +69,6 @@ class WorksWithFileUploadsTest extends TestCase
 
     function testPostHasManyFileUploads()
     {
-        $user = \RafflesArgentina\ResourceController\Models\User::first();
-
         Storage::fake('uploads');
 
         $this->post('/test', [
