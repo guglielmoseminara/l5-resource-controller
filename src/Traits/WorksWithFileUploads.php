@@ -41,10 +41,30 @@ trait WorksWithFileUploads
                     throw new UploadException($uploadedFile->getError());
                 }
 
-                $location = $this->getUploadedFileLocation($uploadedFile, $relativePath);
+                $filename = $this->getFilename($uploadedFile);
+
+                $destination = $this->getStoragePath($relativePath);
+                $this->moveUploadedFile($uploadedFile, $filename, $destination);
+
+                $location = $relativePath.$filename;
                 $this->handleFileRelations($model, $relation, $location, $id);
             }
         }
+    }
+
+    /**
+     * Get the name of the file.
+     *
+     * @param UploadedFile $uploadedFile The UploadedFile object.
+     *
+     * @return string
+     */
+    protected function getFilename(UploadedFile $uploadedFile)
+    {
+        $extension = $uploadedFile->guessExtension();
+        $filename = str_random().'.'.$extension;
+
+        return $filename;
     }
 
     /**
@@ -60,13 +80,17 @@ trait WorksWithFileUploads
     }
 
     /**
-     * Get default relative path.
+     * Move the uploaded file to specified filename and destination.
      *
-     * @return string
+     * @param UploadedFile $uploadedFile The UploadedFile object.
+     * @param string       $filename     The name of the file.
+     * @param string       $destination  The file destination.
+     *
+     * @return \Symfony\Component\HttpFoundation\File\File
      */
-    protected function getDefaultRelativePath()
+    protected function moveUploadedFile($uploadedFile, $filename, $destination)
     {
-        return 'uploads/';
+        return $uploadedFile->move($destination, $filename);
     }
 
     /**
@@ -77,6 +101,16 @@ trait WorksWithFileUploads
     protected function getLocationColumn()
     {
         return 'location';
+    }
+
+    /**
+     * Get default relative path.
+     *
+     * @return string
+     */
+    protected function getDefaultRelativePath()
+    {
+        return 'uploads/';
     }
 
     /**
@@ -105,28 +139,6 @@ trait WorksWithFileUploads
             $this->updateOrCreateFileBelongsToMany($model, $relation, $location, $id);
             break;
         }
-    }
-
-    /**
-     * Get the uploaded file location from the UploadedFile object.
-     *
-     * @param UploadedFile $uploadedFile The UploadedFile object.
-     * @param string       $relativePath The uploaded file relative path.
-     *
-     * @return string
-     */
-    protected function getUploadedFileLocation(UploadedFile $uploadedFile, $relativePath)
-    {
-        $extension = $uploadedFile->guessExtension();
-        $filename = str_random().'.'.$extension;
-
-        $storagePath = $this->getStoragePath($relativePath);
-
-        $uploadedFile->move($storagePath, $filename);
-
-        $location = $relativePath.$filename;
-
-        return $location; 
     }
 
     /**
@@ -162,9 +174,8 @@ trait WorksWithFileUploads
      */
     protected function updateOrCreateFileBelongsToOne(Model $model, Relation $relation, $location, $id = null)
     {
-        $related = $relation->getRelated();
-
         $column = $this->getLocationColumn();
+        $related = $relation->getRelated();
 
         if (!$relation->first()) {
             $relation->associate($related->create([$column => $location]));
@@ -187,7 +198,6 @@ trait WorksWithFileUploads
     protected function updateOrCreateFileHasMany(Model $model, Relation $relation, $location, $id = null)
     {
         $column = $this->getLocationColumn();
-
         $relation->updateOrCreate(['id' => $id], [$column => $location]);
     }
 
@@ -203,9 +213,8 @@ trait WorksWithFileUploads
      */
     protected function updateOrCreateFileBelongsToMany(Model $model, Relation $relation, $location, $id = null)
     {
-        $related = $relation->getRelated();
-
         $column = $this->getLocationColumn();
+        $related = $relation->getRelated();
 
         $related->updateOrCreate(['id' => $id], [$column => $location]);
         $relation->syncWithoutDetaching($id, [$column => $location]);
