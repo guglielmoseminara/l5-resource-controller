@@ -34,6 +34,9 @@ class WorksWithFileUploadsTest extends TestCase
         $this->assertTrue(!is_null($user->hasOneFileUpload));
     }
 
+    /**
+     * @coversNothing
+     */
     function testPostMorphOneFileUpload()
     {
         Storage::fake('uploads');
@@ -54,6 +57,9 @@ class WorksWithFileUploadsTest extends TestCase
         $this->assertTrue(!is_null($user->morphOneFileUpload));
     }
 
+    /**
+     * @coversNothing
+     */
     function testPostBelongsToFileUpload()
     {
         $user = \RafflesArgentina\ResourceController\Models\User::first();
@@ -76,6 +82,9 @@ class WorksWithFileUploadsTest extends TestCase
         $this->assertTrue(!is_null($user->belongsToFileUpload));
     }
 
+    /**
+     * @coversNothing
+     */
     function testPostHasManyFileUploads()
     {
         Storage::fake('uploads');
@@ -97,6 +106,9 @@ class WorksWithFileUploadsTest extends TestCase
         $this->assertTrue($user->hasManyFileUploads->count() === 2);
     }
 
+    /**
+     * @coversNothing
+     */
     function testPostMorphManyFileUploads()
     {
         $user = \RafflesArgentina\ResourceController\Models\User::first();
@@ -120,6 +132,9 @@ class WorksWithFileUploadsTest extends TestCase
         $this->assertTrue($user->morphManyFileUploads->count() === 2);
     }
 
+    /**
+     * @coversNothing
+     */
     function testPostBelongsToManyFileUploads()
     {
         $user = \RafflesArgentina\ResourceController\Models\User::first();
@@ -143,6 +158,9 @@ class WorksWithFileUploadsTest extends TestCase
         $this->assertTrue($user->belongsToManyFileUploads->count() === 2);
     }
 
+    /**
+     * @coversNothing
+     */
     function testPostMorphToManyFileUploads()
     {
         $user = \RafflesArgentina\ResourceController\Models\User::first();
