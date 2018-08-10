@@ -13,17 +13,19 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('upload_id')->nullable();
-            $table->unsignedInteger('related_id')->nullable();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->rememberToken();
-            $table->timestamps();
-            $table->softDeletes();
-        });
+        Schema::create(
+            'users', function (Blueprint $table) {
+                $table->increments('id');
+                $table->unsignedInteger('upload_id')->nullable();
+                $table->unsignedInteger('related_id')->nullable();
+                $table->string('name');
+                $table->string('email')->unique();
+                $table->string('password');
+                $table->rememberToken();
+                $table->timestamps();
+                $table->softDeletes();
+            }
+        );
     }
 
     /**

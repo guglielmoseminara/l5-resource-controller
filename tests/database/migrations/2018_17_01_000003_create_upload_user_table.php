@@ -13,11 +13,13 @@ class CreateUploadUserTable extends Migration
      */
     public function up()
     {
-        Schema::create('upload_user', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('upload_id');
-            $table->unsignedInteger('user_id');
-        });
+        Schema::create(
+            'upload_user', function (Blueprint $table) {
+                $table->increments('id');
+                $table->unsignedInteger('upload_id');
+                $table->unsignedInteger('user_id');
+            }
+        );
     }
 
     /**

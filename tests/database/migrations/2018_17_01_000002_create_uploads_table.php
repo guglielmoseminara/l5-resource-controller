@@ -13,14 +13,16 @@ class CreateUploadsTable extends Migration
      */
     public function up()
     {
-        Schema::create('uploads', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('user_id')->nullable();
-            $table->string('location');
-            $table->unsignedInteger('uploadeable_id')->nullable();
-            $table->string('uploadeable_type')->nullable();
-            $table->timestamps();
-        });
+        Schema::create(
+            'uploads', function (Blueprint $table) {
+                $table->increments('id');
+                $table->unsignedInteger('user_id')->nullable();
+                $table->string('location');
+                $table->unsignedInteger('uploadeable_id')->nullable();
+                $table->string('uploadeable_type')->nullable();
+                $table->timestamps();
+            }
+        );
     }
 
     /**

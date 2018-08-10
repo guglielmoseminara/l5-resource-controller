@@ -13,16 +13,18 @@ class CreateRelatedTable extends Migration
      */
     public function up()
     {
-        Schema::create('related', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('user_id')->nullable();
-            $table->string('a');
-            $table->string('b');
-            $table->string('c');
-            $table->string('relatable_id')->nullable();
-            $table->string('relatable_type')->nullable();
-            $table->timestamps();
-        });
+        Schema::create(
+            'related', function (Blueprint $table) {
+                $table->increments('id');
+                $table->unsignedInteger('user_id')->nullable();
+                $table->string('a');
+                $table->string('b');
+                $table->string('c');
+                $table->string('relatable_id')->nullable();
+                $table->string('relatable_type')->nullable();
+                $table->timestamps();
+            }
+        );
     }
 
     /**

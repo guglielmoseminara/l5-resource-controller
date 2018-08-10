@@ -8,6 +8,9 @@ class WorksWithRelationsTest extends TestCase
 {
     use BaseTest;
 
+    /**
+     * @coversNothing
+     */
     function testStoreHasOne()
     {
         $fillables = [
@@ -39,6 +42,9 @@ class WorksWithRelationsTest extends TestCase
         //dd($user->hasOneRelated->toJson());
     }
 
+    /**
+     * @coversNothing
+     */
     function testStoreMorphOne()
     {
         $fillables = [
@@ -70,6 +76,9 @@ class WorksWithRelationsTest extends TestCase
         //dd($user->hasOneRelated->toJson());
     }
 
+    /**
+     * @coversNothing
+     */
     function testStoreBelongsTo()
     {
         $fillables = [
@@ -98,6 +107,9 @@ class WorksWithRelationsTest extends TestCase
         //dd($user->belongsToRelated->toJson());
     }
 
+    /**
+     * @coversNothing
+     */
     function testStoreHasMany()
     {
         $fillables = [
@@ -146,6 +158,9 @@ class WorksWithRelationsTest extends TestCase
         //dd($user->hasManyRelated->toJson());
     }
 
+    /**
+     * @coversNothing
+     */
     function testStoreMorphMany()
     {
         $fillables = [
@@ -194,6 +209,9 @@ class WorksWithRelationsTest extends TestCase
         //dd($user->hasManyRelated->toJson());
     }
 
+    /**
+     * @coversNothing
+     */
     function testStoreBelongsToManyExistent()
     {
         $related = factory(\RafflesArgentina\ResourceController\Models\Related::class, 5)->create();
@@ -223,37 +241,9 @@ class WorksWithRelationsTest extends TestCase
         //dd($user->belongsToManyRelated->toJson());
     }
 
-    function testStoreMorphToManyExistent()
-    {
-        $related = factory(\RafflesArgentina\ResourceController\Models\Related::class, 5)->create();
-
-        $existent = [];
-        foreach ($related as $id => $model) {
-            $existent[$model->id] = $model->getAttributes();
-        }
-
-        $fillables = [
-            'name' => 'Mario',
-            'email' => 'mario@raffles.com.ar',
-            'password' => bcrypt(str_random()),
-            'morphToManyRelated' => $existent,
-        ];
-
-        $this->post('/test', $fillables)->assertRedirect('/test');
-
-        $user = \RafflesArgentina\ResourceController\Models\User::with('morphToManyRelated')->first();
-
-        $this->assertTrue($user->morphToManyRelated->count() === 5);
-
-        $user->forceDelete();
-
-        $this->json('POST', '/test', $fillables)->assertStatus(200);
-        $user = \RafflesArgentina\ResourceController\Models\User::first();
-        $this->assertTrue($user->morphTOManyRelated->count() === 5);
-
-        //dd($user->belongsToManyRelated->toJson());
-    }
-
+    /**
+     * @coversNothing
+     */
     function testStoreBelongsToManyInexistent()
     {
         $fillables = [
@@ -302,6 +292,41 @@ class WorksWithRelationsTest extends TestCase
         //dd($user->belongsToManyRelated->toJson());
     }
 
+    /**
+     * @coversNothing
+     */
+    function testStoreMorphToManyExistent()
+    {
+        $related = factory(\RafflesArgentina\ResourceController\Models\Related::class, 5)->create();
+
+        $existent = [];
+        foreach ($related as $id => $model) {
+            $existent[$model->id] = $model->getAttributes();
+        }
+
+        $fillables = [
+            'name' => 'Mario',
+            'email' => 'mario@raffles.com.ar',
+            'password' => bcrypt(str_random()),
+            'morphToManyRelated' => $existent,
+        ];
+
+        $this->post('/test', $fillables)->assertRedirect('/test');
+        $user = \RafflesArgentina\ResourceController\Models\User::with('morphToManyRelated')->first();
+        $this->assertTrue($user->morphToManyRelated->count() === 5);
+
+        $user->forceDelete();
+
+        $this->json('POST', '/test', $fillables)->assertStatus(200);
+        $user = \RafflesArgentina\ResourceController\Models\User::first();
+        $this->assertTrue($user->morphTOManyRelated->count() === 5);
+
+        //dd($user->belongsToManyRelated->toJson());
+    }
+
+    /**
+     * @coversNothing
+     */
     function testStoreMorphToManyInexistent()
     {
         $fillables = [
@@ -350,6 +375,9 @@ class WorksWithRelationsTest extends TestCase
         //dd($user->belongsToManyRelated->toJson());
     }
 
+    /**
+     * @coversNothing
+     */
     function testUpdateHasOne()
     {
         $fillables = [
@@ -374,6 +402,9 @@ class WorksWithRelationsTest extends TestCase
         $this->assertTrue(!is_null($user->hasOneRelated));
     }
 
+    /**
+     * @coversNothing
+     */
     function testUpdateMorphOne()
     {
         $fillables = [
@@ -398,6 +429,9 @@ class WorksWithRelationsTest extends TestCase
         $this->assertTrue(!is_null($user->morphOneRelated));
     }
 
+    /**
+     * @coversNothing
+     */
     function testUpdateBelongsTo()
     {
         $fillables = [
@@ -424,6 +458,9 @@ class WorksWithRelationsTest extends TestCase
         $this->assertTrue(!is_null($user->belongsToRelated));
     }
 
+    /**
+     * @coversNothing
+     */
     function testUpdateHasMany()
     {
         $fillables = [
@@ -470,6 +507,9 @@ class WorksWithRelationsTest extends TestCase
         $this->assertTrue($user->hasManyRelated->count() === 5);
     }
 
+    /**
+     * @coversNothing
+     */
     function testUpdateMorphMany()
     {
         $fillables = [
@@ -516,6 +556,9 @@ class WorksWithRelationsTest extends TestCase
         $this->assertTrue($user->morphManyRelated->count() === 5);
     }
 
+    /**
+     * @coversNothing
+     */
     function testUpdateBelongsToManyExistent()
     {
         $related = factory(\RafflesArgentina\ResourceController\Models\Related::class, 5)->create();
@@ -539,37 +582,13 @@ class WorksWithRelationsTest extends TestCase
         $user->forceDelete();
 
         $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->json('PUT','/test/2', $fillables)->assertStatus(200);
+        $this->json('PUT', '/test/2', $fillables)->assertStatus(200);
         $this->assertTrue($user->belongsToManyRelated->count() === 5);
     }
 
-    function testUpdateMorphToManyExistent()
-    {
-        $related = factory(\RafflesArgentina\ResourceController\Models\Related::class, 5)->create();
-
-        $existent = [];
-        foreach ($related as $id => $model) {
-            $existent[$model->id] = $model->getAttributes();
-        }
-
-        $fillables = [
-            'name' => 'Mario',
-            'email' => 'mario@raffles.com.ar',
-            'password' => bcrypt(str_random()),
-            'morphToManyRelated' => $existent
-        ];
-
-        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->put('/test/1', $fillables)->assertRedirect('/test');
-        $this->assertTrue($user->morphToManyRelated->count() === 5);
-
-        $user->forceDelete();
-
-        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->json('PUT','/test/2', $fillables)->assertStatus(200);
-        $this->assertTrue($user->morphToManyRelated->count() === 5);
-    }
-
+    /**
+     * @coversNothing
+     */
     function testUpdateBelongsToManyInexistent()
     {
         $fillables = [
@@ -612,10 +631,43 @@ class WorksWithRelationsTest extends TestCase
         $user->forceDelete();
 
         $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->json('PUT','/test/2', $fillables)->assertStatus(200);
+        $this->json('PUT', '/test/2', $fillables)->assertStatus(200);
         $this->assertTrue($user->belongsToManyRelated->count() === 5);
     }
 
+    /**
+     * @coversNothing
+     */
+    function testUpdateMorphToManyExistent()
+    {
+        $related = factory(\RafflesArgentina\ResourceController\Models\Related::class, 5)->create();
+
+        $existent = [];
+        foreach ($related as $id => $model) {
+            $existent[$model->id] = $model->getAttributes();
+        }
+
+        $fillables = [
+            'name' => 'Mario',
+            'email' => 'mario@raffles.com.ar',
+            'password' => bcrypt(str_random()),
+            'morphToManyRelated' => $existent
+        ];
+
+        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
+        $this->put('/test/1', $fillables)->assertRedirect('/test');
+        $this->assertTrue($user->morphToManyRelated->count() === 5);
+
+        $user->forceDelete();
+
+        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
+        $this->json('PUT', '/test/2', $fillables)->assertStatus(200);
+        $this->assertTrue($user->morphToManyRelated->count() === 5);
+    }
+
+    /**
+     * @coversNothing
+     */
     function testUpdateMorphToManyInexistent()
     {
         $fillables = [
@@ -658,7 +710,7 @@ class WorksWithRelationsTest extends TestCase
         $user->forceDelete();
 
         $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->json('PUT','/test/2', $fillables)->assertStatus(200);
+        $this->json('PUT', '/test/2', $fillables)->assertStatus(200);
         $this->assertTrue($user->morphToManyRelated->count() === 5);
     }
 }

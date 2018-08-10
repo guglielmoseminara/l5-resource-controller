@@ -13,11 +13,13 @@ class CreateRelatablesTable extends Migration
      */
     public function up()
     {
-        Schema::create('relatables', function (Blueprint $table) {
-            $table->unsignedInteger('related_id');
-            $table->unsignedInteger('relatable_id');
-            $table->string('relatable_type')->nullable();
-        });
+        Schema::create(
+            'relatables', function (Blueprint $table) {
+                $table->unsignedInteger('related_id');
+                $table->unsignedInteger('relatable_id');
+                $table->string('relatable_type')->nullable();
+            }
+        );
     }
 
     /**

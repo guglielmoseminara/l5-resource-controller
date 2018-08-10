@@ -13,11 +13,13 @@ class CreateRelatedUserTable extends Migration
      */
     public function up()
     {
-        Schema::create('related_user', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('user_id');
-            $table->unsignedInteger('related_id');
-        });
+        Schema::create(
+            'related_user', function (Blueprint $table) {
+                $table->increments('id');
+                $table->unsignedInteger('user_id');
+                $table->unsignedInteger('related_id');
+            }
+        );
     }
 
     /**

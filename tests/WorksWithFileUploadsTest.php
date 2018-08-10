@@ -11,19 +11,24 @@ class WorksWithFileUploadsTest extends TestCase
 {
     use BaseTest;
 
+    /**
+     * @covers ResourceController::store
+     */
     function testPostHasOneFileUpload()
     {
         Storage::fake('uploads');
 
-        $this->post('/test', [
+        $this->post(
+            '/test', [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
             'password' => str_random(),
             'hasOneFileUpload' => [
                 UploadedFile::fake()->image('test.jpeg')
             ],
-        ])->assertRedirect('/test')
-          ->assertSessionHas('rafflesargentina.status.success');
+            ]
+        )->assertRedirect('/test')
+            ->assertSessionHas('rafflesargentina.status.success');
 
         $user = \RafflesArgentina\ResourceController\Models\User::first();
         $this->assertTrue(!is_null($user->hasOneFileUpload));
@@ -33,15 +38,17 @@ class WorksWithFileUploadsTest extends TestCase
     {
         Storage::fake('uploads');
 
-        $this->post('/test', [
+        $this->post(
+            '/test', [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
             'password' => str_random(),
             'morphOneFileUpload' => [
                 UploadedFile::fake()->image('test.jpeg')
             ],
-        ])->assertRedirect('/test')
-          ->assertSessionHas('rafflesargentina.status.success');
+            ]
+        )->assertRedirect('/test')
+            ->assertSessionHas('rafflesargentina.status.success');
 
         $user = \RafflesArgentina\ResourceController\Models\User::first();
         $this->assertTrue(!is_null($user->morphOneFileUpload));
@@ -53,15 +60,17 @@ class WorksWithFileUploadsTest extends TestCase
 
         Storage::fake('uploads');
 
-        $this->post('/test', [
+        $this->post(
+            '/test', [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
             'password' => str_random(),
             'belongsToFileUpload' => [
                 UploadedFile::fake()->image('test.jpeg')
             ],
-        ])->assertRedirect('/test')
-          ->assertSessionHas('rafflesargentina.status.success');
+            ]
+        )->assertRedirect('/test')
+            ->assertSessionHas('rafflesargentina.status.success');
 
         $user = \RafflesArgentina\ResourceController\Models\User::first();
         $this->assertTrue(!is_null($user->belongsToFileUpload));
@@ -71,7 +80,8 @@ class WorksWithFileUploadsTest extends TestCase
     {
         Storage::fake('uploads');
 
-        $this->post('/test', [
+        $this->post(
+            '/test', [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
             'password' => str_random(),
@@ -79,8 +89,9 @@ class WorksWithFileUploadsTest extends TestCase
                 '1' => UploadedFile::fake()->image('test.jpeg'),
                 '2' => UploadedFile::fake()->create('document.pdf')
             ],
-        ])->assertRedirect('/test')
-          ->assertSessionHas('rafflesargentina.status.success');
+            ]
+        )->assertRedirect('/test')
+            ->assertSessionHas('rafflesargentina.status.success');
 
         $user = \RafflesArgentina\ResourceController\Models\User::first();
         $this->assertTrue($user->hasManyFileUploads->count() === 2);
@@ -92,7 +103,8 @@ class WorksWithFileUploadsTest extends TestCase
 
         Storage::fake('uploads');
 
-        $this->post('/test', [
+        $this->post(
+            '/test', [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
             'password' => str_random(),
@@ -100,8 +112,9 @@ class WorksWithFileUploadsTest extends TestCase
                 '1' => UploadedFile::fake()->image('test.jpeg'),
                 '2' => UploadedFile::fake()->create('document.pdf')
             ],
-        ])->assertRedirect('/test')
-          ->assertSessionHas('rafflesargentina.status.success');
+            ]
+        )->assertRedirect('/test')
+            ->assertSessionHas('rafflesargentina.status.success');
 
         $user = \RafflesArgentina\ResourceController\Models\User::first();
         $this->assertTrue($user->morphManyFileUploads->count() === 2);
@@ -113,7 +126,8 @@ class WorksWithFileUploadsTest extends TestCase
 
         Storage::fake('uploads');
 
-        $this->post('/test', [
+        $this->post(
+            '/test', [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
             'password' => str_random(),
@@ -121,8 +135,9 @@ class WorksWithFileUploadsTest extends TestCase
                 '1' => UploadedFile::fake()->image('test.jpeg'),
                 '2' => UploadedFile::fake()->create('document.pdf')
             ],
-        ])->assertRedirect('/test')
-          ->assertSessionHas('rafflesargentina.status.success');
+            ]
+        )->assertRedirect('/test')
+            ->assertSessionHas('rafflesargentina.status.success');
 
         $user = \RafflesArgentina\ResourceController\Models\User::first();
         $this->assertTrue($user->belongsToManyFileUploads->count() === 2);
@@ -134,7 +149,8 @@ class WorksWithFileUploadsTest extends TestCase
 
         Storage::fake('uploads');
 
-        $this->post('/test', [
+        $this->post(
+            '/test', [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
             'password' => str_random(),
@@ -142,8 +158,9 @@ class WorksWithFileUploadsTest extends TestCase
                 '1' => UploadedFile::fake()->image('test.jpeg'),
                 '2' => UploadedFile::fake()->create('document.pdf')
             ],
-        ])->assertRedirect('/test')
-          ->assertSessionHas('rafflesargentina.status.success');
+            ]
+        )->assertRedirect('/test')
+            ->assertSessionHas('rafflesargentina.status.success');
 
         $user = \RafflesArgentina\ResourceController\Models\User::first();
         $this->assertTrue($user->morphToManyFileUploads->count() === 2);

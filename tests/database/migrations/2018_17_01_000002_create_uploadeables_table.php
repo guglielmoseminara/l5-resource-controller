@@ -13,11 +13,13 @@ class CreateUploadeablesTable extends Migration
      */
     public function up()
     {
-        Schema::create('uploadeables', function (Blueprint $table) {
-            $table->unsignedInteger('upload_id')->nullable();
-            $table->unsignedInteger('uploadeable_id')->nullable();
-            $table->string('uploadeable_type')->nullable();
-        });
+        Schema::create(
+            'uploadeables', function (Blueprint $table) {
+                $table->unsignedInteger('upload_id')->nullable();
+                $table->unsignedInteger('uploadeable_id')->nullable();
+                $table->string('uploadeable_type')->nullable();
+            }
+        );
     }
 
     /**
