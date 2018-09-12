@@ -92,7 +92,11 @@ class ResourceController extends AbstractResourceController
         $message = $this->storeSuccessfulMessage($number);
 
         if ($request->wantsJson()) {
-            return $this->validSuccessJsonResponse($message);
+            $data = [
+                $model
+            ];
+
+            return $this->validSuccessJsonResponse($message, $data);
         }
 
         return redirect()->route($this->getRedirectionRoute())
@@ -196,7 +200,11 @@ class ResourceController extends AbstractResourceController
         $message = $this->updateSuccessfulMessage($key);
 
         if ($request->wantsJson()) {
-            return $this->validSuccessJsonResponse($message);
+            $data = [
+                $model
+            ];
+
+            return $this->validSuccessJsonResponse($message, $data);
         }
 
         return redirect()->route($this->getRedirectionRoute())
@@ -242,7 +250,11 @@ class ResourceController extends AbstractResourceController
         $message = $this->destroySuccessfulMessage($key);
 
         if ($request->wantsJson()) {
-            return $this->validSuccessJsonResponse($message);
+            $data = [
+                $model
+            ];
+
+            return $this->validSuccessJsonResponse($message, $data);
         }
 
         return redirect()->route($this->getRedirectionRoute())

@@ -145,10 +145,11 @@ interface ResourceControllerInterface
      * Return a valid 200 Success json response.
      *
      * @param string $message The response message.
+     * @param array $data     The passed data.
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function validSuccessJsonResponse($message = 'Success');
+    public function validSuccessJsonResponse($message = 'Success', $data = []);
 
     /**
      * Return a valid 404 Not found json response.
