@@ -26,7 +26,7 @@ class ResourceController extends AbstractResourceController
     {
         $this->getFormRequestInstance();
 
-        $items = $this->getPaginatorInstance();
+        $items = $this->repository->get();
 
         if ($request->wantsJson()) {
             return response()->json($items, 200, [], JSON_PRETTY_PRINT);
