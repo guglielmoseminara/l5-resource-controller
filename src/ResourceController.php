@@ -26,7 +26,7 @@ class ResourceController extends AbstractResourceController
     {
         $this->getFormRequestInstance();
 
-        $items = $this->repository->get();
+        $items = $this->getItemsCollection();
 
         if ($request->wantsJson()) {
             return response()->json($items, 200, [], JSON_PRETTY_PRINT);
@@ -262,17 +262,31 @@ class ResourceController extends AbstractResourceController
     }
 
     /**
+     * Get items collection.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getItemsCollection($orderBy = 'updated_at', $order = 'desc')
+    {
+        if ($this->useSoftDeletes) {
+            return $this->repository->model->withTrashed()->orderBy($orderBy, $order)->get();
+        }
+
+        return $this->repository->orderBy($orderBy, $order)->get();
+    }
+
+    /**
      * Get Paginator instance.
      *
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
-    protected function getPaginatorInstance()
+    protected function getPaginatorInstance($orderBy = 'updated_at', $order = 'desc')
     {
         if ($this->useSoftDeletes) {
-            return $this->repository->model->withTrashed()->paginate();
+            return $this->repository->model->withTrashed()->orderBy($orderBy, $order)->paginate();
         }
 
-        return $this->repository->paginate();
+        return $this->repository->orderBy($orderBy, $order)->paginate();
     }
 
     /**
