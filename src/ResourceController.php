@@ -73,7 +73,6 @@ class ResourceController extends AbstractResourceController
         $this->getFormRequestInstance();
 
         DB::beginTransaction();
-
         try {
             $instance = $this->repository->create($request->all());
             $model = $instance[1];
@@ -100,7 +99,7 @@ class ResourceController extends AbstractResourceController
         }
 
         return redirect()->route($this->getRedirectionRoute())
-                         ->with($this->successFlashMessageKey, $message);
+            ->with($this->successFlashMessageKey, $message);
     }
 
     /**
@@ -208,7 +207,7 @@ class ResourceController extends AbstractResourceController
         }
 
         return redirect()->route($this->getRedirectionRoute())
-                         ->with($this->successFlashMessageKey, $message);
+            ->with($this->successFlashMessageKey, $message);
     }
 
     /**
@@ -258,11 +257,14 @@ class ResourceController extends AbstractResourceController
         }
 
         return redirect()->route($this->getRedirectionRoute())
-                         ->with($this->infoFlashMessageKey, $message);
+            ->with($this->infoFlashMessageKey, $message);
     }
 
     /**
      * Get items collection.
+     *
+     * @param string $orderBy The order key.
+     * @param string $order   The order direction.
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
@@ -277,6 +279,9 @@ class ResourceController extends AbstractResourceController
 
     /**
      * Get Paginator instance.
+     *
+     * @param string $orderBy The order key.
+     * @param string $order   The order direction.
      *
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */

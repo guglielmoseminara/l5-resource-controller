@@ -31,7 +31,8 @@ class ResourceControllerTest extends TestCase
     function testIndexRouteWithUseSoftDeletes()
     {
         $users = factory(\RafflesArgentina\ResourceController\Models\User::class, 3)->create();
-        foreach ($users as $user) { $user->delete();
+        foreach ($users as $user) {
+            $user->delete();
         }
 
         $this->get('/test2')

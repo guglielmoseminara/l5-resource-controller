@@ -302,7 +302,7 @@ abstract class AbstractResourceController extends BaseController
      * Return a valid 200 Success json response.
      *
      * @param string $message The response message.
-     * @param array $data     The passed data.
+     * @param array  $data    The passed data.
      *
      * @return \Illuminate\Http\JsonResponse
      */

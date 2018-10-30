@@ -17,13 +17,15 @@ trait BaseTest
 
         $this->withFactories(__DIR__.'/factories');
 
-        \Route::group([
+        \Route::group(
+            [
             'middleware' => [],
             'namespace'  => 'RafflesArgentina\ResourceController',
-        ], function ($router) {
-            $router->resource('test', 'TestController');
-            $router->resource('test2', 'TestUseSoftDeletesController');
-        });
+            ], function ($router) {
+                $router->resource('test', 'TestController');
+                $router->resource('test2', 'TestUseSoftDeletesController');
+            }
+        );
 
         \View::addLocation(__DIR__.'/Resources/Views');
     }
@@ -31,18 +33,20 @@ trait BaseTest
     /**
      * Define environment setup.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param  \Illuminate\Foundation\Application $app
      * @return void
      */
     protected function getEnvironmentSetUp($app)
     {
         // Setup default database to use sqlite :memory:
         $app['config']->set('database.default', 'testbench');
-        $app['config']->set('database.connections.testbench', [
+        $app['config']->set(
+            'database.connections.testbench', [
             'driver'   => 'sqlite',
             'database' => ':memory:',
             'prefix'   => '',
-        ]);
+            ]
+        );
     }
 
     /**
@@ -51,7 +55,7 @@ trait BaseTest
      * In a normal app environment these would be added to the 'providers' array in
      * the config/app.php file.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param \Illuminate\Foundation\Application $app
      *
      * @return array
      */
@@ -69,7 +73,7 @@ trait BaseTest
      * aliased facade, you should add the alias here, along with aliases for
      * facades upon which your package depends, e.g. Cartalyst/Sentry.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param \Illuminate\Foundation\Application $app
      *
      * @return array
      */
