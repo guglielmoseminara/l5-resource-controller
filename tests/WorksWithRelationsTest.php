@@ -13,7 +13,7 @@ class WorksWithRelationsTest extends TestCase
      */
     function testStoreHasOne()
     {
-        $fillables = [
+        $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
             'password' => bcrypt(str_random()),
@@ -24,22 +24,24 @@ class WorksWithRelationsTest extends TestCase
             ]
         ];
 
-        $this->post('/test', $fillables)
+        $this->post('/test', $fillable)
             ->assertRedirect('/test')
             ->assertSessionHas('rafflesargentina.status.success');
 
         $user = \RafflesArgentina\ResourceController\Models\User::first();
         $this->assertTrue(!is_null($user->hasOneRelated));
 
+        foreach ($fillable['hasOneRelated'] as $k => $v) {
+            $this->assertTrue($user->hasOneRelated->{$k} == $v);
+        }
+
         $user->forceDelete();
 
-        $this->json('POST', '/test', $fillables)
+        $this->json('POST', '/test', $fillable)
             ->assertStatus(200)
             ->assertSessionHas('rafflesargentina.status.success');
         $user = \RafflesArgentina\ResourceController\Models\User::first();
         $this->assertTrue(!is_null($user->hasOneRelated));
-
-        //dd($user->hasOneRelated->toJson());
     }
 
     /**
@@ -47,7 +49,7 @@ class WorksWithRelationsTest extends TestCase
      */
     function testStoreMorphOne()
     {
-        $fillables = [
+        $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
             'password' => bcrypt(str_random()),
@@ -58,22 +60,28 @@ class WorksWithRelationsTest extends TestCase
             ]
         ];
 
-        $this->post('/test', $fillables)
+        $this->post('/test', $fillable)
             ->assertRedirect('/test')
             ->assertSessionHas('rafflesargentina.status.success');
 
         $user = \RafflesArgentina\ResourceController\Models\User::first();
         $this->assertTrue(!is_null($user->morphOneRelated));
 
+        foreach ($fillable['morphOneRelated'] as $k => $v) {
+            $this->assertTrue($user->morphOneRelated->{$k} == $v);
+        }
+
         $user->forceDelete();
 
-        $this->json('POST', '/test', $fillables)
+        $this->json('POST', '/test', $fillable)
             ->assertStatus(200)
             ->assertSessionHas('rafflesargentina.status.success');
         $user = \RafflesArgentina\ResourceController\Models\User::first();
         $this->assertTrue(!is_null($user->morphOneRelated));
 
-        //dd($user->hasOneRelated->toJson());
+        foreach ($fillable['morphOneRelated'] as $k => $v) {
+            $this->assertTrue($user->morphOneRelated->{$k} == $v);
+        }
     }
 
     /**
@@ -81,7 +89,7 @@ class WorksWithRelationsTest extends TestCase
      */
     function testStoreBelongsTo()
     {
-        $fillables = [
+        $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
             'password' => bcrypt(str_random()),
@@ -92,19 +100,25 @@ class WorksWithRelationsTest extends TestCase
             ]
         ];
 
-        $this->post('/test', $fillables)
+        $this->post('/test', $fillable)
             ->assertRedirect('/test');
 
         $user = \RafflesArgentina\ResourceController\Models\User::first();
         $this->assertTrue(!is_null($user->belongsToRelated));
 
+        foreach ($fillable['belongsToRelated'] as $k => $v) {
+            $this->assertTrue($user->belongsToRelated->{$k} == $v);
+        }
+
         $user->forceDelete();
 
-        $this->json('POST', '/test', $fillables)->assertStatus(200);
+        $this->json('POST', '/test', $fillable)->assertStatus(200);
         $user = \RafflesArgentina\ResourceController\Models\User::first();
         $this->assertTrue(!is_null($user->belongsToRelated));
 
-        //dd($user->belongsToRelated->toJson());
+        foreach ($fillable['belongsToRelated'] as $k => $v) {
+            $this->assertTrue($user->belongsToRelated->{$k} == $v);
+        }
     }
 
     /**
@@ -112,32 +126,32 @@ class WorksWithRelationsTest extends TestCase
      */
     function testStoreHasMany()
     {
-        $fillables = [
+        $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
             'password' => bcrypt(str_random()),
             'hasManyRelated' => [
-                '1' => [
+                '0' => [
                     'a' => 'blah blah blah',
                     'b' => 'blah blah blah',
                     'c' => 'blah blah blah',
                 ],
-                '2' => [
+                '1' => [
                     'a' => 'bleh bleh bleh',
                     'b' => 'bleh bleh bleh',
                     'c' => 'bleh bleh bleh',
                 ],
-                '3' => [
+                '2' => [
                     'a' => 'blih blih blih',
                     'b' => 'blih blih blih',
                     'c' => 'blih blih blih',
                 ],
-                '4' => [
+                '3' => [
                     'a' => 'bloh bloh bloh',
                     'b' => 'bloh bloh bloh',
                     'c' => 'bloh bloh bloh',
                 ],
-                '5' => [
+                '4' => [
                     'a' => 'bluh bluh bluh',
                     'b' => 'bluh bluh bluh',
                     'c' => 'bluh bluh bluh',
@@ -145,17 +159,27 @@ class WorksWithRelationsTest extends TestCase
             ]
         ];
 
-        $this->post('/test', $fillables)->assertRedirect('/test');
+        $this->post('/test', $fillable)->assertRedirect('/test');
         $user = \RafflesArgentina\ResourceController\Models\User::first();
         $this->assertTrue($user->hasManyRelated->count() === 5);
+
+        foreach ($fillable['hasManyRelated'] as $index => $fields) {
+            foreach ($fields as $k => $v) {
+                $this->assertTrue($user->hasManyRelated[$index]->{$k} == $v);
+            }
+        }
 
         $user->forceDelete();
 
-        $this->json('POST', '/test', $fillables)->assertStatus(200);
+        $this->json('POST', '/test', $fillable)->assertStatus(200);
         $user = \RafflesArgentina\ResourceController\Models\User::first();
         $this->assertTrue($user->hasManyRelated->count() === 5);
 
-        //dd($user->hasManyRelated->toJson());
+        foreach ($fillable['hasManyRelated'] as $index => $fields) {
+            foreach ($fields as $k => $v) {
+                $this->assertTrue($user->hasManyRelated[$index]->{$k} == $v);
+            }
+        }
     }
 
     /**
@@ -163,32 +187,32 @@ class WorksWithRelationsTest extends TestCase
      */
     function testStoreMorphMany()
     {
-        $fillables = [
+        $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
             'password' => bcrypt(str_random()),
             'morphManyRelated' => [
-                '1' => [
+                '0' => [
                     'a' => 'blah blah blah',
                     'b' => 'blah blah blah',
                     'c' => 'blah blah blah',
                 ],
-                '2' => [
+                '1' => [
                     'a' => 'bleh bleh bleh',
                     'b' => 'bleh bleh bleh',
                     'c' => 'bleh bleh bleh',
                 ],
-                '3' => [
+                '2' => [
                     'a' => 'blih blih blih',
                     'b' => 'blih blih blih',
                     'c' => 'blih blih blih',
                 ],
-                '4' => [
+                '3' => [
                     'a' => 'bloh bloh bloh',
                     'b' => 'bloh bloh bloh',
                     'c' => 'bloh bloh bloh',
                 ],
-                '5' => [
+                '4' => [
                     'a' => 'bluh bluh bluh',
                     'b' => 'bluh bluh bluh',
                     'c' => 'bluh bluh bluh',
@@ -196,17 +220,27 @@ class WorksWithRelationsTest extends TestCase
             ]
         ];
 
-        $this->post('/test', $fillables)->assertRedirect('/test');
+        $this->post('/test', $fillable)->assertRedirect('/test');
         $user = \RafflesArgentina\ResourceController\Models\User::first();
         $this->assertTrue($user->morphManyRelated->count() === 5);
+
+        foreach ($fillable['morphManyRelated'] as $index => $fields) {
+            foreach ($fields as $k => $v) {
+                $this->assertTrue($user->morphManyRelated[$index]->{$k} == $v);
+            }
+        }
 
         $user->forceDelete();
 
-        $this->json('POST', '/test', $fillables)->assertStatus(200);
+        $this->json('POST', '/test', $fillable)->assertStatus(200);
         $user = \RafflesArgentina\ResourceController\Models\User::first();
         $this->assertTrue($user->morphManyRelated->count() === 5);
 
-        //dd($user->hasManyRelated->toJson());
+        foreach ($fillable['morphManyRelated'] as $index => $fields) {
+            foreach ($fields as $k => $v) {
+                $this->assertTrue($user->morphManyRelated[$index]->{$k} == $v);
+            }
+        }
     }
 
     /**
@@ -217,61 +251,41 @@ class WorksWithRelationsTest extends TestCase
         $related = factory(\RafflesArgentina\ResourceController\Models\Related::class, 5)->create();
 
         $existent = [];
-        foreach ($related as $id => $model) {
-            $existent[$model->id] = $model->getAttributes();
+        foreach ($related as $k => $model) {
+            $existent[$k] = $model->getAttributes();
         }
 
-        $fillables = [
-            'name' => 'Mario',
-            'email' => 'mario@raffles.com.ar',
-            'password' => bcrypt(str_random()),
-            'belongsToManyRelated' => $existent,
-        ];
-
-        $this->post('/test', $fillables)->assertRedirect('/test');
-        $user = \RafflesArgentina\ResourceController\Models\User::with('belongsToManyRelated')->first();
-        $this->assertTrue($user->belongsToManyRelated->count() === 5);
-
-        $user->forceDelete();
-
-        $this->json('POST', '/test', $fillables)->assertStatus(200);
-        $user = \RafflesArgentina\ResourceController\Models\User::first();
-        $this->assertTrue($user->belongsToManyRelated->count() === 5);
-
-        //dd($user->belongsToManyRelated->toJson());
-    }
-
-    /**
-     * @coversNothing
-     */
-    function testStoreBelongsToManyInexistent()
-    {
-        $fillables = [
+        $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
             'password' => bcrypt(str_random()),
             'belongsToManyRelated' => [
-                '1' => [
+                '0' => [
+                    'id' => '1',
                     'a' => 'blah blah blah',
                     'b' => 'blah blah blah',
                     'c' => 'blah blah blah',
                 ],
-                '2' => [
+                '1' => [
+                    'id' => '2',
                     'a' => 'bleh bleh bleh',
                     'b' => 'bleh bleh bleh',
                     'c' => 'bleh bleh bleh',
                 ],
-                '3' => [
+                '2' => [
+                    'id' => '3',
                     'a' => 'blih blih blih',
                     'b' => 'blih blih blih',
                     'c' => 'blih blih blih',
                 ],
-                '4' => [
+                '3' => [
+                    'id' => '4',
                     'a' => 'bloh bloh bloh',
                     'b' => 'bloh bloh bloh',
                     'c' => 'bloh bloh bloh',
                 ],
-                '5' => [
+                '4' => [
+                    'id' => '5',
                     'a' => 'bluh bluh bluh',
                     'b' => 'bluh bluh bluh',
                     'c' => 'bluh bluh bluh',
@@ -279,17 +293,88 @@ class WorksWithRelationsTest extends TestCase
             ]
         ];
 
-        $this->post('/test', $fillables)->assertRedirect('/test');
+        $this->post('/test', $fillable)->assertRedirect('/test');
         $user = \RafflesArgentina\ResourceController\Models\User::with('belongsToManyRelated')->first();
         $this->assertTrue($user->belongsToManyRelated->count() === 5);
 
+        foreach ($fillable['belongsToManyRelated'] as $index => $fields) {
+            foreach ($fields as $k => $v) {
+                $this->assertTrue($user->belongsToManyRelated[$index]->{$k} == $v);
+            }
+        }
+
         $user->forceDelete();
 
-        $this->json('POST', '/test', $fillables)->assertStatus(200);
+        $this->json('POST', '/test', $fillable)->assertStatus(200);
         $user = \RafflesArgentina\ResourceController\Models\User::first();
         $this->assertTrue($user->belongsToManyRelated->count() === 5);
 
-        //dd($user->belongsToManyRelated->toJson());
+        foreach ($fillable['belongsToManyRelated'] as $index => $fields) {
+            foreach ($fields as $k => $v) {
+                $this->assertTrue($user->belongsToManyRelated[$index]->{$k} == $v);
+            }
+        }
+    }
+
+    /**
+     * @coversNothing
+     */
+    function testStoreBelongsToManyInexistent()
+    {
+        $fillable = [
+            'name' => 'Mario',
+            'email' => 'mario@raffles.com.ar',
+            'password' => bcrypt(str_random()),
+            'belongsToManyRelated' => [
+                '0' => [
+                    'a' => 'blah blah blah',
+                    'b' => 'blah blah blah',
+                    'c' => 'blah blah blah',
+                ],
+                '1' => [
+                    'a' => 'bleh bleh bleh',
+                    'b' => 'bleh bleh bleh',
+                    'c' => 'bleh bleh bleh',
+                ],
+                '2' => [
+                    'a' => 'blih blih blih',
+                    'b' => 'blih blih blih',
+                    'c' => 'blih blih blih',
+                ],
+                '3' => [
+                    'a' => 'bloh bloh bloh',
+                    'b' => 'bloh bloh bloh',
+                    'c' => 'bloh bloh bloh',
+                ],
+                '4' => [
+                    'a' => 'bluh bluh bluh',
+                    'b' => 'bluh bluh bluh',
+                    'c' => 'bluh bluh bluh',
+                ]
+            ]
+        ];
+
+        $this->post('/test', $fillable)->assertRedirect('/test');
+        $user = \RafflesArgentina\ResourceController\Models\User::with('belongsToManyRelated')->first();
+        $this->assertTrue($user->belongsToManyRelated->count() === 5);
+
+        foreach ($fillable['belongsToManyRelated'] as $index => $fields) {
+            foreach ($fields as $k => $v) {
+                $this->assertTrue($user->belongsToManyRelated[$index]->{$k} == $v);
+            }
+        }
+
+        $user->forceDelete();
+
+        $this->json('POST', '/test', $fillable)->assertStatus(200);
+        $user = \RafflesArgentina\ResourceController\Models\User::first();
+        $this->assertTrue($user->belongsToManyRelated->count() === 5);
+
+        foreach ($fillable['belongsToManyRelated'] as $index => $fields) {
+            foreach ($fields as $k => $v) {
+                $this->assertTrue($user->belongsToManyRelated[$index]->{$k} == $v);
+            }
+        }
     }
 
     /**
@@ -300,61 +385,41 @@ class WorksWithRelationsTest extends TestCase
         $related = factory(\RafflesArgentina\ResourceController\Models\Related::class, 5)->create();
 
         $existent = [];
-        foreach ($related as $id => $model) {
-            $existent[$model->id] = $model->getAttributes();
+        foreach ($related as $k => $model) {
+            $existent[$k] = $model->getAttributes();
         }
 
-        $fillables = [
-            'name' => 'Mario',
-            'email' => 'mario@raffles.com.ar',
-            'password' => bcrypt(str_random()),
-            'morphToManyRelated' => $existent,
-        ];
-
-        $this->post('/test', $fillables)->assertRedirect('/test');
-        $user = \RafflesArgentina\ResourceController\Models\User::with('morphToManyRelated')->first();
-        $this->assertTrue($user->morphToManyRelated->count() === 5);
-
-        $user->forceDelete();
-
-        $this->json('POST', '/test', $fillables)->assertStatus(200);
-        $user = \RafflesArgentina\ResourceController\Models\User::first();
-        $this->assertTrue($user->morphTOManyRelated->count() === 5);
-
-        //dd($user->belongsToManyRelated->toJson());
-    }
-
-    /**
-     * @coversNothing
-     */
-    function testStoreMorphToManyInexistent()
-    {
-        $fillables = [
+        $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
             'password' => bcrypt(str_random()),
             'morphToManyRelated' => [
-                '1' => [
+                '0' => [
+                    'id' => '1',
                     'a' => 'blah blah blah',
                     'b' => 'blah blah blah',
                     'c' => 'blah blah blah',
                 ],
-                '2' => [
+                '1' => [
+                    'id' => '2',
                     'a' => 'bleh bleh bleh',
                     'b' => 'bleh bleh bleh',
                     'c' => 'bleh bleh bleh',
                 ],
-                '3' => [
+                '2' => [
+                    'id' => '3',
                     'a' => 'blih blih blih',
                     'b' => 'blih blih blih',
                     'c' => 'blih blih blih',
                 ],
-                '4' => [
+                '3' => [
+                    'id' => '4',
                     'a' => 'bloh bloh bloh',
                     'b' => 'bloh bloh bloh',
                     'c' => 'bloh bloh bloh',
                 ],
-                '5' => [
+                '4' => [
+                    'id' => '5',
                     'a' => 'bluh bluh bluh',
                     'b' => 'bluh bluh bluh',
                     'c' => 'bluh bluh bluh',
@@ -362,17 +427,88 @@ class WorksWithRelationsTest extends TestCase
             ]
         ];
 
-        $this->post('/test', $fillables)->assertRedirect('/test');
+        $this->post('/test', $fillable)->assertRedirect('/test');
         $user = \RafflesArgentina\ResourceController\Models\User::with('morphToManyRelated')->first();
         $this->assertTrue($user->morphToManyRelated->count() === 5);
 
+        foreach ($fillable['morphToManyRelated'] as $index => $fields) {
+            foreach ($fields as $k => $v) {
+                $this->assertTrue($user->morphToManyRelated[$index]->{$k} == $v);
+            }
+        }
+
         $user->forceDelete();
 
-        $this->json('POST', '/test', $fillables)->assertStatus(200);
+        $this->json('POST', '/test', $fillable)->assertStatus(200);
+        $user = \RafflesArgentina\ResourceController\Models\User::first();
+        $this->assertTrue($user->morphTOManyRelated->count() === 5);
+
+        foreach ($fillable['morphToManyRelated'] as $index => $fields) {
+            foreach ($fields as $k => $v) {
+                $this->assertTrue($user->morphToManyRelated[$index]->{$k} == $v);
+            }
+        }
+    }
+
+    /**
+     * @coversNothing
+     */
+    function testStoreMorphToManyInexistent()
+    {
+        $fillable = [
+            'name' => 'Mario',
+            'email' => 'mario@raffles.com.ar',
+            'password' => bcrypt(str_random()),
+            'morphToManyRelated' => [
+                '0' => [
+                    'a' => 'blah blah blah',
+                    'b' => 'blah blah blah',
+                    'c' => 'blah blah blah',
+                ],
+                '1' => [
+                    'a' => 'bleh bleh bleh',
+                    'b' => 'bleh bleh bleh',
+                    'c' => 'bleh bleh bleh',
+                ],
+                '2' => [
+                    'a' => 'blih blih blih',
+                    'b' => 'blih blih blih',
+                    'c' => 'blih blih blih',
+                ],
+                '3' => [
+                    'a' => 'bloh bloh bloh',
+                    'b' => 'bloh bloh bloh',
+                    'c' => 'bloh bloh bloh',
+                ],
+                '4' => [
+                    'a' => 'bluh bluh bluh',
+                    'b' => 'bluh bluh bluh',
+                    'c' => 'bluh bluh bluh',
+                ]
+            ]
+        ];
+
+        $this->post('/test', $fillable)->assertRedirect('/test');
+        $user = \RafflesArgentina\ResourceController\Models\User::with('morphToManyRelated')->first();
+        $this->assertTrue($user->morphToManyRelated->count() === 5);
+
+        foreach ($fillable['morphToManyRelated'] as $index => $fields) {
+            foreach ($fields as $k => $v) {
+                $this->assertTrue($user->morphToManyRelated[$index]->{$k} == $v);
+            }
+        }
+
+        $user->forceDelete();
+
+        $this->json('POST', '/test', $fillable)->assertStatus(200);
         $user = \RafflesArgentina\ResourceController\Models\User::first();
         $this->assertTrue($user->morphToManyRelated->count() === 5);
 
-        //dd($user->belongsToManyRelated->toJson());
+        foreach ($fillable['morphToManyRelated'] as $index => $fields) {
+            foreach ($fields as $k => $v) {
+                $this->assertTrue($user->morphToManyRelated[$index]->{$k} == $v);
+            }
+        }
     }
 
     /**
@@ -380,7 +516,7 @@ class WorksWithRelationsTest extends TestCase
      */
     function testUpdateHasOne()
     {
-        $fillables = [
+        $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
             'password' => bcrypt(str_random()),
@@ -392,13 +528,13 @@ class WorksWithRelationsTest extends TestCase
         ];
 
         $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->put('/test/1', $fillables)->assertRedirect('/test');
+        $this->put('/test/1', $fillable)->assertRedirect('/test');
         $this->assertTrue(!is_null($user->hasOneRelated));
 
         $user->forceDelete();
 
         $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->json('PUT', '/test/2', $fillables)->assertStatus(200);
+        $this->json('PUT', '/test/2', $fillable)->assertStatus(200);
         $this->assertTrue(!is_null($user->hasOneRelated));
     }
 
@@ -407,7 +543,7 @@ class WorksWithRelationsTest extends TestCase
      */
     function testUpdateMorphOne()
     {
-        $fillables = [
+        $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
             'password' => bcrypt(str_random()),
@@ -419,13 +555,13 @@ class WorksWithRelationsTest extends TestCase
         ];
 
         $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->put('/test/1', $fillables)->assertRedirect('/test');
+        $this->put('/test/1', $fillable)->assertRedirect('/test');
         $this->assertTrue(!is_null($user->morphOneRelated));
 
         $user->forceDelete();
 
         $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->json('PUT', '/test/2', $fillables)->assertStatus(200);
+        $this->json('PUT', '/test/2', $fillable)->assertStatus(200);
         $this->assertTrue(!is_null($user->morphOneRelated));
     }
 
@@ -434,7 +570,7 @@ class WorksWithRelationsTest extends TestCase
      */
     function testUpdateBelongsTo()
     {
-        $fillables = [
+        $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
             'password' => bcrypt(str_random()),
@@ -446,14 +582,14 @@ class WorksWithRelationsTest extends TestCase
         ];
 
         $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->put('/test/1', $fillables)->assertRedirect('/test');
+        $this->put('/test/1', $fillable)->assertRedirect('/test');
         $user = \RafflesArgentina\ResourceController\Models\User::first();
         $this->assertTrue(!is_null($user->belongsToRelated));
 
         $user->forceDelete();
 
         $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->json('PUT', '/test/2', $fillables)->assertStatus(200);
+        $this->json('PUT', '/test/2', $fillable)->assertStatus(200);
         $user = \RafflesArgentina\ResourceController\Models\User::first();
         $this->assertTrue(!is_null($user->belongsToRelated));
     }
@@ -463,32 +599,37 @@ class WorksWithRelationsTest extends TestCase
      */
     function testUpdateHasMany()
     {
-        $fillables = [
+        $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
             'password' => bcrypt(str_random()),
             'hasManyRelated' => [
-                '1' => [
+                '0' => [
+                    'id' => '1',
                     'a' => 'blah blah blah',
                     'b' => 'blah blah blah',
                     'c' => 'blah blah blah',
                 ],
-                '2' => [
+                '1' => [
+                    'id' => '2',
                     'a' => 'bleh bleh bleh',
                     'b' => 'bleh bleh bleh',
                     'c' => 'bleh bleh bleh',
                 ],
-                '3' => [
+                '2' => [
+                    'id' => '3',
                     'a' => 'blih blih blih',
                     'b' => 'blih blih blih',
                     'c' => 'blih blih blih',
                 ],
-                '4' => [
+                '3' => [
+                    'id' => '4',
                     'a' => 'bloh bloh bloh',
                     'b' => 'bloh bloh bloh',
                     'c' => 'bloh bloh bloh',
                 ],
-                '5' => [
+                '4' => [
+                    'id' => '5',
                     'a' => 'bluh bluh bluh',
                     'b' => 'bluh bluh bluh',
                     'c' => 'bluh bluh bluh',
@@ -497,13 +638,13 @@ class WorksWithRelationsTest extends TestCase
         ];
 
         $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->put('/test/1', $fillables)->assertRedirect('/test');
+        $this->put('/test/1', $fillable)->assertRedirect('/test');
         $this->assertTrue($user->hasManyRelated->count() === 5);
 
         $user->forceDelete();
 
         $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->json('PUT', '/test/2', $fillables)->assertStatus(200);
+        $this->json('PUT', '/test/2', $fillable)->assertStatus(200);
         $this->assertTrue($user->hasManyRelated->count() === 5);
     }
 
@@ -512,32 +653,37 @@ class WorksWithRelationsTest extends TestCase
      */
     function testUpdateMorphMany()
     {
-        $fillables = [
+        $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
             'password' => bcrypt(str_random()),
             'morphManyRelated' => [
-                '1' => [
+                '0' => [
+                    'id' => '1',
                     'a' => 'blah blah blah',
                     'b' => 'blah blah blah',
                     'c' => 'blah blah blah',
                 ],
-                '2' => [
+                '1' => [
+                    'id' => '2',
                     'a' => 'bleh bleh bleh',
                     'b' => 'bleh bleh bleh',
                     'c' => 'bleh bleh bleh',
                 ],
-                '3' => [
+                '2' => [
+                    'id' => '3',
                     'a' => 'blih blih blih',
                     'b' => 'blih blih blih',
                     'c' => 'blih blih blih',
                 ],
-                '4' => [
+                '3' => [
+                    'id' => '4',
                     'a' => 'bloh bloh bloh',
                     'b' => 'bloh bloh bloh',
                     'c' => 'bloh bloh bloh',
                 ],
-                '5' => [
+                '4' => [
+                    'id' => '5',
                     'a' => 'bluh bluh bluh',
                     'b' => 'bluh bluh bluh',
                     'c' => 'bluh bluh bluh',
@@ -546,13 +692,13 @@ class WorksWithRelationsTest extends TestCase
         ];
 
         $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->put('/test/1', $fillables)->assertRedirect('/test');
+        $this->put('/test/1', $fillable)->assertRedirect('/test');
         $this->assertTrue($user->morphManyRelated->count() === 5);
 
         $user->forceDelete();
 
         $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->json('PUT', '/test/2', $fillables)->assertStatus(200);
+        $this->json('PUT', '/test/2', $fillable)->assertStatus(200);
         $this->assertTrue($user->morphManyRelated->count() === 5);
     }
 
@@ -564,59 +710,41 @@ class WorksWithRelationsTest extends TestCase
         $related = factory(\RafflesArgentina\ResourceController\Models\Related::class, 5)->create();
 
         $existent = [];
-        foreach ($related as $id => $model) {
-            $existent[$model->id] = $model->getAttributes();
+        foreach ($related as $k => $model) {
+            $existent[$k] = $model->getAttributes();
         }
 
-        $fillables = [
-            'name' => 'Mario',
-            'email' => 'mario@raffles.com.ar',
-            'password' => bcrypt(str_random()),
-            'belongsToManyRelated' => $existent
-        ];
-
-        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->put('/test/1', $fillables)->assertRedirect('/test');
-        $this->assertTrue($user->belongsToManyRelated->count() === 5);
-
-        $user->forceDelete();
-
-        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->json('PUT', '/test/2', $fillables)->assertStatus(200);
-        $this->assertTrue($user->belongsToManyRelated->count() === 5);
-    }
-
-    /**
-     * @coversNothing
-     */
-    function testUpdateBelongsToManyInexistent()
-    {
-        $fillables = [
+        $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
             'password' => bcrypt(str_random()),
             'belongsToManyRelated' => [
-                '1' => [
+                '0' => [
+                    'id' => '1',
                     'a' => 'blah blah blah',
                     'b' => 'blah blah blah',
                     'c' => 'blah blah blah',
                 ],
-                '2' => [
+                '1' => [
+                    'id' => '2',
                     'a' => 'bleh bleh bleh',
                     'b' => 'bleh bleh bleh',
                     'c' => 'bleh bleh bleh',
                 ],
-                '3' => [
+                '2' => [
+                    'id' => '3',
                     'a' => 'blih blih blih',
                     'b' => 'blih blih blih',
                     'c' => 'blih blih blih',
                 ],
-                '4' => [
+                '3' => [
+                    'id' => '4',
                     'a' => 'bloh bloh bloh',
                     'b' => 'bloh bloh bloh',
                     'c' => 'bloh bloh bloh',
                 ],
-                '5' => [
+                '4' => [
+                    'id' => '5',
                     'a' => 'bluh bluh bluh',
                     'b' => 'bluh bluh bluh',
                     'c' => 'bluh bluh bluh',
@@ -625,14 +753,87 @@ class WorksWithRelationsTest extends TestCase
         ];
 
         $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->put('/test/1', $fillables)->assertRedirect('/test');
+        $this->put('/test/1', $fillable)->assertRedirect('/test');
         $this->assertTrue($user->belongsToManyRelated->count() === 5);
+
+        foreach ($fillable['belongsToManyRelated'] as $index => $fields) {
+            foreach ($fields as $k => $v) {
+                $this->assertTrue($user->belongsToManyRelated[$index]->{$k} == $v);
+            }
+        }
 
         $user->forceDelete();
 
         $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->json('PUT', '/test/2', $fillables)->assertStatus(200);
+        $this->json('PUT', '/test/2', $fillable)->assertStatus(200);
         $this->assertTrue($user->belongsToManyRelated->count() === 5);
+
+        foreach ($fillable['belongsToManyRelated'] as $index => $fields) {
+            foreach ($fields as $k => $v) {
+                $this->assertTrue($user->belongsToManyRelated[$index]->{$k} == $v);
+            }
+        }
+    }
+
+    /**
+     * @coversNothing
+     */
+    function testUpdateBelongsToManyInexistent()
+    {
+        $fillable = [
+            'name' => 'Mario',
+            'email' => 'mario@raffles.com.ar',
+            'password' => bcrypt(str_random()),
+            'belongsToManyRelated' => [
+                '0' => [
+                    'a' => 'blah blah blah',
+                    'b' => 'blah blah blah',
+                    'c' => 'blah blah blah',
+                ],
+                '1' => [
+                    'a' => 'bleh bleh bleh',
+                    'b' => 'bleh bleh bleh',
+                    'c' => 'bleh bleh bleh',
+                ],
+                '2' => [
+                    'a' => 'blih blih blih',
+                    'b' => 'blih blih blih',
+                    'c' => 'blih blih blih',
+                ],
+                '3' => [
+                    'a' => 'bloh bloh bloh',
+                    'b' => 'bloh bloh bloh',
+                    'c' => 'bloh bloh bloh',
+                ],
+                '4' => [
+                    'a' => 'bluh bluh bluh',
+                    'b' => 'bluh bluh bluh',
+                    'c' => 'bluh bluh bluh',
+                ]
+            ]
+        ];
+
+        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
+        $this->put('/test/1', $fillable)->assertRedirect('/test');
+        $this->assertTrue($user->belongsToManyRelated->count() === 5);
+
+        foreach ($fillable['belongsToManyRelated'] as $index => $fields) {
+            foreach ($fields as $k => $v) {
+                $this->assertTrue($user->belongsToManyRelated[$index]->{$k} == $v);
+            }
+        }
+
+        $user->forceDelete();
+
+        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
+        $this->json('PUT', '/test/2', $fillable)->assertStatus(200);
+        $this->assertTrue($user->belongsToManyRelated->count() === 5);
+
+        foreach ($fillable['belongsToManyRelated'] as $index => $fields) {
+            foreach ($fields as $k => $v) {
+                $this->assertTrue($user->belongsToManyRelated[$index]->{$k} == $v);
+            }
+        }
     }
 
     /**
@@ -643,59 +844,41 @@ class WorksWithRelationsTest extends TestCase
         $related = factory(\RafflesArgentina\ResourceController\Models\Related::class, 5)->create();
 
         $existent = [];
-        foreach ($related as $id => $model) {
-            $existent[$model->id] = $model->getAttributes();
+        foreach ($related as $k => $model) {
+            $existent[$k] = $model->getAttributes();
         }
 
-        $fillables = [
-            'name' => 'Mario',
-            'email' => 'mario@raffles.com.ar',
-            'password' => bcrypt(str_random()),
-            'morphToManyRelated' => $existent
-        ];
-
-        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->put('/test/1', $fillables)->assertRedirect('/test');
-        $this->assertTrue($user->morphToManyRelated->count() === 5);
-
-        $user->forceDelete();
-
-        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->json('PUT', '/test/2', $fillables)->assertStatus(200);
-        $this->assertTrue($user->morphToManyRelated->count() === 5);
-    }
-
-    /**
-     * @coversNothing
-     */
-    function testUpdateMorphToManyInexistent()
-    {
-        $fillables = [
+        $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
             'password' => bcrypt(str_random()),
             'morphToManyRelated' => [
-                '1' => [
+                '0' => [
+                    'id' => '1',
                     'a' => 'blah blah blah',
                     'b' => 'blah blah blah',
                     'c' => 'blah blah blah',
                 ],
-                '2' => [
+                '1' => [
+                    'id' => '2',
                     'a' => 'bleh bleh bleh',
                     'b' => 'bleh bleh bleh',
                     'c' => 'bleh bleh bleh',
                 ],
-                '3' => [
+                '2' => [
+                    'id' => '3',
                     'a' => 'blih blih blih',
                     'b' => 'blih blih blih',
                     'c' => 'blih blih blih',
                 ],
-                '4' => [
+                '3' => [
+                    'id' => '4',
                     'a' => 'bloh bloh bloh',
                     'b' => 'bloh bloh bloh',
                     'c' => 'bloh bloh bloh',
                 ],
-                '5' => [
+                '4' => [
+                    'id' => '5',
                     'a' => 'bluh bluh bluh',
                     'b' => 'bluh bluh bluh',
                     'c' => 'bluh bluh bluh',
@@ -704,13 +887,86 @@ class WorksWithRelationsTest extends TestCase
         ];
 
         $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->put('/test/1', $fillables)->assertRedirect('/test');
+        $this->put('/test/1', $fillable)->assertRedirect('/test');
         $this->assertTrue($user->morphToManyRelated->count() === 5);
+
+        foreach ($fillable['morphToManyRelated'] as $index => $fields) {
+            foreach ($fields as $k => $v) {
+                $this->assertTrue($user->morphToManyRelated[$index]->{$k} == $v);
+            }
+        }
 
         $user->forceDelete();
 
         $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
-        $this->json('PUT', '/test/2', $fillables)->assertStatus(200);
+        $this->json('PUT', '/test/2', $fillable)->assertStatus(200);
         $this->assertTrue($user->morphToManyRelated->count() === 5);
+
+        foreach ($fillable['morphToManyRelated'] as $index => $fields) {
+            foreach ($fields as $k => $v) {
+                $this->assertTrue($user->morphToManyRelated[$index]->{$k} == $v);
+            }
+        }
+    }
+
+    /**
+     * @coversNothing
+     */
+    function testUpdateMorphToManyInexistent()
+    {
+        $fillable = [
+            'name' => 'Mario',
+            'email' => 'mario@raffles.com.ar',
+            'password' => bcrypt(str_random()),
+            'morphToManyRelated' => [
+                '0' => [
+                    'a' => 'blah blah blah',
+                    'b' => 'blah blah blah',
+                    'c' => 'blah blah blah',
+                ],
+                '1' => [
+                    'a' => 'bleh bleh bleh',
+                    'b' => 'bleh bleh bleh',
+                    'c' => 'bleh bleh bleh',
+                ],
+                '2' => [
+                    'a' => 'blih blih blih',
+                    'b' => 'blih blih blih',
+                    'c' => 'blih blih blih',
+                ],
+                '3' => [
+                    'a' => 'bloh bloh bloh',
+                    'b' => 'bloh bloh bloh',
+                    'c' => 'bloh bloh bloh',
+                ],
+                '4' => [
+                    'a' => 'bluh bluh bluh',
+                    'b' => 'bluh bluh bluh',
+                    'c' => 'bluh bluh bluh',
+                ]
+            ]
+        ];
+
+        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
+        $this->put('/test/1', $fillable)->assertRedirect('/test');
+        $this->assertTrue($user->morphToManyRelated->count() === 5);
+
+        foreach ($fillable['morphToManyRelated'] as $index => $fields) {
+            foreach ($fields as $k => $v) {
+                $this->assertTrue($user->morphToManyRelated[$index]->{$k} == $v);
+            }
+        }
+
+        $user->forceDelete();
+
+        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
+        $this->json('PUT', '/test/2', $fillable)->assertStatus(200);
+        $this->assertTrue($user->morphToManyRelated->count() === 5);
+
+        foreach ($fillable['morphToManyRelated'] as $index => $fields) {
+            foreach ($fields as $k => $v) {
+                $this->assertTrue($user->morphToManyRelated[$index]->{$k} == $v);
+            }
+        }
     }
 }

@@ -77,8 +77,8 @@ class ResourceController extends AbstractResourceController
             $instance = $this->repository->create($request->all());
             $model = $instance[1];
             $number = $model->{$model->getRouteKeyName()};
-            $this->updateOrCreateRelations($request, $model);
-            $this->uploadFiles($request, $model);
+            $mergedRequest = $this->uploadFiles($request, $model);
+            $this->updateOrCreateRelations($mergedRequest, $model);
         } catch (\Exception $e) {
             DB::rollback();
 
@@ -185,8 +185,8 @@ class ResourceController extends AbstractResourceController
         try { 
             $instance = $this->repository->update($model, $request->all());
             $model = $instance[1];
-            $this->updateOrCreateRelations($request, $model);
-            $this->uploadFiles($request, $model);
+            $mergedRequest = $this->uploadFiles($request, $model);
+            $this->updateOrCreateRelations($mergedRequest, $model);
         } catch (\Exception $e) {
             DB::rollback();
 

@@ -23,13 +23,13 @@ trait WorksWithRelations
      */
     public function updateOrCreateRelations(Request $request, Model $model)
     {
-        $data = $request->all();
-        foreach ($data as $relationName => $fillables) {
-            if (is_array($request->{$relationName}) && !$request->hasFile($relationName)) {
-                $this->_checkRelationExists($model, $relationName);
+        $parameterBag = $request->request;
+        foreach ($parameterBag->all() as $name => $attributes) {
+            if (is_array($request->{$name})) {
+                $this->_checkRelationExists($model, $name);
 
-                $relation = $model->{$relationName}();
-                $this->handleRelations($fillables, $model, $relation);
+                $relation = $model->{$name}();
+                $this->handleRelations($attributes, $model, $relation);
             }
         }
     }
@@ -37,26 +37,26 @@ trait WorksWithRelations
     /**
      * Handle relations.
      *
-     * @param array    $fillables The relation fillables.
-     * @param Model    $model     The eloquent model.
-     * @param Relation $relation  The eloquent relation.
+     * @param array    $fillable The relation fillable.
+     * @param Model    $model    The eloquent model.
+     * @param Relation $relation The eloquent relation.
      *
      * @return void
      */
-    protected function handleRelations(array $fillables, Model $model, Relation $relation)
+    protected function handleRelations(array $fillable, Model $model, Relation $relation)
     {
         switch (true) {
         case $relation instanceof HasOne || $relation instanceof MorphOne:
-            $this->updateOrCreateHasOne($fillables, $model, $relation);
+            $this->updateOrCreateHasOne($fillable, $model, $relation);
             break;
         case $relation instanceof BelongsTo:
-            $this->updateOrCreateBelongsToOne($fillables, $model, $relation);
+            $this->updateOrCreateBelongsToOne($fillable, $model, $relation);
             break;
         case $relation instanceof HasMany || $relation instanceof MorphMany:
-            $this->updateOrCreateHasMany($fillables, $model, $relation);
+            $this->updateOrCreateHasMany($fillable, $model, $relation);
             break;
         case $relation instanceof BelongsToMany || $relation instanceof MorphToMany:
-            $this->updateOrCreateBelongsToMany($fillables, $model, $relation);
+            $this->updateOrCreateBelongsToMany($fillable, $model, $relation);
             break;
         }
     }
@@ -64,76 +64,80 @@ trait WorksWithRelations
     /**
      * HasOne relation updateOrCreate logic.
      *
-     * @param array    $fillables The relation fillables.
-     * @param Model    $model     The eloquent model.
-     * @param Relation $relation  The eloquent relation.
+     * @param array    $fillable The relation fillable.
+     * @param Model    $model    The eloquent model.
+     * @param Relation $relation The eloquent relation.
      *
      * @return void
      */
-    protected function updateOrCreateHasOne(array $fillables, Model $model, Relation $relation)
+    protected function updateOrCreateHasOne(array $fillable, Model $model, Relation $relation)
     {
         if (!$relation->first()) {
-            $relation->create($fillables);
+            $relation->create($fillable);
         } else {
-            $relation->update($fillables);
+            $relation->update($fillable);
         }
     }
 
     /**
      * BelongsToOne relation updateOrCreate logic.
      *
-     * @param array    $fillables The relation fillables.
-     * @param Model    $model     The eloquent model.
-     * @param Relation $relation  The eloquent relation.
+     * @param array    $fillable The relation fillable.
+     * @param Model    $model    The eloquent model.
+     * @param Relation $relation The eloquent relation.
      *
      * @return void
      */
-    protected function updateOrCreateBelongsToOne(array $fillables, Model $model, Relation $relation)
+    protected function updateOrCreateBelongsToOne(array $fillable, Model $model, Relation $relation)
     {
         $related = $relation->getRelated();
 
         if (!$relation->first()) {
-            $relation->associate($related->create($fillables));
+            $relation->associate($related->create($fillable));
             $model->save();
         } else {
-            $relation->update($fillables);
+            $relation->update($fillable);
         }
     }
 
     /**
      * HasMany relation updateOrCreate logic.
      *
-     * @param array    $fillables The relation fillables.
-     * @param Model    $model     The eloquent model.
-     * @param Relation $relation  The eloquent relation.
+     * @param array    $fillable The relation fillable.
+     * @param Model    $model    The eloquent model.
+     * @param Relation $relation The eloquent relation.
      *
      * @return void
      */
-    protected function updateOrCreateHasMany(array $fillables, Model $model, Relation $relation)
+    protected function updateOrCreateHasMany(array $fillable, Model $model, Relation $relation)
     {
-        foreach ($fillables as $id => $fields) {
-            $relation->updateOrCreate(['id' => $id], $fields);
+        foreach ($fillable as $fields) {
+            $id = array_key_exists('id', $fields) ? $fields['id'] : '';
+            $relation->updateOrCreate(['id' => $id], array_except($fields, ['id']));
         }
     }
 
     /**
      * BelongsToMany relation updateOrCreate logic.
      *
-     * @param array    $fillables The relation fillables.
-     * @param Model    $model     The eloquent model.
-     * @param Relation $relation  The eloquent relation.
+     * @param array    $fillable The relation fillable.
+     * @param Model    $model    The eloquent model.
+     * @param Relation $relation The eloquent relation.
      *
      * @return void
      */
-    protected function updateOrCreateBelongsToMany(array $fillables, Model $model, Relation $relation)
+    protected function updateOrCreateBelongsToMany(array $fillable, Model $model, Relation $relation)
     {
         $related = $relation->getRelated();
 
-        foreach ($fillables as $id => $fields) {
-            $related->updateOrCreate(['id' => $id], $fields);
+        $keys = [];
+        foreach ($fillable as $fields) {
+            $id = array_key_exists('id', $fields) ? $fields['id'] : '';
+            $record = $related->updateOrCreate(['id' => $id], array_except($fields, ['id']));
+            array_push($keys, $record->id);
         }
 
-        $relation->sync(array_keys($fillables));
+        $relation->sync($keys);
     }
 
     /**

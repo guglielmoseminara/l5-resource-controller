@@ -8,11 +8,9 @@ use Storage;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 
-use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Database\Eloquent\Relations\{HasOne, MorphOne, BelongsTo};
-use Illuminate\Database\Eloquent\Relations\{HasMany, MorphMany, MorphToMany, BelongsToMany};
+use Illuminate\Http\Request;
 
 trait WorksWithFileUploads
 {
@@ -23,7 +21,7 @@ trait WorksWithFileUploads
      * @param Model       $model        The eloquent model.
      * @param string|null $relativePath The file uploads relative path.
      *
-     * @return void
+     * @return Request
      */
     public function uploadFiles(Request $request, Model $model, $relativePath = null)
     {
@@ -31,25 +29,35 @@ trait WorksWithFileUploads
             $relativePath = $this->getDefaultRelativePath();
         }
 
-        $files = $request->files;
-        foreach ($files as $relationName => $uploadedFiles) {
-            $this->_checkFileRelationExists($model, $relationName);
-            $relation = $model->{$relationName}();
+        $data = $request->request->all();
 
-            foreach ($uploadedFiles as $id => $uploadedFile) {
-                if (!$uploadedFile->isValid()) {
-                    throw new UploadException($uploadedFile->getError());
+        $fileBag = $request->files;
+        foreach ($fileBag->all() as $name => $parameters) {
+            $this->_checkFileRelationExists($model, $name);
+            $relation = $model->{$name}();
+
+            foreach ($parameters as $index => $file) {
+                if (!$file->isValid()) {
+                    throw new UploadException($file->getError());
                 }
 
-                $filename = $this->getFilename($uploadedFile);
-
+                $filename = $this->getFilename($file);
                 $destination = $this->getStoragePath($relativePath);
-                $this->moveUploadedFile($uploadedFile, $filename, $destination);
+                $this->moveUploadedFile($file, $filename, $destination);
 
                 $location = $relativePath.$filename;
-                $this->handleFileRelations($model, $relation, $location, $id);
+
+                if (count($fileBag->get($name)) > 1) {
+                    $data[$name][$index] = [$this->getLocationColumn() => $location];
+                } else {
+                    $data[$name][$this->getLocationColumn()] = $location;
+                }
+
+                $request->merge($data);
             }
         }
+
+        return $request;
     }
 
     /**
@@ -114,113 +122,6 @@ trait WorksWithFileUploads
     }
 
     /**
-     * Handle file relations.
-     *
-     * @param Model    $model    The eloquent model.
-     * @param Relation $relation The eloquent relation.
-     * @param string   $location The uploaded file location.
-     * @param string   $id       The related model id.
-     *
-     * @return void
-     */
-    protected function handleFileRelations(Model $model, Relation $relation, $location, $id)
-    {
-        switch (true) {
-        case $relation instanceof HasOne || $relation instanceof MorphOne:
-            $this->updateOrCreateFileHasOne($model, $relation, $location, $id);
-            break;
-        case $relation instanceof BelongsTo:
-            $this->updateOrCreateFileBelongsToOne($model, $relation, $location, $id);
-            break;
-        case $relation instanceof HasMany || $relation instanceof MorphMany:
-            $this->updateOrCreateFileHasMany($model, $relation, $location, $id);
-            break;
-        case $relation instanceof BelongsToMany || $relation instanceof MorphToMany:
-            $this->updateOrCreateFileBelongsToMany($model, $relation, $location, $id);
-            break;
-        }
-    }
-
-    /**
-     * HasOne file relation updateOrCreate logic.
-     *
-     * @param Model       $model    The eloquent model.
-     * @param Relation    $relation The eloquent relation.
-     * @param string      $location The uploaded file location.
-     * @param string|null $id       The related model id.
-     *
-     * @return void
-     */
-    protected function updateOrCreateFileHasOne(Model $model, Relation $relation, $location, $id = null)
-    {
-        $column = $this->getLocationColumn();
-
-        if (!$relation->first()) {
-            $relation->create([$column => $location]);
-        } else {
-            $relation->update([$column => $location]);
-        }
-    }
-
-    /**
-     * BelongsToOne file relation updateOrCreate logic.
-     *
-     * @param Model       $model    The eloquent model.
-     * @param Relation    $relation The eloquent relation.
-     * @param string      $location The uploaded file location.
-     * @param string|null $id       The related model id.
-     *
-     * @return void
-     */
-    protected function updateOrCreateFileBelongsToOne(Model $model, Relation $relation, $location, $id = null)
-    {
-        $column = $this->getLocationColumn();
-        $related = $relation->getRelated();
-
-        if (!$relation->first()) {
-            $relation->associate($related->create([$column => $location]));
-            $model->save();
-        } else {
-            $relation->update([$column => $location]);
-        }
-    }
-
-    /**
-     * HasMany file relation updateOrCreate logic.
-     *
-     * @param Model       $model    The eloquent model.
-     * @param Relation    $relation The eloquent relation.
-     * @param string      $location The uploaded file location.
-     * @param string|null $id       The related model id.
-     *
-     * @return void
-     */
-    protected function updateOrCreateFileHasMany(Model $model, Relation $relation, $location, $id = null)
-    {
-        $column = $this->getLocationColumn();
-        $relation->updateOrCreate(['id' => $id], [$column => $location]);
-    }
-
-    /**
-     * BelongsToMany file relation updateOrCreate logic.
-     *
-     * @param Model       $model    The eloquent model.
-     * @param Relation    $relation The eloquent relation.
-     * @param string      $location The uploaded file location.
-     * @param string|null $id       The related model id.
-     *
-     * @return void
-     */
-    protected function updateOrCreateFileBelongsToMany(Model $model, Relation $relation, $location, $id = null)
-    {
-        $column = $this->getLocationColumn();
-        $related = $relation->getRelated();
-
-        $related->updateOrCreate(['id' => $id], [$column => $location]);
-        $relation->syncWithoutDetaching($id, [$column => $location]);
-    }
-
-    /**
      * Throw an exception if request file is not named after an existent relation.
      *
      * @param Model  $model        The eloquent model.
@@ -238,7 +139,6 @@ trait WorksWithFileUploads
             } else {
                 $message = "Request file '{$relationName}' is not named after an existent relation.";
             }
-
             throw new UploadException($message);
         }
     }

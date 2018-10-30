@@ -20,12 +20,12 @@ class WorksWithFileUploadsTest extends TestCase
 
         $this->post(
             '/test', [
-            'name' => 'Mario',
-            'email' => 'mario@raffles.com.ar',
-            'password' => str_random(),
-            'hasOneFileUpload' => [
-                UploadedFile::fake()->image('test.jpeg')
-            ],
+                'name' => 'Mario',
+                'email' => 'mario@raffles.com.ar',
+                'password' => str_random(),
+                'hasOneFileUpload' => [
+                    UploadedFile::fake()->image('test.jpeg')
+                ],
             ]
         )->assertRedirect('/test')
             ->assertSessionHas('rafflesargentina.status.success');
@@ -46,9 +46,9 @@ class WorksWithFileUploadsTest extends TestCase
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
             'password' => str_random(),
-            'morphOneFileUpload' => [
-                UploadedFile::fake()->image('test.jpeg')
-            ],
+                'morphOneFileUpload' => [
+                    UploadedFile::fake()->image('test.jpeg')
+                ],
             ]
         )->assertRedirect('/test')
             ->assertSessionHas('rafflesargentina.status.success');
@@ -71,9 +71,9 @@ class WorksWithFileUploadsTest extends TestCase
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
             'password' => str_random(),
-            'belongsToFileUpload' => [
-                UploadedFile::fake()->image('test.jpeg')
-            ],
+                'belongsToFileUpload' => [
+                    UploadedFile::fake()->image('test.jpeg')
+                ],
             ]
         )->assertRedirect('/test')
             ->assertSessionHas('rafflesargentina.status.success');
@@ -95,9 +95,9 @@ class WorksWithFileUploadsTest extends TestCase
             'email' => 'mario@raffles.com.ar',
             'password' => str_random(),
             'hasManyFileUploads' => [
-                '1' => UploadedFile::fake()->image('test.jpeg'),
-                '2' => UploadedFile::fake()->create('document.pdf')
-            ],
+                UploadedFile::fake()->image('test.jpeg'),
+                UploadedFile::fake()->create('document.pdf')
+            ]
             ]
         )->assertRedirect('/test')
             ->assertSessionHas('rafflesargentina.status.success');
@@ -121,8 +121,8 @@ class WorksWithFileUploadsTest extends TestCase
             'email' => 'mario@raffles.com.ar',
             'password' => str_random(),
             'morphManyFileUploads' => [
-                '1' => UploadedFile::fake()->image('test.jpeg'),
-                '2' => UploadedFile::fake()->create('document.pdf')
+                UploadedFile::fake()->image('test.jpeg'),
+                UploadedFile::fake()->create('document.pdf')
             ],
             ]
         )->assertRedirect('/test')
