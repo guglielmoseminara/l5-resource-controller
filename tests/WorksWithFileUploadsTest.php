@@ -173,8 +173,8 @@ class WorksWithFileUploadsTest extends TestCase
             'email' => 'mario@raffles.com.ar',
             'password' => str_random(),
             'morphToManyFileUploads' => [
-                '1' => UploadedFile::fake()->image('test.jpeg'),
-                '2' => UploadedFile::fake()->create('document.pdf')
+                UploadedFile::fake()->image('test.jpeg'),
+                UploadedFile::fake()->create('document.pdf')
             ],
             ]
         )->assertRedirect('/test')
@@ -326,8 +326,8 @@ class WorksWithFileUploadsTest extends TestCase
         $this->put(
             '/test/1', [
             'morphToManyFileUploads' => [
-                '1' => UploadedFile::fake()->image('test.jpeg'),
-                '2' => UploadedFile::fake()->create('document.pdf')
+                UploadedFile::fake()->image('test.jpeg'),
+                UploadedFile::fake()->create('document.pdf')
             ],
             ]
         )->assertRedirect('/test')

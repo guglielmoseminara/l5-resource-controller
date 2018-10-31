@@ -166,7 +166,13 @@ trait WorksWithRelations
                 array_push($records, $record);
             }
         } else {
-            $record = $this->updateOrCreateHasOne($fillable, $model, $relation);
+            if (array_key_exists('id', $fillable)) {
+                $id = $fillable['id'];
+            } else {
+                $id = '';
+            }
+
+            $record = $related->updateOrCreate(['id' => $id], array_except($fillable, ['id']));
 
             array_push($keys, $record->id);
             array_push($records, $record);
