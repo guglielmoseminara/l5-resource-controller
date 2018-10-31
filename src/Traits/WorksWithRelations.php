@@ -68,15 +68,17 @@ trait WorksWithRelations
      * @param Model    $model    The eloquent model.
      * @param Relation $relation The eloquent relation.
      *
-     * @return void
+     * @return Model
      */
     protected function updateOrCreateHasOne(array $fillable, Model $model, Relation $relation)
     {
-        if (!$relation->first()) {
-            $relation->create($fillable);
+        if (array_key_exists('id', $fillable)) {
+            $id = $fillable['id'];
         } else {
-            $relation->update($fillable);
+            $id = '';
         }
+
+        return $relation->updateOrCreate(['id' => $id], array_except($fillable, ['id']));
     }
 
     /**
@@ -86,18 +88,20 @@ trait WorksWithRelations
      * @param Model    $model    The eloquent model.
      * @param Relation $relation The eloquent relation.
      *
-     * @return void
+     * @return Model
      */
     protected function updateOrCreateBelongsToOne(array $fillable, Model $model, Relation $relation)
     {
         $related = $relation->getRelated();
 
         if (!$relation->first()) {
-            $relation->associate($related->create($fillable));
+            $record = $relation->associate($related->create($fillable));
             $model->save();
         } else {
-            $relation->update($fillable);
+            $record = $relation->update($fillable);
         }
+
+        return $record;
     }
 
     /**
@@ -107,14 +111,29 @@ trait WorksWithRelations
      * @param Model    $model    The eloquent model.
      * @param Relation $relation The eloquent relation.
      *
-     * @return void
+     * @return array
      */
     protected function updateOrCreateHasMany(array $fillable, Model $model, Relation $relation)
     {
-        foreach ($fillable as $fields) {
-            $id = array_key_exists('id', $fields) ? $fields['id'] : '';
-            $relation->updateOrCreate(['id' => $id], array_except($fields, ['id']));
+        $records = [];
+
+        if (count($fillable) > 1) {
+            foreach ($fillable as $fields) {
+                if (array_key_exists('id', $fields)) {
+                    $id = $fields['id'];
+                } else {
+                    $id = '';
+                }
+
+                $record = $relation->updateOrCreate(['id' => $id], array_except($fields, ['id']));
+                array_push($records, $record);
+            }
+        } else {
+            $record = $this->updateOrCreateHasOne($fillable, $model, $relation);
+            array_push($records, $record);
         }
+
+        return $records;
     }
 
     /**
@@ -124,20 +143,38 @@ trait WorksWithRelations
      * @param Model    $model    The eloquent model.
      * @param Relation $relation The eloquent relation.
      *
-     * @return void
+     * @return array
      */
     protected function updateOrCreateBelongsToMany(array $fillable, Model $model, Relation $relation)
     {
+        $keys = [];
+        $records = [];
+
         $related = $relation->getRelated();
 
-        $keys = [];
-        foreach ($fillable as $fields) {
-            $id = array_key_exists('id', $fields) ? $fields['id'] : '';
-            $record = $related->updateOrCreate(['id' => $id], array_except($fields, ['id']));
+        if (count($fillable) > 1) {
+            foreach ($fillable as $fields) {
+                if (array_key_exists('id', $fields)) {
+                    $id = $fields['id'];
+                } else {
+                    $id = '';
+                }
+
+                $record = $related->updateOrCreate(['id' => $id], array_except($fields, ['id']));
+
+                array_push($keys, $record->id);
+                array_push($records, $record);
+            }
+        } else {
+            $record = $this->updateOrCreateHasOne($fillable, $model, $relation);
+
             array_push($keys, $record->id);
+            array_push($records, $record);
         }
 
         $relation->sync($keys);
+
+        return $records;
     }
 
     /**
