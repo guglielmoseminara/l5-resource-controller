@@ -11,8 +11,6 @@ use Illuminate\Database\Eloquent\Relations\{HasOne, MorphOne, BelongsTo};
 use Illuminate\Database\Eloquent\Relations\{HasMany, MorphMany, MorphToMany, BelongsToMany};
 use Illuminate\Database\Eloquent\MassAssignmentException;
 
-use RafflesArgentina\ResourceController\Exceptions\ResourceControllerException;
-
 trait WorksWithRelations
 {
     /**
@@ -74,18 +72,13 @@ trait WorksWithRelations
      */
     protected function updateOrCreateHasOne(array $fillable, Model $model, Relation $relation)
     {
-        try {
-            if (array_key_exists('id', $fillable)) {
-                $id = $fillable['id'];
-            } else {
-                $id = '';
-            }
-
-            return $relation->updateOrCreate(['id' => $id], array_except($fillable, ['id']));
-        } catch (\Exception $e) {
-            $message = $this->storeFailedMessage($e->getMessage());
-            throw new ResourceControllerException($message);
+        if (array_key_exists('id', $fillable)) {
+            $id = $fillable['id'];
+        } else {
+            $id = '';
         }
+
+        return $relation->updateOrCreate(['id' => $id], array_except($fillable, ['id']));
     }
 
     /**
@@ -99,21 +92,16 @@ trait WorksWithRelations
      */
     protected function updateOrCreateBelongsToOne(array $fillable, Model $model, Relation $relation)
     {
-        try {
-            $related = $relation->getRelated();
+        $related = $relation->getRelated();
 
-            if (!$relation->first()) {
-                $record = $relation->associate($related->create($fillable));
-                $model->save();
-            } else {
-                $record = $relation->update($fillable);
-            }
-
-            return $record;
-        } catch (\Exception $e) {
-            $message = $this->storeFailedMessage($e->getMessage());
-            throw new ResourceControllerException($message);
+        if (!$relation->first()) {
+            $record = $relation->associate($related->create($fillable));
+            $model->save();
+        } else {
+            $record = $relation->update($fillable);
         }
+
+        return $record;
     }
 
     /**
@@ -127,30 +115,25 @@ trait WorksWithRelations
      */
     protected function updateOrCreateHasMany(array $fillable, Model $model, Relation $relation)
     {
-        try {
-            $records = [];
+        $records = [];
 
-            if (count($fillable) > 1) {
-                foreach ($fillable as $fields) {
-                    if (array_key_exists('id', $fields)) {
-                        $id = $fields['id'];
-                    } else {
-                        $id = '';
-                    }
-
-                    $record = $relation->updateOrCreate(['id' => $id], array_except($fields, ['id']));
-                    array_push($records, $record);
+        if (count($fillable) > 1) {
+            foreach ($fillable as $fields) {
+                if (array_key_exists('id', $fields)) {
+                    $id = $fields['id'];
+                } else {
+                    $id = '';
                 }
-            } else {
-                $record = $this->updateOrCreateHasOne($fillable, $model, $relation);
+
+                $record = $relation->updateOrCreate(['id' => $id], array_except($fields, ['id']));
                 array_push($records, $record);
             }
-
-            return $records;
-        } catch (\Exception $e) {
-            $message = $this->storeFailedMessage($e->getMessage());
-            throw new ResourceControllerException($message);
+        } else {
+            $record = $this->updateOrCreateHasOne($fillable, $model, $relation);
+            array_push($records, $record);
         }
+
+        return $records;
     }
 
     /**
@@ -164,45 +147,40 @@ trait WorksWithRelations
      */
     protected function updateOrCreateBelongsToMany(array $fillable, Model $model, Relation $relation)
     {
-        try {
-            $keys = [];
-            $records = [];
+        $keys = [];
+        $records = [];
 
-            $related = $relation->getRelated();
+        $related = $relation->getRelated();
 
-            if (count($fillable) > 1) {
-                foreach ($fillable as $fields) {
-                    if (array_key_exists('id', $fields)) {
-                        $id = $fields['id'];
-                    } else {
-                        $id = '';
-                    }
-
-                    $record = $related->updateOrCreate(['id' => $id], array_except($fields, ['id']));
-
-                    array_push($keys, $record->id);
-                    array_push($records, $record);
-                }
-            } else {
-                if (array_key_exists('id', $fillable)) {
-                    $id = $fillable['id'];
+        if (count($fillable) > 1) {
+            foreach ($fillable as $fields) {
+                if (array_key_exists('id', $fields)) {
+                    $id = $fields['id'];
                 } else {
                     $id = '';
                 }
 
-                $record = $related->updateOrCreate(['id' => $id], array_except($fillable, ['id']));
+                $record = $related->updateOrCreate(['id' => $id], array_except($fields, ['id']));
 
                 array_push($keys, $record->id);
                 array_push($records, $record);
             }
+        } else {
+            if (array_key_exists('id', $fillable)) {
+                $id = $fillable['id'];
+            } else {
+                $id = '';
+            }
 
-            $relation->sync($keys);
+            $record = $related->updateOrCreate(['id' => $id], array_except($fillable, ['id']));
 
-            return $records;
-        } catch (\Exception $e) {
-            $message = $this->storeFailedMessage($e->getMessage());
-            throw new ResourceControllerException($message);
+            array_push($keys, $record->id);
+            array_push($records, $record);
         }
+
+        $relation->sync($keys);
+
+        return $records;
     }
 
     /**
