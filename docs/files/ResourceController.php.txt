@@ -26,7 +26,7 @@ class ResourceController extends AbstractResourceController
     {
         $this->getFormRequestInstance();
 
-        $items = $this->getPaginatorInstance();
+        $items = $this->getItemsCollection();
 
         if ($request->wantsJson()) {
             return response()->json($items, 200, [], JSON_PRETTY_PRINT);
@@ -73,13 +73,12 @@ class ResourceController extends AbstractResourceController
         $this->getFormRequestInstance();
 
         DB::beginTransaction();
-
         try {
             $instance = $this->repository->create($request->all());
             $model = $instance[1];
             $number = $model->{$model->getRouteKeyName()};
-            $this->updateOrCreateRelations($request, $model);
-            $this->uploadFiles($request, $model);
+            $mergedRequest = $this->uploadFiles($request, $model);
+            $this->updateOrCreateRelations($mergedRequest, $model);
         } catch (\Exception $e) {
             DB::rollback();
 
@@ -92,11 +91,15 @@ class ResourceController extends AbstractResourceController
         $message = $this->storeSuccessfulMessage($number);
 
         if ($request->wantsJson()) {
-            return $this->validSuccessJsonResponse($message);
+            $data = [
+                $model
+            ];
+
+            return $this->validSuccessJsonResponse($message, $data);
         }
 
         return redirect()->route($this->getRedirectionRoute())
-                         ->with($this->successFlashMessageKey, $message);
+            ->with($this->successFlashMessageKey, $message);
     }
 
     /**
@@ -182,8 +185,8 @@ class ResourceController extends AbstractResourceController
         try { 
             $instance = $this->repository->update($model, $request->all());
             $model = $instance[1];
-            $this->updateOrCreateRelations($request, $model);
-            $this->uploadFiles($request, $model);
+            $mergedRequest = $this->uploadFiles($request, $model);
+            $this->updateOrCreateRelations($mergedRequest, $model);
         } catch (\Exception $e) {
             DB::rollback();
 
@@ -196,11 +199,15 @@ class ResourceController extends AbstractResourceController
         $message = $this->updateSuccessfulMessage($key);
 
         if ($request->wantsJson()) {
-            return $this->validSuccessJsonResponse($message);
+            $data = [
+                $model
+            ];
+
+            return $this->validSuccessJsonResponse($message, $data);
         }
 
         return redirect()->route($this->getRedirectionRoute())
-                         ->with($this->successFlashMessageKey, $message);
+            ->with($this->successFlashMessageKey, $message);
     }
 
     /**
@@ -242,25 +249,49 @@ class ResourceController extends AbstractResourceController
         $message = $this->destroySuccessfulMessage($key);
 
         if ($request->wantsJson()) {
-            return $this->validSuccessJsonResponse($message);
+            $data = [
+                $model
+            ];
+
+            return $this->validSuccessJsonResponse($message, $data);
         }
 
         return redirect()->route($this->getRedirectionRoute())
-                         ->with($this->infoFlashMessageKey, $message);
+            ->with($this->infoFlashMessageKey, $message);
+    }
+
+    /**
+     * Get items collection.
+     *
+     * @param string $orderBy The order key.
+     * @param string $order   The order direction.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getItemsCollection($orderBy = 'updated_at', $order = 'desc')
+    {
+        if ($this->useSoftDeletes) {
+            return $this->repository->model->withTrashed()->orderBy($orderBy, $order)->get();
+        }
+
+        return $this->repository->orderBy($orderBy, $order)->get();
     }
 
     /**
      * Get Paginator instance.
      *
+     * @param string $orderBy The order key.
+     * @param string $order   The order direction.
+     *
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
-    protected function getPaginatorInstance()
+    protected function getPaginatorInstance($orderBy = 'updated_at', $order = 'desc')
     {
         if ($this->useSoftDeletes) {
-            return $this->repository->model->withTrashed()->paginate();
+            return $this->repository->model->withTrashed()->orderBy($orderBy, $order)->paginate();
         }
 
-        return $this->repository->paginate();
+        return $this->repository->orderBy($orderBy, $order)->paginate();
     }
 
     /**

@@ -29,7 +29,7 @@ trait WorksWithFileUploads
             $relativePath = $this->getDefaultRelativePath();
         }
 
-        $data = $request->request->all();
+        $data = $request->attributes->all();
 
         $fileBag = $request->files;
         foreach ($fileBag->all() as $name => $parameters) {
