@@ -127,11 +127,11 @@ trait WorksWithRelations
      */
     protected function updateOrCreateHasMany(array $fillable, Model $model, Relation $relation)
     {
-        try {
-            $records = [];
+        $records = [];
 
-            if (count($fillable) > 1) {
-                foreach ($fillable as $fields) {
+        if (count($fillable) > 1) {
+            foreach ($fillable as $fields) {
+                try {
                     if (array_key_exists('id', $fields)) {
                         $id = $fields['id'];
                     } else {
@@ -140,17 +140,22 @@ trait WorksWithRelations
 
                     $record = $relation->updateOrCreate(['id' => $id], array_except($fields, ['id']));
                     array_push($records, $record);
+                } catch (\Exception $e) {
+                    $message = $this->storeFailedMessage($e->getMessage());
+                    throw new ResourceControllerException($message);
                 }
-            } else {
+            }
+        } else {
+            try {
                 $record = $this->updateOrCreateHasOne($fillable, $model, $relation);
                 array_push($records, $record);
+            } catch (\Exception $e) {
+                $message = $this->storeFailedMessage($e->getMessage());
+                throw new ResourceControllerException($message);
             }
-
-            return $records;
-        } catch (\Exception $e) {
-            $message = $this->storeFailedMessage($e->getMessage());
-            throw new ResourceControllerException($message);
         }
+
+        return $records;
     }
 
     /**
@@ -164,14 +169,14 @@ trait WorksWithRelations
      */
     protected function updateOrCreateBelongsToMany(array $fillable, Model $model, Relation $relation)
     {
-        try {
-            $keys = [];
-            $records = [];
+        $keys = [];
+        $records = [];
 
-            $related = $relation->getRelated();
+        $related = $relation->getRelated();
 
-            if (count($fillable) > 1) {
-                foreach ($fillable as $fields) {
+        if (count($fillable) > 1) {
+            foreach ($fillable as $fields) {
+                try {
                     if (array_key_exists('id', $fields)) {
                         $id = $fields['id'];
                     } else {
@@ -182,8 +187,13 @@ trait WorksWithRelations
 
                     array_push($keys, $record->id);
                     array_push($records, $record);
+                } catch (\Exception $e) {
+                    $message = $this->storeFailedMessage($e->getMessage());
+                    throw new ResourceControllerException($message);
                 }
-            } else {
+            }
+        } else {
+            try {
                 if (array_key_exists('id', $fillable)) {
                     $id = $fillable['id'];
                 } else {
@@ -194,15 +204,20 @@ trait WorksWithRelations
 
                 array_push($keys, $record->id);
                 array_push($records, $record);
+            } catch (\Exception $e) {
+                $message = $this->storeFailedMessage($e->getMessage());
+                throw new ResourceControllerException($message);
             }
+        }
 
+        try {
             $relation->sync($keys);
-
-            return $records;
         } catch (\Exception $e) {
             $message = $this->storeFailedMessage($e->getMessage());
             throw new ResourceControllerException($message);
         }
+
+        return $records;
     }
 
     /**
