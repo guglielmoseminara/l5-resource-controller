@@ -147,8 +147,8 @@ class WorksWithFileUploadsTest extends TestCase
             'email' => 'mario@raffles.com.ar',
             'password' => str_random(),
             'belongsToManyFileUploads' => [
-                '1' => UploadedFile::fake()->image('test.jpeg'),
-                '2' => UploadedFile::fake()->create('document.pdf')
+                UploadedFile::fake()->image('test.jpeg'),
+                UploadedFile::fake()->create('document.pdf')
             ],
             ]
         )->assertRedirect('/test')
@@ -181,6 +181,158 @@ class WorksWithFileUploadsTest extends TestCase
             ->assertSessionHas('rafflesargentina.status.success');
 
         $user = \RafflesArgentina\ResourceController\Models\User::first();
+        $this->assertTrue($user->morphToManyFileUploads->count() === 2);
+    }
+
+    /**
+     * @coversNothing
+     */
+    function testPutHasOneFileUpload()
+    {
+        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
+
+        Storage::fake('uploads');
+
+        $this->put(
+            '/test/1', [
+                'hasOneFileUpload' => [
+                    UploadedFile::fake()->image('test.jpeg')
+                ],
+            ]
+        )->assertRedirect('/test')
+            ->assertSessionHas('rafflesargentina.status.success');
+
+        $this->assertTrue(!is_null($user->hasOneFileUpload));
+    }
+
+    /**
+     * @coversNothing
+     */
+    function testPutMorphOneFileUpload()
+    {
+        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
+
+        Storage::fake('uploads');
+
+        $this->put(
+            '/test/1', [
+                'morphOneFileUpload' => [
+                    UploadedFile::fake()->image('test.jpeg')
+                ],
+            ]
+        )->assertRedirect('/test')
+            ->assertSessionHas('rafflesargentina.status.success');
+
+        $this->assertTrue(!is_null($user->morphOneFileUpload));
+    }
+
+    /**
+     * @coversNothing
+     */
+    function testPutBelongsToFileUpload()
+    {
+        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
+
+        Storage::fake('uploads');
+
+        $this->put(
+            '/test/1', [
+                'belongsToFileUpload' => [
+                    UploadedFile::fake()->image('test.jpeg')
+                ],
+            ]
+        )->assertRedirect('/test')
+            ->assertSessionHas('rafflesargentina.status.success');
+
+        $user->refresh();
+        $this->assertTrue(!is_null($user->belongsToFileUpload));
+    }
+
+    /**
+     * @coversNothing
+     */
+    function testPutHasManyFileUploads()
+    {
+        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
+
+        Storage::fake('uploads');
+
+        $this->put(
+            '/test/1', [
+            'hasManyFileUploads' => [
+                UploadedFile::fake()->image('test.jpeg'),
+                UploadedFile::fake()->create('document.pdf')
+            ]
+            ]
+        )->assertRedirect('/test')
+            ->assertSessionHas('rafflesargentina.status.success');
+
+        $this->assertTrue($user->hasManyFileUploads->count() === 2);
+    }
+
+    /**
+     * @coversNothing
+     */
+    function testPutMorphManyFileUploads()
+    {
+        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
+
+        Storage::fake('uploads');
+
+        $this->put(
+            '/test/1', [
+            'morphManyFileUploads' => [
+                UploadedFile::fake()->image('test.jpeg'),
+                UploadedFile::fake()->create('document.pdf')
+            ],
+            ]
+        )->assertRedirect('/test')
+            ->assertSessionHas('rafflesargentina.status.success');
+
+        $this->assertTrue($user->morphManyFileUploads->count() === 2);
+    }
+
+    /**
+     * @coversNothing
+     */
+    function testPutBelongsToManyFileUploads()
+    {
+        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
+
+        Storage::fake('uploads');
+
+        $this->put(
+            '/test/1', [
+            'belongsToManyFileUploads' => [
+                UploadedFile::fake()->image('test.jpeg'),
+                UploadedFile::fake()->create('document.pdf')
+            ],
+            ]
+        )->assertRedirect('/test')
+            ->assertSessionHas('rafflesargentina.status.success');
+
+        $this->assertTrue($user->belongsToManyFileUploads->count() === 2);
+    }
+
+    /**
+     * @coversNothing
+     */
+    function testPutMorphToManyFileUploads()
+    {
+        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
+
+        Storage::fake('uploads');
+
+        $this->put(
+            '/test/1', [
+            'morphToManyFileUploads' => [
+                '1' => UploadedFile::fake()->image('test.jpeg'),
+                '2' => UploadedFile::fake()->create('document.pdf')
+            ],
+            ]
+        )->assertRedirect('/test')
+            ->assertSessionHas('rafflesargentina.status.success');
+
         $this->assertTrue($user->morphToManyFileUploads->count() === 2);
     }
 }
