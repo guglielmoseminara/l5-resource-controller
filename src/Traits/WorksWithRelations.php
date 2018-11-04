@@ -24,7 +24,8 @@ trait WorksWithRelations
     public function updateOrCreateRelations(Request $request, Model $model)
     {
         $parameterBag = $request->request;
-        foreach ($parameterBag->all() as $name => $attributes) {
+        $nonEmpties = array_filter($parameterBag->all());
+        foreach ($nonEmpties as $name => $attributes) {
             if (is_array($request->{$name})) {
                 $this->_checkRelationExists($model, $name);
 
@@ -68,7 +69,7 @@ trait WorksWithRelations
      * @param Model    $model    The eloquent model.
      * @param Relation $relation The eloquent relation.
      *
-     * @return Model
+     * @return Model | null
      */
     protected function updateOrCreateHasOne(array $fillable, Model $model, Relation $relation)
     {
@@ -78,7 +79,11 @@ trait WorksWithRelations
             $id = '';
         }
 
-        return $relation->updateOrCreate(['id' => $id], array_except($fillable, ['id']));
+        if (array_except($fillable, ['id'])) {
+            return $relation->updateOrCreate(['id' => $id], $fillable);
+        }
+
+        return null;
     }
 
     /**
@@ -94,14 +99,18 @@ trait WorksWithRelations
     {
         $related = $relation->getRelated();
 
-        if (!$relation->first()) {
-            $record = $relation->associate($related->create($fillable));
-            $model->save();
-        } else {
-            $record = $relation->update($fillable);
+        if (array_except($fillable, ['id'])) {
+            if (!$relation->first()) {
+                $record = $relation->associate($related->create($fillable));
+                $model->save();
+            } else {
+                $record = $relation->update($fillable);
+            }
+
+            return $record;
         }
 
-        return $record;
+        return null;
     }
 
     /**
@@ -125,8 +134,10 @@ trait WorksWithRelations
                     $id = '';
                 }
 
-                $record = $relation->updateOrCreate(['id' => $id], array_except($fields, ['id']));
-                array_push($records, $record);
+                if (array_except($fields, ['id'])) {
+                    $record = $relation->updateOrCreate(['id' => $id], $fields);
+                    array_push($records, $record);
+                }
             }
         } else {
             $record = $this->updateOrCreateHasOne($fillable, $model, $relation);
@@ -160,25 +171,30 @@ trait WorksWithRelations
                     $id = '';
                 }
 
-                $record = $related->updateOrCreate(['id' => $id], array_except($fields, ['id']));
-
-                array_push($keys, $record->id);
-                array_push($records, $record);
+                if (array_except($fields, ['id'])) {
+                    $record = $related->updateOrCreate(['id' => $id], $fields);
+                    array_push($keys, $record->id);
+                    array_push($records, $record);
+                }
             }
         } else {
             if (array_key_exists('id', $fillable)) {
                 $id = $fillable['id'];
+                array_push($keys, $id);
             } else {
                 $id = '';
             }
 
-            $record = $related->updateOrCreate(['id' => $id], array_except($fillable, ['id']));
-
-            array_push($keys, $record->id);
-            array_push($records, $record);
+            if (array_except($fillable, ['id'])) {
+                $record = $related->updateOrCreate(['id' => $id], $fillable);
+                array_push($keys, $record->id);
+                array_push($records, $record);
+            }
         }
 
-        $relation->sync($keys);
+        if ($keys) {
+            $relation->sync($keys);
+        }
 
         return $records;
     }
