@@ -24,8 +24,7 @@ trait WorksWithRelations
     public function updateOrCreateRelations(Request $request, Model $model)
     {
         $parameterBag = $request->request;
-        $nonEmpties = array_filter($parameterBag->all());
-        foreach ($nonEmpties as $name => $attributes) {
+        foreach ($parameterBag->all() as $name => $attributes) {
             if (is_array($request->{$name})) {
                 $this->_checkRelationExists($model, $name);
 
@@ -163,38 +162,22 @@ trait WorksWithRelations
 
         $related = $relation->getRelated();
 
-        if (count($fillable) > 1) {
-            foreach ($fillable as $fields) {
-                if (array_key_exists('id', $fields)) {
-                    $id = $fields['id'];
-                } else {
-                    $id = '';
-                }
-
-                if (array_except($fields, ['id'])) {
-                    $record = $related->updateOrCreate(['id' => $id], $fields);
-                    array_push($keys, $record->id);
-                    array_push($records, $record);
-                }
-            }
-        } else {
-            if (array_key_exists('id', $fillable)) {
-                $id = $fillable['id'];
+        foreach ($fillable as $fields) {
+            if (array_key_exists('id', $fields)) {
+                $id = $fields['id'];
                 array_push($keys, $id);
             } else {
                 $id = '';
             }
 
-            if (array_except($fillable, ['id'])) {
-                $record = $related->updateOrCreate(['id' => $id], $fillable);
+            if (array_except($fields, ['id'])) {
+                $record = $related->updateOrCreate(['id' => $id], $fields);
                 array_push($keys, $record->id);
                 array_push($records, $record);
             }
         }
 
-        if ($keys) {
-            $relation->sync($keys);
-        }
+        $relation->sync($keys);
 
         return $records;
     }

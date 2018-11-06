@@ -133,7 +133,7 @@ trait WorksWithFileUploads
      */
     private function _checkFileRelationExists(Model $model, $relationName)
     {
-        if (!method_exists($model, $relationName) || !$model->{$relationName}() instanceof Relation) {
+        if ((!method_exists($model, $relationName) && !$model->{$relationName}() instanceof Relation)) {
             if (Lang::has('resource-controller.filerelationinexistent')) {
                 $message = trans('resource-controller.filerelationinexistent', ['relationName' => $relationName]);
             } else {
