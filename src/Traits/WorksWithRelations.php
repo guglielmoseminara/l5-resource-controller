@@ -123,24 +123,20 @@ trait WorksWithRelations
      */
     protected function updateOrCreateHasMany(array $fillable, Model $model, Relation $relation)
     {
+        $keys = [];
         $records = [];
 
-        if (count($fillable) > 1) {
-            foreach ($fillable as $fields) {
-                if (array_key_exists('id', $fields)) {
-                    $id = $fields['id'];
-                } else {
-                    $id = '';
-                }
-
-                if (array_except($fields, ['id'])) {
-                    $record = $relation->updateOrCreate(['id' => $id], $fields);
-                    array_push($records, $record);
-                }
+        foreach ($fillable as $fields) {
+            if (array_key_exists('id', $fields)) {
+                $id = $fields['id'];
+            } else {
+                $id = '';
             }
-        } else {
-            $record = $this->updateOrCreateHasOne($fillable, $model, $relation);
-            array_push($records, $record);
+            if (array_except($fields, ['id'])) {
+                $record = $relation->updateOrCreate(['id' => $id], $fields);
+                array_push($keys, $record->id);
+                array_push($records, $record);
+            }
         }
 
         return $records;
