@@ -7,16 +7,18 @@ use Validator;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Support\MessageBag;
 use Illuminate\Support\Facades\View;
 use Illuminate\Foundation\Http\FormRequest;
 
 use RafflesArgentina\ResourceController\Contracts\ResourceControllerInterface;
 use RafflesArgentina\ResourceController\Exceptions\ResourceControllerException;
+use RafflesArgentina\ResourceController\Traits\FormatsValidJsonResponses;
 
 abstract class AbstractResourceController extends BaseController
                                           implements ResourceControllerInterface
 {
+    use FormatsValidJsonResponses;
+
     /**
      * The alias for named routes.
      *
@@ -296,66 +298,6 @@ abstract class AbstractResourceController extends BaseController
         }
 
         return back()->withErrors($validator)->withInput();
-    }
-
-    /**
-     * Return a valid 200 Success json response.
-     *
-     * @param string $message The response message.
-     * @param array  $data    The passed data.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function validSuccessJsonResponse($message = 'Success', $data = [])
-    {
-        return response()->json(
-            [
-                'code' => '200',
-                'message' => $message,
-                'data' => $data,
-                'errors' => [],
-                'redirect' => route($this->getRedirectionRoute()),
-            ], 200, [], JSON_PRETTY_PRINT
-        );
-    }
-
-    /**
-     * Return a valid 404 Not found json response.
-     *
-     * @param string $message The response message.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function validNotFoundJsonResponse($message = 'Not found')
-    {
-        return response()->json(
-            [
-                'code' => '404',
-                'message' => $message,
-                'errors' => [],
-                'redirect' => route($this->getRedirectionRoute()),
-            ], 404, [], JSON_PRETTY_PRINT
-        );
-    }
-
-    /**
-     * Return a valid 422 Unprocessable entity json response.
-     *
-     * @param \Illuminate\Support\MessageBag $errors  The message bag errors.
-     * @param string                         $message The response message.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function validUnprocessableEntityJsonResponse(MessageBag $errors, $message = 'Unprocessable Entity')
-    {
-        return response()->json(
-            [
-                'code' => '422',
-                'message' => $message,
-                'errors' => $errors,
-                'redirect' => route($this->getRedirectionRoute()),
-            ], 422, [], JSON_PRETTY_PRINT
-        );
     }
 
     /**

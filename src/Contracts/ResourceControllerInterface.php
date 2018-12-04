@@ -140,33 +140,4 @@ interface ResourceControllerInterface
      * @return \Illuminate\Http\RedirectResponse
      */
     public function redirectBackWithErrors($validator);
-
-    /**
-     * Return a valid 200 Success json response.
-     *
-     * @param string $message The response message.
-     * @param array  $data    The passed data.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function validSuccessJsonResponse($message = 'Success', $data = []);
-
-    /**
-     * Return a valid 404 Not found json response.
-     *
-     * @param string $message The response message.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function validNotFoundJsonResponse($message = 'Not found');
-
-    /**
-     * Return a valid 422 Unprocessable entity json response.
-     *
-     * @param MessageBag $errors  The message bag errors.
-     * @param string     $message The response message.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function validUnprocessableEntityJsonResponse(MessageBag $errors, $message = 'Unprocessable Entity');
 }
