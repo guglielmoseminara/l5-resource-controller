@@ -11,7 +11,7 @@ use RafflesArgentina\ResourceController\Traits\WorksWithFileUploads;
 use RafflesArgentina\ResourceController\Traits\FormatsResponseMessages;
 use RafflesArgentina\ResourceController\Exceptions\ResourceControllerException;
 
-class ResourceController extends AbstractResourceController
+class ApiResourceController extends AbstractResourceController
 {
     use WorksWithRelations, WorksWithFileUploads, FormatsResponseMessages;
 
@@ -20,7 +20,7 @@ class ResourceController extends AbstractResourceController
      *
      * @param Request $request The request object.
      *
-     * @return mixed
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
@@ -28,14 +28,7 @@ class ResourceController extends AbstractResourceController
 
         $items = $this->getItemsCollection();
 
-        if ($request->wantsJson()) {
-            return $this->validSuccessJsonResponse('Success', $items);
-        }
-
-        $view = $this->getViewLocation(__FUNCTION__);
-        $this->checkViewExists($view);
-
-        return response()->view($view, compact('items'));
+        return $this->validSuccessJsonResponse('Success', $items);
     }
 
     /**
@@ -43,20 +36,11 @@ class ResourceController extends AbstractResourceController
      *
      * @param Request $request The request object.
      *
-     * @return mixed
+     * @return \Illuminate\Http\JsonResponse
      */
     public function create(Request $request)
     {
-        if ($request->wantsJson()) {
-            return $this->validNotFoundJsonResponse();
-        }
-
-        $model = new $this->repository->model;
-
-        $view = $this->getViewLocation(__FUNCTION__);
-        $this->checkViewExists($view);
-
-        return response()->view($view, compact('model'));
+        return $this->validNotFoundJsonResponse();
     }
 
     /**
@@ -66,7 +50,7 @@ class ResourceController extends AbstractResourceController
      *
      * @throws ResourceControllerException
      *
-     * @return mixed
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
@@ -89,17 +73,9 @@ class ResourceController extends AbstractResourceController
         DB::commit();
 
         $message = $this->storeSuccessfulMessage($number);
+        $data = [$model];
 
-        if ($request->wantsJson()) {
-            $data = [
-                $model
-            ];
-
-            return $this->validSuccessJsonResponse($message, $data);
-        }
-
-        return redirect()->route($this->getRedirectionRoute())
-            ->with($this->successFlashMessageKey, $message);
+        return $this->validSuccessJsonResponse($message, $data);
     }
 
     /**
@@ -108,27 +84,17 @@ class ResourceController extends AbstractResourceController
      * @param Request $request The request object.
      * @param string  $key     The model key.
      *
-     * @return mixed
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Request $request, $key)
     {
         $model = $this->findFirstByKey($key);
 
         if (!$model) {
-            if ($request->wantsJson()) {
-                return $this->validNotFoundJsonResponse();
-            }
-            abort(404);
+            return $this->validNotFoundJsonResponse();
         }
 
-        if ($request->wantsJson()) {
-            return response()->json($model, 200, [], JSON_PRETTY_PRINT);
-        }
-
-        $view = $this->getViewLocation(__FUNCTION__);
-        $this->checkViewExists($view);
-
-        return response()->view($view, compact('model'));
+        return response()->json($model, 200, [], JSON_PRETTY_PRINT);
     }
 
     /**
@@ -137,24 +103,11 @@ class ResourceController extends AbstractResourceController
      * @param Request $request The request object.
      * @param string  $key     The model key.
      *
-     * @return mixed
+     * @return \Illuminate\Http\JsonResponse
      */
     public function edit(Request $request, $key)
     {
-        if ($request->wantsJson()) {
-            return $this->validNotFoundJsonResponse();
-        }
-
-        $model = $this->findFirstByKey($key);
-
-        if (!$model) {
-            abort(404);
-        }
-
-        $view = $this->getViewLocation(__FUNCTION__);
-        $this->checkViewExists($view);
-
-        return response()->view($view, compact('model'));
+        return $this->validNotFoundJsonResponse();
     }
 
     /**
@@ -165,7 +118,7 @@ class ResourceController extends AbstractResourceController
      *
      * @throws ResourceControllerException
      *
-     * @return mixed
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $key)
     {
@@ -174,10 +127,7 @@ class ResourceController extends AbstractResourceController
         $model = $this->findFirstByKey($key);
 
         if (!$model) {
-            if ($request->wantsJson()) {
-                return $this->validNotFoundJsonResponse();
-            }
-            abort(404);
+            return $this->validNotFoundJsonResponse();
         }
 
         DB::beginTransaction();
@@ -197,17 +147,9 @@ class ResourceController extends AbstractResourceController
         DB::commit();
 
         $message = $this->updateSuccessfulMessage($key);
+        $data = [$model];
 
-        if ($request->wantsJson()) {
-            $data = [
-                $model
-            ];
-
-            return $this->validSuccessJsonResponse($message, $data);
-        }
-
-        return redirect()->route($this->getRedirectionRoute())
-            ->with($this->successFlashMessageKey, $message);
+        return $this->validSuccessJsonResponse($message, $data);
     }
 
     /**
@@ -218,7 +160,7 @@ class ResourceController extends AbstractResourceController
      *
      * @throws ResourceControllerException
      *
-     * @return mixed
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Request $request, $key)
     {
@@ -227,10 +169,7 @@ class ResourceController extends AbstractResourceController
         $model = $this->findFirstByKey($key);
 
         if (!$model) {
-            if ($request->wantsJson()) {
-                return $this->validNotFoundJsonResponse();
-            }
-            abort(404);
+            return $this->validNotFoundJsonResponse();
         }
 
         DB::beginTransaction();
@@ -247,16 +186,9 @@ class ResourceController extends AbstractResourceController
         DB::commit();
 
         $message = $this->destroySuccessfulMessage($key);
+        $data = [$model];
 
-        if ($request->wantsJson()) {
-            $data = [
-                $model
-            ];
-
-            return $this->validSuccessJsonResponse($message, $data);
-        }
-
-        return redirect()->route($this->getRedirectionRoute())
-            ->with($this->infoFlashMessageKey, $message);
+        return $this->validSuccessJsonResponse($message, $data);
     }
 }
+

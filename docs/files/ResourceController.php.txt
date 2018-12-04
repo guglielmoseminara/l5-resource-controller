@@ -29,7 +29,7 @@ class ResourceController extends AbstractResourceController
         $items = $this->getItemsCollection();
 
         if ($request->wantsJson()) {
-            return response()->json($items, 200, [], JSON_PRETTY_PRINT);
+            return $this->validSuccessJsonResponse('Success', $items);
         }
 
         $view = $this->getViewLocation(__FUNCTION__);
@@ -258,60 +258,6 @@ class ResourceController extends AbstractResourceController
 
         return redirect()->route($this->getRedirectionRoute())
             ->with($this->infoFlashMessageKey, $message);
-    }
-
-    /**
-     * Get items collection.
-     *
-     * @param string $orderBy The order key.
-     * @param string $order   The order direction.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function getItemsCollection($orderBy = 'updated_at', $order = 'desc')
-    {
-        if ($this->useSoftDeletes) {
-            return $this->repository->model->withTrashed()->orderBy($orderBy, $order)->get();
-        }
-
-        return $this->repository->orderBy($orderBy, $order)->get();
-    }
-
-    /**
-     * Get Paginator instance.
-     *
-     * @param string $orderBy The order key.
-     * @param string $order   The order direction.
-     *
-     * @return \Illuminate\Pagination\LengthAwarePaginator
-     */
-    protected function getPaginatorInstance($orderBy = 'updated_at', $order = 'desc')
-    {
-        if ($this->useSoftDeletes) {
-            return $this->repository->model->withTrashed()->orderBy($orderBy, $order)->paginate();
-        }
-
-        return $this->repository->orderBy($orderBy, $order)->paginate();
-    }
-
-    /**
-     * Find first by key.
-     *
-     * @param string $key The model key.
-     *
-     * @return Model|null
-     */
-    protected function findFirstByKey($key)
-    {
-        if ($this->useSoftDeletes) {
-            return $this->repository
-                ->withTrashed()
-                ->where($this->repository->model->getRouteKeyName(), $key)
-                ->first();
-        }
-
-        return $this->repository
-            ->findBy($this->repository->model->getRouteKeyName(), $key);
     }
 }
 

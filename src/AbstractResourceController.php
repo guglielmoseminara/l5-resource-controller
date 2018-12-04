@@ -245,29 +245,23 @@ abstract class AbstractResourceController extends BaseController
     }
 
     /**
-     * Get view location for the specified action.
+     * Find first by key.
      *
-     * @param string $action The action.
+     * @param string $key The model key.
      *
-     * @return string
+     * @return Model|null
      */
-    public function getViewLocation($action)
+    public function findFirstByKey($key)
     {
-        if (request()->ajax()) {
-            return $this->module.$this->theme.$this->resourceName.'ajax.'.$action;
+        if ($this->useSoftDeletes) {
+            return $this->repository
+                ->withTrashed()
+                ->where($this->repository->getRouteKeyName(), $key)
+                ->first();
         }
 
-        return $this->module.$this->theme.$this->resourceName.$action;
-    }
-
-    /**
-     * Get redirection route.
-     *
-     * @return string
-     */
-    public function getRedirectionRoute()
-    {
-        return $this->getRouteName('index');
+        return $this->repository
+            ->findBy($this->repository->getRouteKeyName(), $key);
     }
 
     /**
@@ -282,6 +276,67 @@ abstract class AbstractResourceController extends BaseController
         }
         
         return app()->make($this->formRequest);
+    }
+
+
+    /**
+     * Get items collection.
+     *
+     * @param string $orderBy The order key.
+     * @param string $order   The order direction.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getItemsCollection($orderBy = 'updated_at', $order = 'desc')
+    {
+        if ($this->useSoftDeletes) {
+            return $this->repository->withTrashed()->orderBy($orderBy, $order)->get();
+        }
+
+        return $this->repository->orderBy($orderBy, $order)->get();
+    }
+
+    /**
+     * Get Paginator instance.
+     *
+     * @param string $orderBy The order key.
+     * @param string $order   The order direction.
+     *
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getPaginatorInstance($orderBy = 'updated_at', $order = 'desc')
+    {
+        if ($this->useSoftDeletes) {
+            return $this->repository->withTrashed()->orderBy($orderBy, $order)->paginate();
+        }
+
+        return $this->repository->orderBy($orderBy, $order)->paginate();
+    }
+
+    /**
+     * Get redirection route.
+     *
+     * @return string
+     */
+    public function getRedirectionRoute()
+    {
+        return $this->getRouteName('index');
+    }
+
+    /**
+     * Get view location for the specified action.
+     *
+     * @param string $action The action.
+     *
+     * @return string
+     */
+    public function getViewLocation($action)
+    {
+        if (request()->ajax()) {
+            return $this->module.$this->theme.$this->resourceName.'ajax.'.$action;
+        }
+
+        return $this->module.$this->theme.$this->resourceName.$action;
     }
 
     /**

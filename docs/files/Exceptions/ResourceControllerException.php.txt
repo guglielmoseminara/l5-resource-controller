@@ -19,11 +19,15 @@ class ResourceControllerException extends \Exception
      *
      * @param \Illuminate\Http\Request $request The request object.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return mixed
      */
     public function render($request)
     {
-        return redirect()->back()->with(['rafflesargentina.status.error' => $this->message]);
+        if ($request->wantsJson()) {
+            return $this->validInternalServerErrorJsonResponse($this, $this->message);
+        } else {
+            return redirect()->back()->with(['rafflesargentina.status.error' => $this->message]);
+        }
     }
 }
 

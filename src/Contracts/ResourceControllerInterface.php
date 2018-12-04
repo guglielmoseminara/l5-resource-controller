@@ -110,13 +110,40 @@ interface ResourceControllerInterface
     public function checkViewExists($view);
 
     /**
-     * Get view location for the specified action.
+     * Find first by key.
      *
-     * @param string $action The action.
+     * @param string $key The model key.
      *
-     * @return string
+     * @return Model|null
      */
-    public function getViewLocation($action);
+    public function findFirstByKey($key);
+
+    /**
+     * Get the FormRequest instance.
+     *
+     * @return mixed
+     */
+    public function getFormRequestInstance();
+
+    /**
+     * Get items collection.
+     *
+     * @param string $orderBy The order key.
+     * @param string $order   The order direction.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getItemsCollection($orderBy = 'updated_at', $order = 'desc');
+
+    /**
+     * Get Paginator instance.
+     *
+     * @param string $orderBy The order key.
+     * @param string $order   The order direction.
+     *
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function getPaginatorInstance($orderBy = 'updated_at', $order = 'desc');
 
     /**
      * Get redirection route.
@@ -126,11 +153,13 @@ interface ResourceControllerInterface
     public function getRedirectionRoute();
 
     /**
-     * Get the FormRequest instance.
+     * Get view location for the specified action.
      *
-     * @return mixed
+     * @param string $action The action.
+     *
+     * @return string
      */
-    public function getFormRequestInstance();
+    public function getViewLocation($action);
 
     /**
      * Redirect back with errors.
