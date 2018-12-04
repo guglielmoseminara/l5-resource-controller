@@ -29,31 +29,13 @@ trait WorksWithFileUploads
             $relativePath = $this->getDefaultRelativePath();
         }
 
-        $data = $request->attributes->all();
-
         $fileBag = $request->files;
-        foreach ($fileBag->all() as $name => $parameters) {
-            $this->_checkFileRelationExists($model, $name);
-            $relation = $model->{$name}();
-
-            foreach ($parameters as $index => $file) {
-                if (!$file->isValid()) {
-                    throw new UploadException($file->getError());
-                }
-
-                $filename = $this->getFilename($file);
-                $destination = $this->getStoragePath($relativePath);
-                $this->moveUploadedFile($file, $filename, $destination);
-
-                $location = $relativePath.$filename;
-
-                if (count($fileBag->get($name)) > 1) {
-                    $data[$name][$index] = [$this->getLocationColumn() => $location];
-                } else {
-                    $data[$name][$this->getLocationColumn()] = $location;
-                }
-
-                $request->merge($data);
+        foreach ($fileBag->all() as $paramName => $uploadedFiles) {
+            $attributes = $model->getAttributes();
+            if (array_key_exists($paramName, $attributes)) {
+                $this->handleNonMultipleFileUploads($model, $paramName, $uploadedFiles, $relativePath);
+            } else {
+                $this->handleMultipleFileUploads($request, $model, $paramName, $uploadedFiles, $relativePath);
             }
         }
 
@@ -119,6 +101,69 @@ trait WorksWithFileUploads
     protected function getDefaultRelativePath()
     {
         return 'uploads/';
+    }
+
+    /**
+     * Handle multiple file uploads.
+     *
+     * @param Request $request       The Request object.
+     * @param Model   $model         The eloquent model.
+     * @param string  $paramName     The name of the file param.
+     * @param array   $uploadedFiles An array of UploadedFile objects.
+     * @param string  $relativePath  The file uploads relative path.
+     *
+     * @return void
+     */
+    protected function handleMultipleFileUploads(Request $request, Model $model, $paramName, $uploadedFiles, $relativePath)
+    {
+        $this->_checkFileRelationExists($model, $paramName);
+
+        $data = $request->attributes->all();
+        $fileBag = $request->files;
+        foreach ($uploadedFiles as $index => $uploadedFile) {
+            if (!$uploadedFile->isValid()) {
+                throw new UploadException($uploadedFile->getError());
+            }
+
+            $filename = $this->getFilename($uploadedFile);
+            $storagePath = $this->getStoragePath($relativePath);
+            $this->moveUploadedFile($uploadedFile, $filename, $storagePath);
+
+            $location = $relativePath.$filename;
+
+            if (count($fileBag->get($paramName)) > 1) {
+                $data[$paramName][$index] = [$this->getLocationColumn() => $location];
+            } else {
+                $data[$paramName][$this->getLocationColumn()] = $location;
+            }
+
+            $request->merge($data);
+        }
+    }
+
+    /**
+     * Handle non-multiple file uploads.
+     *
+     * @param Model        $model        The eloquent model.
+     * @param string       $paramName    The name of the file param.
+     * @param UploadedFile $uploadedFile The UploadedFile object.
+     *
+     * @return void
+     */
+    protected function handleNonMultipleFileUploads(Model $model, $paramName, $uploadedFile, $relativePath)
+    {
+        if (!$uploadedFile->isValid()) {
+            throw new UploadException($uploadedFile->getError());
+        }
+
+        $filename = $this->getFilename($uploadedFile);
+        $destination = $this->getStoragePath($relativePath);
+        $this->moveUploadedFile($uploadedFile, $filename, $destination);
+
+        $location = $relativePath.$filename;
+
+        $model->{$paramName} = $location;
+        $model->save();
     }
 
     /**

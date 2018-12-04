@@ -14,6 +14,27 @@ class WorksWithFileUploadsTest extends TestCase
     /**
      * @coversNothing
      */
+    function testPostNonMultipleFileUpload()
+    {
+        Storage::fake('uploads');
+
+        $this->post(
+            '/test', [
+                'location' => UploadedFile::fake()->image('test.jpeg'),
+                'name' => 'Mario',
+                'email' => 'mario@raffles.com.ar',
+                'password' => str_random()
+            ]
+        )->assertRedirect('/test')
+            ->assertSessionHas('rafflesargentina.status.success');
+
+        $user = \RafflesArgentina\ResourceController\Models\User::first();
+        $this->assertTrue(!is_null($user->location));
+    }
+
+    /**
+     * @coversNothing
+     */
     function testPostHasOneFileUpload()
     {
         Storage::fake('uploads');
@@ -182,6 +203,26 @@ class WorksWithFileUploadsTest extends TestCase
 
         $user = \RafflesArgentina\ResourceController\Models\User::first();
         $this->assertTrue($user->morphToManyFileUploads->count() === 2);
+    }
+
+    /**
+     * @coversNothing
+     */
+    function testPutNonMultipleFileUpload()
+    {
+        $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
+
+        Storage::fake('uploads');
+
+        $this->put(
+            '/test/1', [
+                'location' => UploadedFile::fake()->image('test.jpeg'),
+            ]
+        )->assertRedirect('/test')
+            ->assertSessionHas('rafflesargentina.status.success');
+
+        $user->refresh();
+        $this->assertTrue(!is_null($user->location));
     }
 
     /**
