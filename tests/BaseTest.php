@@ -24,6 +24,8 @@ trait BaseTest
             ], function ($router) {
                 $router->resource('test', 'TestController');
                 $router->resource('test2', 'TestUseSoftDeletesController');
+                $router->resource('test3', 'ApiTestController');
+                $router->resource('test4', 'ApiTestUseSoftDeletesController');
             }
         );
 
