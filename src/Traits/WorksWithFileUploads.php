@@ -147,6 +147,7 @@ trait WorksWithFileUploads
      * @param Model        $model        The eloquent model.
      * @param string       $paramName    The name of the file param.
      * @param UploadedFile $uploadedFile The UploadedFile object.
+     * @param string       $relativePath The file uploads relative path.
      *
      * @return void
      */
