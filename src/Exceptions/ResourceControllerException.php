@@ -24,7 +24,7 @@ class ResourceControllerException extends \Exception
     public function render($request)
     {
         if ($request->wantsJson()) {
-            return $this->validInternalServerErrorJsonResponse($this->message, $this);
+            return $this->validInternalServerErrorJsonResponse($this, $this->message);
         } else {
             return redirect()->back()->with(['rafflesargentina.status.error' => $this->message]);
         }

@@ -9,12 +9,12 @@ trait FormatsValidJsonResponses
     /**
      * Return a valid 500 Internal Server Error json response.
      *
-     * @param string    $message The response message.
      * @param Exception $exception The exception object.
+     * @param string    $message   The response message.
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function validInternalServerErrorJsonResponse($message = 'Error', $exception)
+    public function validInternalServerErrorJsonResponse($exception, $message = 'Error')
     {
         return response()->json(
             [
@@ -72,8 +72,9 @@ trait FormatsValidJsonResponses
     /**
      * Return a valid 422 Unprocessable entity json response.
      *
-     * @param \Illuminate\Support\MessageBag $errors  The message bag errors.
-     * @param string                         $message The response message.
+     * @param \Illuminate\Support\MessageBag $errors   The message bag errors.
+     * @param string                         $message  The response message.
+     * @param string                         $redirect The redirection url.
      *
      * @return \Illuminate\Http\JsonResponse
      */
