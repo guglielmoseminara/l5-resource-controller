@@ -131,14 +131,14 @@ trait WorksWithRelations
                 $id = $fields['id'];
             } else {
                 $id = '';
-	    }
+            }
 
             if (array_except($fields, ['id'])) {
                 $record = $relation->updateOrCreate(['id' => $id], $fields);
                 array_push($keys, $record->id);
                 array_push($records, $record);
-	    }
-	}
+            }
+        }
     
         if ($keys && (property_exists($this, 'pruneHasMany') && $this->pruneHasMany !== false)) {
             $notIn = $relation->getRelated()->whereNotIn('id', $keys)->get();
