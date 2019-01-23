@@ -2,8 +2,12 @@
 
 namespace RafflesArgentina\ResourceController\Exceptions;
 
+use RafflesArgentina\ResourceController\Traits\FormatsValidJsonResponses;
+
 class ResourceControllerException extends \Exception
 {
+    use FormatsValidJsonResponses;
+
     /**
      * Report the exception.
      *
