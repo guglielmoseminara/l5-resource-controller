@@ -72,10 +72,10 @@ trait WorksWithRelations
      */
     protected function updateOrCreateHasOne(array $fillable, Model $model, Relation $relation)
     {
-        $id = '';
-
         if (array_key_exists('id', $fillable)) {
             $id = $fillable['id'];
+        } else {
+            $id = '';
         }
 
         if (array_except($fillable, ['id'])) {
@@ -133,36 +133,27 @@ trait WorksWithRelations
     protected function updateOrCreateHasMany(array $fillable, Model $model, Relation $relation)
     {
         $keys = [];
-        $id = '';
         $records = [];
 
         foreach ($fillable as $fields) {
-            if (is_array($fields)) {
-                if (array_key_exists('id', $fields)) {
-                    $id = $fields['id'];
-                }
+            if (array_key_exists('id', $fields)) {
+                $id = $fields['id'];
+            } else {
+                $id = '';
+            }
 
-                if (array_except($fields, ['id'])) {
-                    $record = $relation->updateOrCreate(['id' => $id], $fields);
-                    array_push($keys, $record->id);
-                    array_push($records, $record);
-                }
+            if (array_except($fields, ['id'])) {
+                $record = $relation->updateOrCreate(['id' => $id], $fields);
+                array_push($keys, $record->id);
+                array_push($records, $record);
             }
         }
-
+    
         if ($keys && (property_exists($this, 'pruneHasMany') && $this->pruneHasMany !== false)) {
             $notIn = $relation->getRelated()->whereNotIn('id', $keys)->get();
             foreach ($notIn as $record) {
                 $record->delete();
             }
-        }
-
-        return count($records) > 0 ?: $records;
-
-        if (array_except($fillable, ['id'])) {
-            $record = $relation->updateOrCreate(['id' => $id], $fillable);
-            array_push($keys, $record->id);
-            array_push($records, $record);
         }
 
         return $records;
