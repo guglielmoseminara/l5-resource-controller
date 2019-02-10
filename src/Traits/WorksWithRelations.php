@@ -79,16 +79,11 @@ trait WorksWithRelations
         }
 
         if (array_except($fillable, ['id'])) {
-            $record = $relation->updateOrCreate(['id' => $id], $fillable);
-
             if (property_exists($this, 'pruneHasOne') && $this->pruneHasOne !== false) {
-                $notIn = $relation->getRelated()->where('id', '!=', $record->id)->get();
-                foreach ($notIn as $record) {
-                    $record->delete();
-                }
+                $relation->update($fillable);
             }
 
-            return $record;
+            return $relation->updateOrCreate(['id' => $id], $fillable);
         }
 
         return null;
