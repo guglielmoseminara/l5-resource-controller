@@ -1,10 +1,10 @@
 {
-    "name": "rafflesargentina/l5-resource-controller",
+    "name": "guglielmoseminara/l5-resource-controller",
     "description": "Resource Controller for Laravel 5",
     "keywords": [
         "resource controller", "laravel 5"
     ],
-    "homepage": "https://github.com/rafflesargentina/l5-resource-controller",
+    "homepage": "https://github.com/guglielmoseminara/l5-resource-controller",
     "license": "MIT",
     "authors": [
         {
