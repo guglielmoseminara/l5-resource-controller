@@ -4,6 +4,7 @@ namespace RafflesArgentina\ResourceController;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 use Orchestra\Testbench\TestCase;
 
@@ -23,7 +24,7 @@ class WorksWithFileUploadsTest extends TestCase
                 'location' => UploadedFile::fake()->image('test.jpeg'),
                 'name' => 'Mario',
                 'email' => 'mario@raffles.com.ar',
-                'password' => str_random()
+                'password' => Str::random()
             ]
         )->assertRedirect('/test')
             ->assertSessionHas('rafflesargentina.status.success');
@@ -43,7 +44,7 @@ class WorksWithFileUploadsTest extends TestCase
             '/test', [
                 'name' => 'Mario',
                 'email' => 'mario@raffles.com.ar',
-                'password' => str_random(),
+                'password' => Str::random(),
                 'hasOneFileUpload' => [
                     UploadedFile::fake()->image('test.jpeg')
                 ],
@@ -66,7 +67,7 @@ class WorksWithFileUploadsTest extends TestCase
             '/test', [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
-            'password' => str_random(),
+            'password' => Str::random(),
                 'morphOneFileUpload' => [
                     UploadedFile::fake()->image('test.jpeg')
                 ],
@@ -91,7 +92,7 @@ class WorksWithFileUploadsTest extends TestCase
             '/test', [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
-            'password' => str_random(),
+            'password' => Str::random(),
                 'belongsToFileUpload' => [
                     UploadedFile::fake()->image('test.jpeg')
                 ],
@@ -114,7 +115,7 @@ class WorksWithFileUploadsTest extends TestCase
             '/test', [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
-            'password' => str_random(),
+            'password' => Str::random(),
             'hasManyFileUploads' => [
                 UploadedFile::fake()->image('test.jpeg'),
                 UploadedFile::fake()->create('document.pdf')
@@ -140,7 +141,7 @@ class WorksWithFileUploadsTest extends TestCase
             '/test', [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
-            'password' => str_random(),
+            'password' => Str::random(),
             'morphManyFileUploads' => [
                 UploadedFile::fake()->image('test.jpeg'),
                 UploadedFile::fake()->create('document.pdf')
@@ -166,7 +167,7 @@ class WorksWithFileUploadsTest extends TestCase
             '/test', [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
-            'password' => str_random(),
+            'password' => Str::random(),
             'belongsToManyFileUploads' => [
                 UploadedFile::fake()->image('test.jpeg'),
                 UploadedFile::fake()->create('document.pdf')
@@ -192,7 +193,7 @@ class WorksWithFileUploadsTest extends TestCase
             '/test', [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
-            'password' => str_random(),
+            'password' => Str::random(),
             'morphToManyFileUploads' => [
                 UploadedFile::fake()->image('test.jpeg'),
                 UploadedFile::fake()->create('document.pdf')

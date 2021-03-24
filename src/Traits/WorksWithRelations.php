@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\Relations\{HasOne, MorphOne, BelongsTo};
 use Illuminate\Database\Eloquent\Relations\{HasMany, MorphMany, MorphToMany, BelongsToMany};
 use Illuminate\Database\Eloquent\MassAssignmentException;
+use Illuminate\Support\Arr;
 
 trait WorksWithRelations
 {
@@ -78,7 +79,7 @@ trait WorksWithRelations
             $id = $fillable['id'];
         }
 
-        if (array_except($fillable, ['id'])) {
+        if (Arr::except($fillable, ['id'])) {
             if (property_exists($this, 'pruneHasOne') && $this->pruneHasOne !== false) {
                 $relation->update($fillable);
             }
@@ -102,7 +103,7 @@ trait WorksWithRelations
     {
         $related = $relation->getRelated();
 
-        if (array_except($fillable, ['id'])) {
+        if (Arr::except($fillable, ['id'])) {
             if (!$relation->first()) {
                 $record = $relation->associate($related->create($fillable));
                 $model->save();
@@ -137,13 +138,13 @@ trait WorksWithRelations
                     $id = $fields['id'];
                 }
 
-                if (array_except($fields, ['id'])) {
+                if (Arr::except($fields, ['id'])) {
                     $record = $relation->updateOrCreate(['id' => $id], $fields);
                     array_push($keys, $record->id);
                     array_push($records, $record);
                 }
             } else {
-                if (array_except($fillable, ['id'])) {
+                if (Arr::except($fillable, ['id'])) {
                     $record = $relation->updateOrCreate(['id' => $id], $fillable);
                     array_push($keys, $record->id);
                     array_push($records, $record);
@@ -185,7 +186,7 @@ trait WorksWithRelations
                 $id = '';
             }
 
-            if (array_except($fields, ['id'])) {
+            if (Arr::except($fields, ['id'])) {
                 $record = $related->updateOrCreate(['id' => $id], $fields);
                 array_push($keys, $record->id);
                 array_push($records, $record);

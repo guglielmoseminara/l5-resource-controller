@@ -3,6 +3,7 @@
 namespace RafflesArgentina\ResourceController;
 
 use Orchestra\Testbench\TestCase;
+use Illuminate\Support\Str;
 
 class ResourceControllerTest extends TestCase
 {
@@ -64,11 +65,11 @@ class ResourceControllerTest extends TestCase
      */
     function testStoreRoute()
     {
-        $this->post('/test', ['name' => 'Mario', 'email' => 'mario@raffles.com.ar', 'password' => bcrypt(str_random())])
+        $this->post('/test', ['name' => 'Mario', 'email' => 'mario@raffles.com.ar', 'password' => bcrypt(Str::random())])
             ->assertRedirect('/test')
             ->assertSessionHas('rafflesargentina.status.success');
 
-        $this->json('POST', '/test', ['name' => 'Paula', 'email' => 'paula@raffles.com.ar', 'password' => bcrypt(str_random())])
+        $this->json('POST', '/test', ['name' => 'Paula', 'email' => 'paula@raffles.com.ar', 'password' => bcrypt(Str::random())])
             ->assertStatus(200);
     }
 
@@ -165,12 +166,12 @@ class ResourceControllerTest extends TestCase
     {
         $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
 
-        $this->put('/test/'.$user->id, ['name' => 'Mario', 'email' => 'mario@raffles.com.ar', 'password' => bcrypt(str_random())])
+        $this->put('/test/'.$user->id, ['name' => 'Mario', 'email' => 'mario@raffles.com.ar', 'password' => bcrypt(Str::random())])
             ->assertRedirect('/test')
             ->assertStatus(302)
             ->assertSessionHas('rafflesargentina.status.success');
 
-        $this->json('PUT', '/test/'.$user->id, ['name' => 'Mario', 'email' => 'mario@raffles.com.ar', 'password' => bcrypt(str_random())])
+        $this->json('PUT', '/test/'.$user->id, ['name' => 'Mario', 'email' => 'mario@raffles.com.ar', 'password' => bcrypt(Str::random())])
             ->assertStatus(200);
     }
 
@@ -182,12 +183,12 @@ class ResourceControllerTest extends TestCase
         $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
         $user->delete();
 
-        $this->put('/test2/'.$user->id, ['name' => 'Mario', 'email' => 'mario@raffles.com.ar', 'password' => bcrypt(str_random())])
+        $this->put('/test2/'.$user->id, ['name' => 'Mario', 'email' => 'mario@raffles.com.ar', 'password' => bcrypt(Str::random())])
             ->assertRedirect('/test')
             ->assertStatus(302)
             ->assertSessionHas('rafflesargentina.status.success');
 
-        $this->json('PUT', '/test2/'.$user->id, ['name' => 'Mario', 'email' => 'mario@raffles.com.ar', 'password' => bcrypt(str_random())])
+        $this->json('PUT', '/test2/'.$user->id, ['name' => 'Mario', 'email' => 'mario@raffles.com.ar', 'password' => bcrypt(Str::random())])
             ->assertStatus(200);
     }
 

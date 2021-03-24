@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Str;
+
 $factory->define(
     \RafflesArgentina\ResourceController\Models\User::class, function (\Faker\Generator $faker) {
         return [
@@ -13,9 +15,9 @@ $factory->define(
 $factory->define(
     \RafflesArgentina\ResourceController\Models\Related::class, function (\Faker\Generator $faker) {
         return [
-        'a' => str_random(),
-        'b' => str_random(),
-        'c' => str_random(),
+        'a' => Str::random(),
+        'b' => Str::random(),
+        'c' => Str::random(),
         ];
     }
 );

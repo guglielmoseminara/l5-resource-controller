@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\View;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 
 use RafflesArgentina\ResourceController\Contracts\ResourceControllerInterface;
 use RafflesArgentina\ResourceController\Exceptions\ResourceControllerException;
@@ -363,11 +364,11 @@ abstract class AbstractResourceController extends BaseController
     private function _formatRouteNameAndViewPathModifiers()
     {
         if ($this->alias) {
-            $this->alias = str_finish($this->alias, '.');
+            $this->alias = Str::finish($this->alias, '.');
         }
 
         if ($this->theme) {
-            $this->theme = str_finish($this->theme, '.');
+            $this->theme = Str::finish($this->theme, '.');
         }
 
         if ($this->module) {
@@ -377,11 +378,11 @@ abstract class AbstractResourceController extends BaseController
         }
 
         if ($this->prefix) {
-            $this->prefix = str_finish($this->prefix, '.');
+            $this->prefix = Str::finish($this->prefix, '.');
         }
 
         if ($this->resourceName) {
-            $this->resourceName = str_finish($this->resourceName, '.');
+            $this->resourceName = Str::finish($this->resourceName, '.');
         }
     }
 

@@ -3,6 +3,7 @@
 namespace RafflesArgentina\ResourceController;
 
 use Orchestra\Testbench\TestCase;
+use Illuminate\Support\Str;
 
 class ApiResourceControllerTest extends TestCase
 {
@@ -49,7 +50,7 @@ class ApiResourceControllerTest extends TestCase
      */
     function testStoreRoute()
     {
-        $this->json('POST', '/test3', ['name' => 'Paula', 'email' => 'paula@raffles.com.ar', 'password' => bcrypt(str_random())])
+        $this->json('POST', '/test3', ['name' => 'Paula', 'email' => 'paula@raffles.com.ar', 'password' => bcrypt(Str::random())])
             ->assertStatus(200);
     }
 
@@ -122,7 +123,7 @@ class ApiResourceControllerTest extends TestCase
     {
         $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
 
-        $this->json('PUT', '/test3/'.$user->id, ['name' => 'Mario', 'email' => 'mario@raffles.com.ar', 'password' => bcrypt(str_random())])
+        $this->json('PUT', '/test3/'.$user->id, ['name' => 'Mario', 'email' => 'mario@raffles.com.ar', 'password' => bcrypt(Str::random())])
             ->assertStatus(200);
     }
 
@@ -134,7 +135,7 @@ class ApiResourceControllerTest extends TestCase
         $user = factory(\RafflesArgentina\ResourceController\Models\User::class)->create();
         $user->delete();
 
-        $this->json('PUT', '/test4/'.$user->id, ['name' => 'Mario', 'email' => 'mario@raffles.com.ar', 'password' => bcrypt(str_random())])
+        $this->json('PUT', '/test4/'.$user->id, ['name' => 'Mario', 'email' => 'mario@raffles.com.ar', 'password' => bcrypt(Str::random())])
             ->assertStatus(200);
     }
 

@@ -3,6 +3,7 @@
 namespace RafflesArgentina\ResourceController;
 
 use Orchestra\Testbench\TestCase;
+use Illuminate\Support\Str;
 
 class WorksWithRelationsTest extends TestCase
 {
@@ -16,7 +17,7 @@ class WorksWithRelationsTest extends TestCase
         $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
-            'password' => bcrypt(str_random()),
+            'password' => bcrypt(Str::random()),
             'hasOneRelated' => [
                 'a' => 'blah blah blah',
                 'b' => 'blah blah blah',
@@ -52,7 +53,7 @@ class WorksWithRelationsTest extends TestCase
         $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
-            'password' => bcrypt(str_random()),
+            'password' => bcrypt(Str::random()),
             'morphOneRelated' => [
                 'a' => 'blah blah blah',
                 'b' => 'blah blah blah',
@@ -92,7 +93,7 @@ class WorksWithRelationsTest extends TestCase
         $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
-            'password' => bcrypt(str_random()),
+            'password' => bcrypt(Str::random()),
             'belongsToRelated' => [
                 'a' => 'blah blah blah',
                 'b' => 'blah blah blah',
@@ -129,7 +130,7 @@ class WorksWithRelationsTest extends TestCase
         $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
-            'password' => bcrypt(str_random()),
+            'password' => bcrypt(Str::random()),
             'hasManyRelated' => [
                 '0' => [
                     'a' => 'blah blah blah',
@@ -190,7 +191,7 @@ class WorksWithRelationsTest extends TestCase
         $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
-            'password' => bcrypt(str_random()),
+            'password' => bcrypt(Str::random()),
             'morphManyRelated' => [
                 '0' => [
                     'a' => 'blah blah blah',
@@ -258,7 +259,7 @@ class WorksWithRelationsTest extends TestCase
         $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
-            'password' => bcrypt(str_random()),
+            'password' => bcrypt(Str::random()),
             'belongsToManyRelated' => [
                 '0' => [
                     'id' => '1',
@@ -324,7 +325,7 @@ class WorksWithRelationsTest extends TestCase
         $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
-            'password' => bcrypt(str_random()),
+            'password' => bcrypt(Str::random()),
             'belongsToManyRelated' => [
                 '0' => [
                     'a' => 'blah blah blah',
@@ -392,7 +393,7 @@ class WorksWithRelationsTest extends TestCase
         $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
-            'password' => bcrypt(str_random()),
+            'password' => bcrypt(Str::random()),
             'morphToManyRelated' => [
                 '0' => [
                     'id' => '1',
@@ -458,7 +459,7 @@ class WorksWithRelationsTest extends TestCase
         $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
-            'password' => bcrypt(str_random()),
+            'password' => bcrypt(Str::random()),
             'morphToManyRelated' => [
                 '0' => [
                     'a' => 'blah blah blah',
@@ -519,7 +520,7 @@ class WorksWithRelationsTest extends TestCase
         $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
-            'password' => bcrypt(str_random()),
+            'password' => bcrypt(Str::random()),
             'hasOneRelated' => [
                 'a' => 'blah blah blah',
                 'b' => 'blah blah blah',
@@ -546,7 +547,7 @@ class WorksWithRelationsTest extends TestCase
         $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
-            'password' => bcrypt(str_random()),
+            'password' => bcrypt(Str::random()),
             'morphOneRelated' => [
                 'a' => 'blah blah blah',
                 'b' => 'blah blah blah',
@@ -573,7 +574,7 @@ class WorksWithRelationsTest extends TestCase
         $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
-            'password' => bcrypt(str_random()),
+            'password' => bcrypt(Str::random()),
             'belongsToRelated' => [
                 'a' => 'blah blah blah',
                 'b' => 'blah blah blah',
@@ -602,7 +603,7 @@ class WorksWithRelationsTest extends TestCase
         $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
-            'password' => bcrypt(str_random()),
+            'password' => bcrypt(Str::random()),
             'hasManyRelated' => [
                 '0' => [
                     'id' => '1',
@@ -656,7 +657,7 @@ class WorksWithRelationsTest extends TestCase
         $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
-            'password' => bcrypt(str_random()),
+            'password' => bcrypt(Str::random()),
             'morphManyRelated' => [
                 '0' => [
                     'id' => '1',
@@ -717,7 +718,7 @@ class WorksWithRelationsTest extends TestCase
         $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
-            'password' => bcrypt(str_random()),
+            'password' => bcrypt(Str::random()),
             'belongsToManyRelated' => [
                 '0' => [
                     'id' => '1',
@@ -783,7 +784,7 @@ class WorksWithRelationsTest extends TestCase
         $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
-            'password' => bcrypt(str_random()),
+            'password' => bcrypt(Str::random()),
             'belongsToManyRelated' => [
                 '0' => [
                     'a' => 'blah blah blah',
@@ -851,7 +852,7 @@ class WorksWithRelationsTest extends TestCase
         $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
-            'password' => bcrypt(str_random()),
+            'password' => bcrypt(Str::random()),
             'morphToManyRelated' => [
                 '0' => [
                     'id' => '1',
@@ -917,7 +918,7 @@ class WorksWithRelationsTest extends TestCase
         $fillable = [
             'name' => 'Mario',
             'email' => 'mario@raffles.com.ar',
-            'password' => bcrypt(str_random()),
+            'password' => bcrypt(Str::random()),
             'morphToManyRelated' => [
                 '0' => [
                     'a' => 'blah blah blah',

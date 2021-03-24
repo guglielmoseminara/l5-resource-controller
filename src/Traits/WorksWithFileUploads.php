@@ -4,6 +4,7 @@ namespace RafflesArgentina\ResourceController\Traits;
 
 use Lang;
 use Storage;
+use Illuminate\Support\Str;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
@@ -52,7 +53,7 @@ trait WorksWithFileUploads
     protected function getFilename(UploadedFile $uploadedFile)
     {
         $extension = $uploadedFile->guessExtension();
-        $filename = str_random().'.'.$extension;
+        $filename = Str::random().'.'.$extension;
 
         return $filename;
     }
