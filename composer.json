@@ -1,6 +1,7 @@
 {
     "name": "guglielmoseminara/l5-resource-controller",
     "description": "Resource Controller for Laravel 5",
+    "version": "v1.7.4",
     "keywords": [
         "resource controller", "laravel 5"
     ],
