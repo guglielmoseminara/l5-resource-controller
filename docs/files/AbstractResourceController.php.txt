@@ -13,6 +13,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use RafflesArgentina\ResourceController\Contracts\ResourceControllerInterface;
 use RafflesArgentina\ResourceController\Exceptions\ResourceControllerException;
 use RafflesArgentina\ResourceController\Traits\FormatsValidJsonResponses;
+use Str;
 
 abstract class AbstractResourceController extends BaseController
                                           implements ResourceControllerInterface
