@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 trait WorksWithFileUploads
 {
@@ -52,7 +53,7 @@ trait WorksWithFileUploads
     protected function getFilename(UploadedFile $uploadedFile)
     {
         $extension = $uploadedFile->guessExtension();
-        $filename = str_random().'.'.$extension;
+        $filename = Str::random().'.'.$extension;
 
         return $filename;
     }
